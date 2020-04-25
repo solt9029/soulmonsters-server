@@ -1,0 +1,5 @@
+type Deck {
+  id: ID! @id
+  userId: String!
+  name: String!
+}
