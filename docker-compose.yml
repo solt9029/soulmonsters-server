@@ -16,7 +16,7 @@ services:
             host: mysql
             user: root
             password: prisma
-            rawAccess: true
+            rawAccess: false
             port: 3306
             migrations: true
   mysql:
