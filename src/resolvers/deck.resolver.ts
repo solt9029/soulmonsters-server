@@ -1,5 +1,6 @@
+import { CreateDeckInputType } from './../input.types/create.deck.input.type';
 import { AuthGuard } from '../guards/auth.guard';
-import { Resolver, Query, Args } from '@nestjs/graphql';
+import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { PrismaService } from '../services/prisma.service';
 import { UseGuards } from '@nestjs/common';
 import { User } from 'src/decorators/user.decorator';
@@ -14,6 +15,19 @@ export class DeckResolver {
   async decks(@User() user: auth.DecodedIdToken) {
     return await this.prismaService.query.decks({
       where: { userId: user.uid },
+    });
+  }
+
+  @Mutation()
+  async createDeck(
+    @User() user: auth.DecodedIdToken,
+    @Args('data') data: CreateDeckInputType,
+  ) {
+    return await this.prismaService.mutation.createDeck({
+      data: {
+        userId: user.uid,
+        name: data.name,
+      },
     });
   }
 }

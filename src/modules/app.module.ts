@@ -10,7 +10,7 @@ import { GraphQLModule } from '@nestjs/graphql';
     GraphQLModule.forRoot({
       playground: true,
       introspection: true,
-      typePaths: ['./**/*.graphql'],
+      typePaths: ['../**/*.graphql'],
       resolverValidationOptions: {
         requireResolversForResolveType: false,
       },
