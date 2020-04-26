@@ -35,4 +35,4 @@ lerna-debug.log*
 
 *.env
 src/prisma/*
-schema.graphql
+src/graphql/index.ts

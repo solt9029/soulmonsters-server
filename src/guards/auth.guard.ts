@@ -1,5 +1,5 @@
 import { UserService } from '../services/user.service';
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { CanActivate, ExecutionContext } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 import { GqlExecutionContext } from '@nestjs/graphql';
 

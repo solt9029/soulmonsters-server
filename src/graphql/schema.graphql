@@ -1,0 +1,17 @@
+type Deck {
+  id: ID!
+  userId: String!
+  name: String!
+}
+
+input DeckCreateInput {
+  name: String!
+}
+
+type Mutation {
+  createDeck(data: DeckCreateInput!): Deck!
+}
+
+type Query {
+  decks: [Deck!]!
+}

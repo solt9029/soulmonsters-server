@@ -1,5 +1,5 @@
-import { Deck } from './../objects/deck';
-import { DeckCreateInput } from '../inputs/deck.create.input';
+import { Deck } from './../graphql';
+import { ValidatedDeckCreateInput } from '../inputs/validated.deck.create.input';
 import { AuthGuard } from '../guards/auth.guard';
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { PrismaService } from '../services/prisma.service';
@@ -22,7 +22,7 @@ export class DeckResolver {
   @Mutation(returns => Deck)
   async createDeck(
     @User() user: auth.DecodedIdToken,
-    @Args('data') data: DeckCreateInput,
+    @Args('data') data: ValidatedDeckCreateInput,
   ) {
     return await this.prismaService.mutation.createDeck({
       data: {
