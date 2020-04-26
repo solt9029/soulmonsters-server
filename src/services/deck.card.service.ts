@@ -15,24 +15,12 @@ export class DeckCardService {
       deckCards(
         where: { deck: { userId: $userId, id: $deckId } }
       ) {
-        id
-        count
+        id count
         card {
-          id
-          name
-          kind
-          attribute
-          type
-          attack
-          defence
-          cost
-          detail
-          picture
+          id name kind attribute type attack defence cost detail picture
         }
         deck {
-          id
-          userId
-          name
+          id userId name
         }
       }
     }
