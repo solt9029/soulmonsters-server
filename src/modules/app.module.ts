@@ -1,3 +1,4 @@
+import { DeckCardResolver } from './../resolvers/deck.card.resolver';
 import { CardResolver } from './../resolvers/card.resolver';
 import { UserService } from './../services/user.service';
 import { DeckResolver } from './../resolvers/deck.resolver';
@@ -22,6 +23,12 @@ import { GraphQLModule } from '@nestjs/graphql';
     }),
   ],
   controllers: [AppController],
-  providers: [PrismaService, DeckResolver, UserService, CardResolver],
+  providers: [
+    PrismaService,
+    DeckResolver,
+    UserService,
+    CardResolver,
+    DeckCardResolver,
+  ],
 })
 export class AppModule {}

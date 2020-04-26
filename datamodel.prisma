@@ -19,7 +19,7 @@ type Card {
   picture: String!
 }
 
-type CardDeck {
+type DeckCard {
   id: ID! @id
   count: Int!
   deck: Deck! @relation

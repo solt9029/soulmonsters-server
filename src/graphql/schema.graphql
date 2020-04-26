@@ -53,6 +53,13 @@ enum Type {
   BLACK_STA
 }
 
+type DeckCard implements Node {
+  id: ID!
+  count: Int!
+  deck: Deck!
+  card: Card!
+}
+
 type Mutation {
   createDeck(data: DeckCreateInput!): Deck!
 }
@@ -60,4 +67,5 @@ type Mutation {
 type Query {
   decks: [Deck!]!
   cards: [Card!]!
+  deckCards(deckId: String): [DeckCard!]!
 }
