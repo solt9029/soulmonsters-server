@@ -1,11 +1,56 @@
-type Deck {
+interface Node {
+  id: ID!
+}
+
+scalar DateTime
+
+type Deck implements Node {
   id: ID!
   userId: String!
   name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 input DeckCreateInput {
   name: String!
+}
+
+type Card implements Node {
+  id: ID!
+  name: String!
+  kind: Kind!
+  type: Type!
+  attribute: Attribute
+  attack: Int
+  defence: Int
+  cost: Int
+  detail: String
+  picture: String!
+}
+
+enum Kind {
+  MONSTER
+  CIRCLE_MONSTER
+  QUICK
+  BLOCK
+}
+
+enum Attribute {
+  RED
+  BLUE
+  WHITE
+  GREEN
+  PURPLE
+  BLACK
+}
+
+enum Type {
+  CIRCLE
+  TRIANGLE
+  RECTANGLE
+  WHITE_STAR
+  BLACK_STA
 }
 
 type Mutation {
@@ -14,4 +59,5 @@ type Mutation {
 
 type Query {
   decks: [Deck!]!
+  cards: [Card!]!
 }

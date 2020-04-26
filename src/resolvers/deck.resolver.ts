@@ -1,4 +1,3 @@
-import { Deck } from './../graphql';
 import { ValidatedDeckCreateInput } from '../inputs/validated.deck.create.input';
 import { AuthGuard } from '../guards/auth.guard';
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
@@ -12,14 +11,14 @@ import { auth } from 'firebase-admin';
 export class DeckResolver {
   constructor(private readonly prismaService: PrismaService) {}
 
-  @Query(returns => [Deck])
+  @Query()
   async decks(@User() user: auth.DecodedIdToken) {
     return await this.prismaService.query.decks({
       where: { userId: user.uid },
     });
   }
 
-  @Mutation(returns => Deck)
+  @Mutation()
   async createDeck(
     @User() user: auth.DecodedIdToken,
     @Args('data') data: ValidatedDeckCreateInput,

@@ -2,4 +2,50 @@ type Deck {
   id: ID! @id
   userId: String!
   name: String!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Card {
+  id: ID! @id
+  name: String!
+  kind: Kind!
+  type: Type!
+  attribute: Attribute
+  attack: Int
+  defence: Int
+  cost: Int
+  detail: String
+  picture: String!
+}
+
+type CardDeck {
+  id: ID! @id
+  count: Int!
+  deck: Deck! @relation
+  card: Card! @relation
+}
+
+enum Kind {
+  MONSTER
+  CIRCLE_MONSTER
+  QUICK
+  BLOCK
+}
+
+enum Type {
+  CIRCLE
+  TRIANGLE
+  RECTANGLE
+  WHITE_STAR
+  BLACK_STA
+}
+
+enum Attribute {
+  RED
+  BLUE
+  WHITE 
+  GREEN
+  PURPLE
+  BLACK
 }
