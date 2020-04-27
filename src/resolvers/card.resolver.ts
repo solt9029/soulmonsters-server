@@ -1,12 +1,12 @@
+import { CardService } from './../services/card.service';
 import { Resolver, Query } from '@nestjs/graphql';
-import { PrismaService } from '../services/prisma.service';
 
 @Resolver()
 export class CardResolver {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly cardService: CardService) {}
 
   @Query()
   async cards() {
-    return await this.prismaService.query.cards({});
+    return await this.cardService.findAll();
   }
 }

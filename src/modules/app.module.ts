@@ -1,3 +1,5 @@
+import { CardService } from './../services/card.service';
+import { DeckService } from './../services/deck.service';
 import { DeckCardService } from './../services/deck.card.service';
 import { DeckCardResolver } from './../resolvers/deck.card.resolver';
 import { CardResolver } from './../resolvers/card.resolver';
@@ -31,6 +33,8 @@ import { GraphQLModule } from '@nestjs/graphql';
     CardResolver,
     DeckCardResolver,
     DeckCardService,
+    DeckService,
+    CardService,
   ],
 })
 export class AppModule {}
