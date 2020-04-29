@@ -1,6 +1,12 @@
-endpoint: http://localhost:4466
+endpoint: ${env:PRISMA_ENDPOINT}
 datamodel: ./prisma/datamodel.prisma
+generate:
+  - generator: javascript-client
+    output: ./prisma/generated/
 hooks:
   post-deploy:
+    - prisma generate
     - graphql get-schema
     - graphql codegen
+seed:
+  run: npm run ts-node ./prisma/seed.ts
