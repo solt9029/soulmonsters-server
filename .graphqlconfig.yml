@@ -3,7 +3,7 @@ projects:
     schemaPath: prisma/schema.graphql
     extensions:
       endpoints:
-        dev: 'http://localhost:4466'
+        default: ${env:PRISMA_ENDPOINT}
       codegen:
         - generator: prisma-binding
           language: typescript
