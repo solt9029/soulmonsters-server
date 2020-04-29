@@ -1,5 +1,5 @@
 import { UserService } from '../services/user.service';
-import { CanActivate, ExecutionContext } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
@@ -19,6 +19,7 @@ admin.initializeApp({
   databaseURL: FIREBASE_DATABASE_URL,
 });
 
+@Injectable()
 export class AuthGuard implements CanActivate {
   constructor(private readonly userService: UserService) {}
 
