@@ -17,4 +17,8 @@ export class DeckService {
       data: { userId, name },
     });
   }
+
+  async findById(id: string): Promise<Deck | null> {
+    return await this.prismaService.query.deck({ where: { id } });
+  }
 }

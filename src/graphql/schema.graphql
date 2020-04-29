@@ -16,6 +16,11 @@ input DeckCreateInput {
   name: String!
 }
 
+input DeckCardCreateInput {
+  deckId: String!
+  cardId: String!
+}
+
 type Card implements Node {
   id: ID!
   name: String!
@@ -62,6 +67,7 @@ type DeckCard implements Node {
 
 type Mutation {
   createDeck(data: DeckCreateInput!): Deck!
+  upsertDeckCard(data: DeckCardCreateInput!): DeckCard!
 }
 
 type Query {

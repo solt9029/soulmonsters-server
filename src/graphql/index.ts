@@ -30,6 +30,11 @@ export enum Type {
     BLACK_STA = "BLACK_STA"
 }
 
+export class DeckCardCreateInput {
+    deckId: string;
+    cardId: string;
+}
+
 export class DeckCreateInput {
     name: string;
 }
@@ -68,6 +73,8 @@ export class DeckCard implements Node {
 
 export abstract class IMutation {
     abstract createDeck(data: DeckCreateInput): Deck | Promise<Deck>;
+
+    abstract upsertDeckCard(data: DeckCardCreateInput): DeckCard | Promise<DeckCard>;
 }
 
 export abstract class IQuery {
