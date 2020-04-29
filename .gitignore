@@ -36,3 +36,4 @@ lerna-debug.log*
 *.env
 prisma/schema.graphql
 prisma/generated/*
+src/prisma/prisma.binding.ts
