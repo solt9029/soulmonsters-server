@@ -1,6 +1,6 @@
 projects:
   soulmonsters-server:
-    schemaPath: src/prisma/schema.graphql
+    schemaPath: prisma/schema.graphql
     extensions:
       endpoints:
         dev: 'http://localhost:4466'
