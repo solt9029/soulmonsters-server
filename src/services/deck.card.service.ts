@@ -1,4 +1,4 @@
-import { DeckCard } from './../prisma/prisma.binding';
+import { DeckCard } from '../prisma/generated/prisma.binding';
 import { PrismaService } from './prisma.service';
 import { Injectable } from '@nestjs/common';
 

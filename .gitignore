@@ -34,6 +34,6 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 *.env
-prisma/schema.graphql
 prisma/generated/*
-src/prisma/prisma.binding.ts
+src/prisma/generated/*
+!src/prisma/generated/.gitkeep
