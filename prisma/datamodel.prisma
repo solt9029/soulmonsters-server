@@ -26,6 +26,14 @@ type DeckCard {
   card: Card! @relation
 }
 
+type UserSetting {
+  id: ID! @id
+  userId: String! @unique
+  selectedDeck: Deck @relation
+  winningCount: Int! @default(value: 0)
+  losingCount: Int! @default(value: 0)
+}
+
 enum Kind {
   MONSTER
   CIRCLE_MONSTER
