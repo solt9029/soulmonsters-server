@@ -15,7 +15,7 @@ import { GraphQLModule } from '@nestjs/graphql';
     GraphQLModule.forRoot({
       playground: true,
       introspection: true,
-      typePaths: ['src/graphql/schema.graphql'],
+      typePaths: ['src/graphql/schema/*.graphql'],
       definitions: {
         path: 'src/graphql/index.ts',
         outputAs: 'class',

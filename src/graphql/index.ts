@@ -72,17 +72,17 @@ export class DeckCard implements Node {
 }
 
 export abstract class IMutation {
-    abstract createDeck(data: DeckCreateInput): Deck | Promise<Deck>;
-
     abstract upsertDeckCard(data: DeckCardCreateInput): DeckCard | Promise<DeckCard>;
+
+    abstract createDeck(data: DeckCreateInput): Deck | Promise<Deck>;
 }
 
 export abstract class IQuery {
-    abstract decks(): Deck[] | Promise<Deck[]>;
-
     abstract cards(): Card[] | Promise<Card[]>;
 
     abstract deckCards(deckId?: string): DeckCard[] | Promise<DeckCard[]>;
+
+    abstract decks(): Deck[] | Promise<Deck[]>;
 }
 
 export type DateTime = any;
