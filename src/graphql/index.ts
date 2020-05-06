@@ -39,10 +39,6 @@ export class DeckCreateInput {
     name: string;
 }
 
-export class UserSettingUpdateInput {
-    selectedDeckId: string;
-}
-
 export interface Node {
     id: string;
 }
@@ -79,10 +75,6 @@ export abstract class IMutation {
     abstract upsertDeckCard(data: DeckCardCreateInput): DeckCard | Promise<DeckCard>;
 
     abstract createDeck(data: DeckCreateInput): Deck | Promise<Deck>;
-
-    abstract createUserSetting(): UserSetting | Promise<UserSetting>;
-
-    abstract updateUserSetting(selectedDeckId: string): UserSetting | Promise<UserSetting>;
 }
 
 export abstract class IQuery {
@@ -92,13 +84,12 @@ export abstract class IQuery {
 
     abstract decks(): Deck[] | Promise<Deck[]>;
 
-    abstract userSetting(userId: string): UserSetting | Promise<UserSetting>;
+    abstract userData(userId: string): UserData | Promise<UserData>;
 }
 
-export class UserSetting implements Node {
+export class UserData implements Node {
     id: string;
     userId: string;
-    selectedDeck?: Deck;
     winningCount: number;
     losingCount: number;
 }

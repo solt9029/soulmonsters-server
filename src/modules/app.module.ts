@@ -1,5 +1,5 @@
-import { UserSettingResolver } from './../resolvers/user.setting.resolver';
-import { UserSettingService } from './../services/user.setting.service';
+import { UserDataResolver } from '../resolvers/user.data.resolver';
+import { UserDataService } from '../services/user.data.service';
 import { CardService } from './../services/card.service';
 import { DeckService } from './../services/deck.service';
 import { DeckCardService } from './../services/deck.card.service';
@@ -32,13 +32,13 @@ import { GraphQLModule } from '@nestjs/graphql';
     DeckResolver,
     CardResolver,
     DeckCardResolver,
-    UserSettingResolver,
+    UserDataResolver,
     PrismaService,
     UserService,
     DeckCardService,
     DeckService,
     CardService,
-    UserSettingService,
+    UserDataService,
   ],
 })
 export class AppModule {}

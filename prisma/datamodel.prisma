@@ -26,10 +26,9 @@ type DeckCard {
   card: Card! @relation
 }
 
-type UserSetting {
+type UserData {
   id: ID! @id
   userId: String! @unique
-  selectedDeck: Deck @relation
   winningCount: Int! @default(value: 0)
   losingCount: Int! @default(value: 0)
 }
