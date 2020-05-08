@@ -74,4 +74,10 @@ export class DeckCardService {
       },
     });
   }
+
+  async delete(id: string): Promise<DeckCard> {
+    return await this.prismaService.mutation.deleteDeckCard({
+      where: { id },
+    });
+  }
 }

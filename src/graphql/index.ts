@@ -30,7 +30,7 @@ export enum Type {
     BLACK_STA = "BLACK_STA"
 }
 
-export class DeckCardCreateInput {
+export class DeckCardUpdateInput {
     deckId: string;
     cardId: string;
 }
@@ -72,7 +72,9 @@ export class DeckCard implements Node {
 }
 
 export abstract class IMutation {
-    abstract upsertDeckCard(data: DeckCardCreateInput): DeckCard | Promise<DeckCard>;
+    abstract plusDeckCard(data: DeckCardUpdateInput): DeckCard | Promise<DeckCard>;
+
+    abstract minusDeckCard(data: DeckCardUpdateInput): DeckCard | Promise<DeckCard>;
 
     abstract createDeck(data: DeckCreateInput): Deck | Promise<Deck>;
 }

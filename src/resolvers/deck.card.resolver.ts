@@ -1,4 +1,4 @@
-import { DeckCardCreateInput } from './../graphql/index';
+import { DeckCardUpdateInput } from './../graphql/index';
 import { DeckService } from './../services/deck.service';
 import { DeckCardService } from './../services/deck.card.service';
 import { AuthGuard } from '../guards/auth.guard';
@@ -10,6 +10,7 @@ import {
   HttpException,
   HttpStatus,
   NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 
 @Resolver()
@@ -17,6 +18,9 @@ import {
 export class DeckCardResolver {
   private static get MAX_COUNT() {
     return 3;
+  }
+  private static get MIN_COUNT() {
+    return 1;
   }
 
   constructor(
@@ -39,8 +43,8 @@ export class DeckCardResolver {
   }
 
   @Mutation()
-  async upsertDeckCard(
-    @Args('data') data: DeckCardCreateInput,
+  async plusDeckCard(
+    @Args('data') data: DeckCardUpdateInput,
     @User() user: auth.DecodedIdToken,
   ) {
     const { deckId, cardId } = data;
@@ -54,8 +58,9 @@ export class DeckCardResolver {
         throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
       }
       if (deckCards[0].count >= DeckCardResolver.MAX_COUNT) {
-        return deckCards[0];
+        throw new BadRequestException('Max Count');
       }
+
       return await this.deckCardService.updateCountById(
         deckCards[0].id,
         deckCards[0].count + 1,
@@ -70,5 +75,35 @@ export class DeckCardResolver {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     }
     return await this.deckCardService.create(deckId, cardId);
+  }
+
+  @Mutation()
+  async minusDeckCard(
+    @Args('data') data: DeckCardUpdateInput,
+    @User() user: auth.DecodedIdToken,
+  ) {
+    const { deckId, cardId } = data;
+
+    const deckCards = await this.deckCardService.findByDeckIdAndCardId(
+      deckId,
+      cardId,
+    );
+
+    if (deckCards.length < 1) {
+      throw new NotFoundException();
+    }
+
+    if (deckCards[0].deck.userId !== user.uid) {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
+
+    if (deckCards[0].count > DeckCardResolver.MIN_COUNT) {
+      return await this.deckCardService.updateCountById(
+        deckCards[0].id,
+        deckCards[0].count - 1,
+      );
+    }
+
+    return await this.deckCardService.delete(deckCards[0].id);
   }
 }
