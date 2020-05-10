@@ -53,6 +53,61 @@ async function main() {
     picture:
       'https://lh3.googleusercontent.com/sY5qrKrdQYNakOlTcPuv5m6dy5EJEqqfa1dqYDwh8lVseTO1DOwkVU9MCQ3YMsHsHSI7azX56jwaMMr7K9VeLIzrJ0NEZtu21kD085txpSYZ2pAKg-sAbtp3D4A4uBpB7A6GsCeHwODOoUOK4Va_GIWCRrpFQB3t0zGg6zZNUev0oWhLF-QP2UtG42RSY_sFZj-ACO3d8vqqoN_EG3hTFSZ4UtvdnYTHlltxJj6X-pONkfGpMD5QcotCkkyNEBbCqaw2NItpyDtHjjvPjQkQRlLvs-hXskX_kvzDCqH8iD-GK6GupPmaH0BCgbRUZMWrlNHu0iaTnWLtV-TWMNqswr9jwDKk_IGOOc4U0eMr_d_6hSSlWYanctZcHxAltraeZJj7VmsN2y6s9FKSzMvwX3yXoRw7FGKHD08o3JUuTp5uzWXStjpL_gdLvn_579yIpYXM4P2F11Psb685FPFr8pJkSge2KhkaBUyBVI0eAHFiBz87J3-zp9GuzbgL7weBKL6vnJhfo76Kx4Oy0nxUlTfHtlhWCp93Me0rSSmXw4uAtqshgdkjlGRi-j3OHr6m40iKY-y1RlGpt2iWfi1mquTn24mIVv0be8w4qAiHPRJJtqHXpo-_wvA6iUBOff374fu3oYDFL1OYl4n8pT3h72F4rVPrtCAhh0lR_MLMt2Cp3Tz0PsmWZjevBzGQDLX0bSXe44pFDYt4b3qNC1JSK-gdnk4DIyIfeuLfaJ5xsXYcIl1gRgkUyJE=w500-h715-no',
   });
+
+  await prisma.createCard({
+    name: 'ヘドロン',
+    kind: 'MONSTER',
+    type: 'TRIANGLE',
+    attribute: 'PURPLE',
+    attack: 1000,
+    defence: 600,
+    cost: 3,
+    detail:
+      '●ソウル3\n自分のモルグゾーンに置かれている紫属性モンスター1枚をバトルゾーンに置く。',
+    picture:
+      'https://lh3.googleusercontent.com/pw/ACtC-3c_vpDDbjkMxQGTi775hHbMJd64WC6bmnUcWrzUike63NK5Pk1i7137-4Mgybrr-K2WZ2PjLIDfeQy1tH9n2ubll6QttANkX_xn1IiwATO33jkqxXsHFud8e5sm6jy7dbp7nuw8NTT-XDGOQ8SAhSblWg=w500-h715-no?authuser=0',
+  });
+
+  await prisma.createCard({
+    name: 'さらにみずみずしい魚',
+    kind: 'MONSTER',
+    type: 'RECTANGLE',
+    attribute: 'BLUE',
+    attack: 200,
+    defence: 300,
+    cost: 1,
+    detail: '■1ターンに1度\n●ソウル3\nデッキからカードを2枚ドローする。',
+    picture:
+      'https://lh3.googleusercontent.com/pw/ACtC-3ex6FRzBJnI7fAHy4gDdFZV-Apj_FklVwDFfBmms5bhHRxy4acRQoWz3Lu4mAvaQJDCscuU1l4OtTtAXRKLz4RDWJQzaBSTz7P8lvXvCSpZOsw6clTlRGJ7MKW65lCupLAXVzsdT3h8SGoGAYV4W3wzOg=w500-h715-no?authuser=0',
+  });
+
+  await prisma.createCard({
+    name: '進化したバクボムダン',
+    kind: 'MONSTER',
+    type: 'TRIANGLE',
+    attribute: 'RED',
+    attack: 1500,
+    defence: 600,
+    cost: 4,
+    detail:
+      '■バトルゾーンからソウルゾーンに置かれたとき\n相手ライフに600のダメージを与える。',
+    picture:
+      'https://lh3.googleusercontent.com/pw/ACtC-3dfaWOlzhjbywPk6iTahvugdfz5z87OflHR7D4SiWKisdv2-EpjP6eeSbOHyiutCr3PXSb6_pJMm4SuW-cNpX-rg-51vF6i2DCicQLfNgtC5TB4ep5_XQ8TUsQp9G2sCmexKD4ZjQCgJNu2t8Lm_wOEBw=w500-h715-no?authuser=0',
+  });
+
+  await prisma.createCard({
+    name: '懐かしのルード',
+    kind: 'MONSTER',
+    type: 'CIRCLE',
+    attribute: 'WHITE',
+    attack: 300,
+    defence: 300,
+    cost: 1,
+    detail:
+      '●エナジー2\n相手モンスター1枚の攻撃力をこのターンのエンドタイムまで700下げる。',
+    picture:
+      'https://lh3.googleusercontent.com/pw/ACtC-3e_TwurBT8oL0wbI1qD8Vw6fkZrqu1xGbcEFb0kHH_JGXbLyh3oyOhSJb53C_kgtIBwlBWOIB1MANxe3Kv3Nu5d5HXlBfa4dYUF_sTSRVrkg8VQovzxWH65l1GzRx7M3seYi3AnMBb2Blu19e6gkhCEMw=w500-h715-no?authuser=0',
+  });
 }
 
 main().catch(err => console.error(err));
