@@ -1,3 +1,6 @@
+import { DeckResolver } from './../resolvers/deck.resolver';
+import { DeckService } from './../services/deck.service';
+import { DeckEntity } from './../entities/deck.entity';
 import { UserService } from './../services/user.service';
 import { Module } from '@nestjs/common';
 import { AppController } from '../controllers/app.controller';
@@ -23,10 +26,10 @@ const {
       username: DB_USERNAME,
       password: DB_PASSWORD,
       database: DB_DATABASE,
-      entities: [],
+      entities: [DeckEntity],
       synchronize: DB_SYNCHRONIZE?.toLowerCase() === 'true',
     }),
-    TypeOrmModule.forFeature([]),
+    TypeOrmModule.forFeature([DeckEntity]),
     GraphQLModule.forRoot({
       playground: true,
       introspection: true,
@@ -41,6 +44,6 @@ const {
     }),
   ],
   controllers: [AppController],
-  providers: [UserService],
+  providers: [UserService, DeckService, DeckResolver],
 })
 export class AppModule {}
