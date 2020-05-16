@@ -1,4 +1,3 @@
-import { DeckEntity } from './../entities/deck.entity';
 import { ValidatedDeckCreateInput } from './../inputs/validated.deck.create.input';
 import { DeckService } from './../services/deck.service';
 import { AuthGuard } from './../guards/auth.guard';
@@ -22,10 +21,6 @@ export class DeckResolver {
     @User() user: auth.DecodedIdToken,
     @Args('data') data: ValidatedDeckCreateInput,
   ) {
-    const deckEntity = new DeckEntity();
-    deckEntity.userId = user.uid;
-    deckEntity.name = data.name;
-
-    return await this.deckService.save(deckEntity);
+    return await this.deckService.create(user.uid, data.name);
   }
 }

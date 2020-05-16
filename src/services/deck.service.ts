@@ -10,11 +10,18 @@ export class DeckService {
     private readonly deckRepository: Repository<DeckEntity>,
   ) {}
 
+  async findById(id: string): Promise<DeckEntity | undefined> {
+    return await this.deckRepository.findOne({ where: { id } });
+  }
+
   async findByUserId(userId: string): Promise<DeckEntity[]> {
     return await this.deckRepository.find({ where: { userId } });
   }
 
-  async save(deckEntity: DeckEntity): Promise<DeckEntity> {
-    return await this.deckRepository.save(deckEntity);
+  async create(userId: string, name: string): Promise<DeckEntity> {
+    const insertResult = await this.deckRepository.insert({ userId, name });
+    return await this.deckRepository.findOne({
+      id: insertResult.identifiers[0].id,
+    });
   }
 }
