@@ -10,7 +10,7 @@ export class Decks1589633829753 implements MigrationInterface {
         updatedAt datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
         id varchar(36) NOT NULL,
         PRIMARY KEY (id)
-      ) ENGINE=InnoDB DEFAULT CHARSET=latin1`);
+      ) ENGINE=InnoDB`);
   }
 
   public async down(queryRunner: QueryRunner): Promise<any> {
