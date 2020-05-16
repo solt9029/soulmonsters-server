@@ -1,5 +1,6 @@
+import { DeckCardEntity } from './deck.card.entity';
 import { Card, Kind, Type, Attribute } from './../graphql/index';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity({ name: 'cards' })
 export class CardEntity extends Card {
@@ -32,4 +33,10 @@ export class CardEntity extends Card {
 
   @Column('text')
   picture: string;
+
+  @OneToMany(
+    () => DeckCardEntity,
+    deckCardEntity => deckCardEntity.card,
+  )
+  deckCards: DeckCardEntity[];
 }

@@ -1,3 +1,4 @@
+import { DeckCardEntity } from './deck.card.entity';
 import { Deck } from './../graphql/index';
 import {
   Entity,
@@ -5,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   CreateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity({ name: 'decks' })
@@ -23,4 +25,10 @@ export class DeckEntity extends Deck {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(
+    () => DeckCardEntity,
+    deckCardEntity => deckCardEntity.card,
+  )
+  deckCards: DeckCardEntity[];
 }
