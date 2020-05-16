@@ -1,4 +1,3 @@
-import { DeckCardEntity } from './../entities/deck.card.entity';
 import { DeckService } from './../services/deck.service';
 import { DeckCardUpdateInput } from './../graphql/index';
 import { DeckCardService } from './../services/deck.card.service';
