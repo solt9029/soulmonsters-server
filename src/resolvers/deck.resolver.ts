@@ -1,5 +1,4 @@
 import { DeckEntity } from './../entities/deck.entity';
-import { Deck } from './../graphql/index';
 import { ValidatedDeckCreateInput } from './../inputs/validated.deck.create.input';
 import { DeckService } from './../services/deck.service';
 import { AuthGuard } from './../guards/auth.guard';

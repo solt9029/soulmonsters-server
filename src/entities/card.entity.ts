@@ -3,8 +3,8 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'cards' })
 export class CardEntity extends Card {
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
   @Column()
   name!: string;
@@ -27,9 +27,9 @@ export class CardEntity extends Card {
   @Column()
   cost: number;
 
-  @Column()
+  @Column('text')
   detail: string;
 
-  @Column()
+  @Column('text')
   picture: string;
 }

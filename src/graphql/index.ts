@@ -39,8 +39,12 @@ export class DeckCreateInput {
     name: string;
 }
 
-export class Card {
-    id: number;
+export interface Node {
+    id: string;
+}
+
+export class Card implements Node {
+    id: string;
     name: string;
     kind: Kind;
     type: Type;
@@ -52,16 +56,16 @@ export class Card {
     picture: string;
 }
 
-export class Deck {
-    id: number;
+export class Deck implements Node {
+    id: string;
     userId: string;
     name: string;
     createdAt: DateTime;
     updatedAt: DateTime;
 }
 
-export class DeckCard {
-    id: number;
+export class DeckCard implements Node {
+    id: string;
     count: number;
     deck: Deck;
     card: Card;
@@ -85,8 +89,8 @@ export abstract class IQuery {
     abstract userData(userId: string): UserData | Promise<UserData>;
 }
 
-export class UserData {
-    id: number;
+export class UserData implements Node {
+    id: string;
     userId: string;
     winningCount: number;
     losingCount: number;
