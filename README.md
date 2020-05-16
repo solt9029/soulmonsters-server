@@ -15,7 +15,7 @@ docker-compose up -d
 cp .env.example .env
 vi .env
 
-prisma deploy # generates prisma/generated/*, prisma/schema.graphql, src/prisma/prisma.binding.ts
+npm run typeorm migration:run
 
 npm run start:dev
 ```
