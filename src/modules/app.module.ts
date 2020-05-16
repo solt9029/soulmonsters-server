@@ -1,19 +1,32 @@
-import { UserDataResolver } from '../resolvers/user.data.resolver';
-import { UserDataService } from '../services/user.data.service';
-import { CardService } from './../services/card.service';
-import { DeckService } from './../services/deck.service';
-import { DeckCardService } from './../services/deck.card.service';
-import { DeckCardResolver } from './../resolvers/deck.card.resolver';
-import { CardResolver } from './../resolvers/card.resolver';
 import { UserService } from './../services/user.service';
-import { DeckResolver } from './../resolvers/deck.resolver';
-import { PrismaService } from './../services/prisma.service';
 import { Module } from '@nestjs/common';
 import { AppController } from '../controllers/app.controller';
 import { GraphQLModule } from '@nestjs/graphql';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
+const {
+  DB_TYPE,
+  DB_HOST,
+  DB_PORT,
+  DB_USERNAME,
+  DB_PASSWORD,
+  DB_DATABASE,
+  DB_SYNCHRONIZE,
+} = process.env;
 
 @Module({
   imports: [
+    TypeOrmModule.forRoot({
+      type: DB_TYPE,
+      host: DB_HOST,
+      port: parseInt(DB_PORT),
+      username: DB_USERNAME,
+      password: DB_PASSWORD,
+      database: DB_DATABASE,
+      entities: [],
+      synchronize: DB_SYNCHRONIZE?.toLowerCase() === 'true',
+    }),
+    TypeOrmModule.forFeature([]),
     GraphQLModule.forRoot({
       playground: true,
       introspection: true,
@@ -28,17 +41,6 @@ import { GraphQLModule } from '@nestjs/graphql';
     }),
   ],
   controllers: [AppController],
-  providers: [
-    DeckResolver,
-    CardResolver,
-    DeckCardResolver,
-    UserDataResolver,
-    PrismaService,
-    UserService,
-    DeckCardService,
-    DeckService,
-    CardService,
-    UserDataService,
-  ],
+  providers: [UserService],
 })
 export class AppModule {}

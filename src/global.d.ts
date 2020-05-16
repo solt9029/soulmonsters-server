@@ -6,5 +6,12 @@ declare namespace NodeJS {
     readonly FIREBASE_CLIENT_EMAIL: string;
     readonly FIREBASE_DATABASE_URL: string;
     readonly CORS_ORIGIN: string;
+    readonly DB_TYPE: 'mysql';
+    readonly DB_PORT: string;
+    readonly DB_HOST: string;
+    readonly DB_USERNAME: string;
+    readonly DB_PASSWORD: string;
+    readonly DB_DATABASE: string;
+    readonly DB_SYNCHRONIZE: 'true' | 'false';
   }
 }
