@@ -1,3 +1,6 @@
+import { CardEntity } from './../entities/card.entity';
+import { CardResolver } from './../resolvers/card.resolver';
+import { CardService } from './../services/card.service';
 import { DeckResolver } from './../resolvers/deck.resolver';
 import { DeckService } from './../services/deck.service';
 import { DeckEntity } from './../entities/deck.entity';
@@ -26,10 +29,10 @@ const {
       username: DB_USERNAME,
       password: DB_PASSWORD,
       database: DB_DATABASE,
-      entities: [DeckEntity],
+      entities: [DeckEntity, CardEntity],
       synchronize: DB_SYNCHRONIZE?.toLowerCase() === 'true',
     }),
-    TypeOrmModule.forFeature([DeckEntity]),
+    TypeOrmModule.forFeature([DeckEntity, CardEntity]),
     GraphQLModule.forRoot({
       playground: true,
       introspection: true,
@@ -44,6 +47,12 @@ const {
     }),
   ],
   controllers: [AppController],
-  providers: [UserService, DeckService, DeckResolver],
+  providers: [
+    UserService,
+    DeckService,
+    DeckResolver,
+    CardService,
+    CardResolver,
+  ],
 })
 export class AppModule {}
