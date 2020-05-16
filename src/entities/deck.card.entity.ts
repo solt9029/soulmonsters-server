@@ -19,7 +19,7 @@ export class DeckCardEntity extends DeckCard {
   card: CardEntity;
 
   @ManyToOne(
-    type => DeckEntity,
+    () => DeckEntity,
     deckEntity => deckEntity.deckCards,
     { primary: true },
   )
