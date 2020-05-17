@@ -1,24 +1,27 @@
-import { Deck } from './../graphql/index';
-import { PrismaService } from './prisma.service';
+import { DeckEntity } from './../entities/deck.entity';
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class DeckService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    @InjectRepository(DeckEntity)
+    private readonly deckRepository: Repository<DeckEntity>,
+  ) {}
 
-  async findByUserId(userId: string): Promise<Deck[]> {
-    return await this.prismaService.query.decks({
-      where: { userId },
-    });
+  async findById(id: number): Promise<DeckEntity | undefined> {
+    return await this.deckRepository.findOne({ where: { id } });
   }
 
-  async createDeck(userId: string, name: string): Promise<Deck> {
-    return this.prismaService.mutation.createDeck({
-      data: { userId, name },
-    });
+  async findByUserId(userId: string): Promise<DeckEntity[]> {
+    return await this.deckRepository.find({ where: { userId } });
   }
 
-  async findById(id: string): Promise<Deck | null> {
-    return await this.prismaService.query.deck({ where: { id } });
+  async create(userId: string, name: string): Promise<DeckEntity> {
+    const insertResult = await this.deckRepository.insert({ userId, name });
+    return await this.deckRepository.findOne({
+      id: insertResult.identifiers[0].id,
+    });
   }
 }

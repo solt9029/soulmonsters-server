@@ -1,83 +1,45 @@
-import { DeckCard } from '../prisma/generated/prisma.binding';
-import { PrismaService } from './prisma.service';
+import { DeckCardEntity } from './../entities/deck.card.entity';
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class DeckCardService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    @InjectRepository(DeckCardEntity)
+    private readonly deckCardRepository: Repository<DeckCardEntity>,
+  ) {}
 
-  async findByDeckId(deckId: string): Promise<DeckCard[]> {
-    const query = `
-    query($deckId: ID!) {
-      deckCards(
-        where: { deck: { id: $deckId } }
-      ) {
-        id count
-        card {
-          id name kind attribute type attack defence cost detail picture
-        }
-        deck {
-          id userId name
-        }
-      }
-    }
-    `;
-    const variables = { deckId };
-
-    const result = await this.prismaService.request<{
-      data: { deckCards: DeckCard[] };
-    }>(query, variables);
-
-    return result.data.deckCards;
+  async findByDeckId(deckId: number): Promise<DeckCardEntity[]> {
+    return await this.deckCardRepository.find({
+      where: { deck: { id: deckId } },
+      relations: ['card', 'deck'],
+    });
   }
 
   async findByDeckIdAndCardId(
-    deckId: string,
-    cardId: string,
-  ): Promise<DeckCard[]> {
-    const query = `
-    query($deckId: ID!, $cardId: ID!) {
-      deckCards(
-        where: { deck: { id: $deckId }, card: { id: $cardId } }
-      ) {
-        id count
-        card {
-          id name kind attribute type attack defence cost detail picture
-        }
-        deck {
-          id userId name
-        }
-      }
-    }
-    `;
-    const variables = { deckId, cardId };
-
-    const result = await this.prismaService.request<{
-      data: { deckCards: DeckCard[] };
-    }>(query, variables);
-
-    return result.data.deckCards;
-  }
-
-  async updateCountById(id: string, count: number): Promise<DeckCard> {
-    return await this.prismaService.mutation.updateDeckCard({
-      where: { id },
-      data: { count },
+    deckId: number,
+    cardId: number,
+  ): Promise<DeckCardEntity | undefined> {
+    return await this.deckCardRepository.findOne({
+      where: { deck: { id: deckId }, card: { id: cardId } },
+      relations: ['card', 'deck'],
     });
   }
 
-  async create(deckId: string, cardId: string): Promise<DeckCard> {
-    return await this.prismaService.mutation.createDeckCard({
-      data: {
-        deck: { connect: { id: deckId } },
-        card: { connect: { id: cardId } },
-      },
-    });
+  async updateCountById(id: number, count: number): Promise<DeckCardEntity> {
+    await this.deckCardRepository.update({ id }, { count });
+    return await this.deckCardRepository.findOne({ where: { id } });
   }
 
-  async delete(id: string): Promise<DeckCard> {
-    return await this.prismaService.mutation.deleteDeckCard({
-      where: { id },
+  async create(deckId: number, cardId: number): Promise<DeckCardEntity> {
+    const insertResult = await this.deckCardRepository.insert({
+      deck: { id: deckId },
+      card: { id: cardId },
+      count: 1,
+    });
+    return await this.deckCardRepository.findOne({
+      where: { id: insertResult.identifiers[0].id },
     });
   }
 }
