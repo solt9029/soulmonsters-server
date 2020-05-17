@@ -57,7 +57,7 @@ export class DeckCardResolver {
       cardId,
     );
 
-    if (deckCardEntity === undefined) {
+    if (deckCardEntity !== undefined) {
       if (deckCardEntity.deck.userId !== user.uid) {
         throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
       }

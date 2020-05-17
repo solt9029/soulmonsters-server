@@ -13,7 +13,7 @@ import {
 @Unique(['card', 'deck'])
 export class DeckCardEntity extends DeckCard {
   @PrimaryGeneratedColumn()
-  id!: number;
+  id: number;
 
   @Column()
   count: number;
@@ -21,14 +21,12 @@ export class DeckCardEntity extends DeckCard {
   @ManyToOne(
     () => CardEntity,
     cardEntity => cardEntity.deckCards,
-    { primary: true },
   )
   card: CardEntity;
 
   @ManyToOne(
     () => DeckEntity,
     deckEntity => deckEntity.deckCards,
-    { primary: true },
   )
   deck: DeckEntity;
 }

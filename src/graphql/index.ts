@@ -82,7 +82,7 @@ export abstract class IMutation {
 export abstract class IQuery {
     abstract cards(): Card[] | Promise<Card[]>;
 
-    abstract deckCards(deckId?: string): DeckCard[] | Promise<DeckCard[]>;
+    abstract deckCards(deckId: number): DeckCard[] | Promise<DeckCard[]>;
 
     abstract decks(): Deck[] | Promise<Deck[]>;
 

@@ -12,13 +12,13 @@ import {
 @Entity({ name: 'decks' })
 export class DeckEntity extends Deck {
   @PrimaryGeneratedColumn()
-  id!: number;
+  id: number;
 
   @Column()
-  userId!: string;
+  userId: string;
 
   @Column({ length: 64 })
-  name!: string;
+  name: string;
 
   @CreateDateColumn()
   createdAt: Date;
