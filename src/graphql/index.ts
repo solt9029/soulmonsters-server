@@ -31,8 +31,8 @@ export enum Type {
 }
 
 export class DeckCardUpdateInput {
-    deckId: string;
-    cardId: string;
+    deckId: number;
+    cardId: number;
 }
 
 export class DeckCreateInput {
@@ -40,11 +40,11 @@ export class DeckCreateInput {
 }
 
 export interface Node {
-    id: string;
+    id: number;
 }
 
 export class Card implements Node {
-    id: string;
+    id: number;
     name: string;
     kind: Kind;
     type: Type;
@@ -57,7 +57,7 @@ export class Card implements Node {
 }
 
 export class Deck implements Node {
-    id: string;
+    id: number;
     userId: string;
     name: string;
     createdAt: DateTime;
@@ -65,7 +65,7 @@ export class Deck implements Node {
 }
 
 export class DeckCard implements Node {
-    id: string;
+    id: number;
     count: number;
     deck: Deck;
     card: Card;
@@ -90,7 +90,7 @@ export abstract class IQuery {
 }
 
 export class UserData implements Node {
-    id: string;
+    id: number;
     userId: string;
     winningCount: number;
     losingCount: number;

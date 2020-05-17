@@ -31,7 +31,7 @@ export class DeckCardResolver {
   @Query()
   async deckCards(
     @User() user: auth.DecodedIdToken,
-    @Args('deckId') deckId: string,
+    @Args('deckId') deckId: number,
   ) {
     const deckCardEntities = await this.deckCardService.findByDeckId(deckId);
 

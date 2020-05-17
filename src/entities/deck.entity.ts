@@ -11,8 +11,8 @@ import {
 
 @Entity({ name: 'decks' })
 export class DeckEntity extends Deck {
-  @PrimaryGeneratedColumn('uuid')
-  id!: string;
+  @PrimaryGeneratedColumn()
+  id!: number;
 
   @Column()
   userId!: string;

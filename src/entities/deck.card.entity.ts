@@ -12,8 +12,8 @@ import {
 @Entity({ name: 'deckCards' })
 @Unique(['card', 'deck'])
 export class DeckCardEntity extends DeckCard {
-  @PrimaryGeneratedColumn('uuid')
-  id!: string;
+  @PrimaryGeneratedColumn()
+  id!: number;
 
   @Column()
   count: number;

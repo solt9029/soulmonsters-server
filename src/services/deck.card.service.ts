@@ -10,7 +10,7 @@ export class DeckCardService {
     private readonly deckCardRepository: Repository<DeckCardEntity>,
   ) {}
 
-  async findByDeckId(deckId: string): Promise<DeckCardEntity[]> {
+  async findByDeckId(deckId: number): Promise<DeckCardEntity[]> {
     return await this.deckCardRepository.find({
       where: { deck: { id: deckId } },
       relations: ['card', 'deck'],
@@ -18,8 +18,8 @@ export class DeckCardService {
   }
 
   async findByDeckIdAndCardId(
-    deckId: string,
-    cardId: string,
+    deckId: number,
+    cardId: number,
   ): Promise<DeckCardEntity | undefined> {
     return await this.deckCardRepository.findOne({
       where: { deck: { id: deckId }, card: { id: cardId } },
@@ -27,12 +27,12 @@ export class DeckCardService {
     });
   }
 
-  async updateCountById(id: string, count: number): Promise<DeckCardEntity> {
+  async updateCountById(id: number, count: number): Promise<DeckCardEntity> {
     await this.deckCardRepository.update({ id }, { count });
     return await this.deckCardRepository.findOne({ where: { id } });
   }
 
-  async create(deckId: string, cardId: string): Promise<DeckCardEntity> {
+  async create(deckId: number, cardId: number): Promise<DeckCardEntity> {
     const insertResult = await this.deckCardRepository.insert({
       deck: { id: deckId },
       card: { id: cardId },
