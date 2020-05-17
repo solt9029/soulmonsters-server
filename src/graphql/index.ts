@@ -22,6 +22,21 @@ export enum Kind {
     BLOCK = "BLOCK"
 }
 
+export enum Phase {
+    DRAW = "DRAW",
+    ENERGY = "ENERGY",
+    PUT = "PUT",
+    SOMETHING = "SOMETHING",
+    BATTLE = "BATTLE",
+    END = "END"
+}
+
+export enum Status {
+    WAIT = "WAIT",
+    PLAY = "PLAY",
+    END = "END"
+}
+
 export enum Type {
     CIRCLE = "CIRCLE",
     TRIANGLE = "TRIANGLE",
@@ -69,6 +84,18 @@ export class DeckCard implements Node {
     count: number;
     deck: Deck;
     card: Card;
+}
+
+export class Game implements Node {
+    id: number;
+    firstUserId: string;
+    secondUserId?: string;
+    playingUserId?: string;
+    phase?: Phase;
+    winningUserId?: string;
+    startedAt?: DateTime;
+    endedAt?: DateTime;
+    status: Status;
 }
 
 export abstract class IMutation {
