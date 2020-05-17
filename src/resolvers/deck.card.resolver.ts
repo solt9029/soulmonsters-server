@@ -79,4 +79,34 @@ export class DeckCardResolver {
     }
     return await this.deckCardService.create(deckId, cardId);
   }
+
+  @Mutation()
+  async minusDeckCard(
+    @Args('data') data: DeckCardUpdateInput,
+    @User() user: auth.DecodedIdToken,
+  ) {
+    const { deckId, cardId } = data;
+
+    const deckCardEntity = await this.deckCardService.findByDeckIdAndCardId(
+      deckId,
+      cardId,
+    );
+
+    if (deckCardEntity === undefined) {
+      throw new NotFoundException();
+    }
+
+    if (deckCardEntity.deck.userId !== user.uid) {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
+
+    if (deckCardEntity.count > DeckCardResolver.MIN_COUNT) {
+      return await this.deckCardService.updateCountById(
+        deckCardEntity.id,
+        deckCardEntity.count - 1,
+      );
+    }
+
+    return await this.deckCardService.delete(deckCardEntity.id);
+  }
 }

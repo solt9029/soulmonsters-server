@@ -42,4 +42,12 @@ export class DeckCardService {
       where: { id: insertResult.identifiers[0].id },
     });
   }
+
+  async delete(id: number): Promise<DeckCardEntity> {
+    const deckCardEntity = await this.deckCardRepository.findOne({
+      where: { id },
+    });
+    await this.deckCardRepository.delete({ id });
+    return deckCardEntity;
+  }
 }
