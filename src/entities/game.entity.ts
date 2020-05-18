@@ -21,7 +21,7 @@ export class GameEntity extends Game {
   secondUserId: string;
 
   @Column({ nullable: true })
-  playingUserId: PlayingUser; // first or second enumにする
+  playingUserId: PlayingUser;
 
   @Column({ nullable: true })
   phase: Phase;
