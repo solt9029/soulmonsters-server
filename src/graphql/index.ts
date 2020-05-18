@@ -101,6 +101,7 @@ export class Game implements Node {
     startedAt?: DateTime;
     endedAt?: DateTime;
     status: Status;
+    players?: Player[];
 }
 
 export abstract class IMutation {
@@ -109,12 +110,14 @@ export abstract class IMutation {
     abstract minusDeckCard(data: DeckCardUpdateInput): DeckCard | Promise<DeckCard>;
 
     abstract createDeck(data: DeckCreateInput): Deck | Promise<Deck>;
+
+    abstract startGame(deckId: number): Game | Promise<Game>;
 }
 
 export class Player implements Node {
     id: number;
     userId: string;
-    energy: number;
+    energy?: number;
     lifePoint: number;
     lastViewedAt?: DateTime;
     deck: Deck;

@@ -1,3 +1,5 @@
+import { GameResolver } from './../resolvers/game.resolver';
+import { GameService } from './../services/game.service';
 import { PlayerEntity } from './../entities/player.entity';
 import { GameEntity } from './../entities/game.entity';
 import { DeckCardResolver } from './../resolvers/deck.card.resolver';
@@ -72,6 +74,8 @@ const {
     CardResolver,
     DeckCardService,
     DeckCardResolver,
+    GameService,
+    GameResolver,
   ],
 })
 export class AppModule {}

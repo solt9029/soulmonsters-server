@@ -17,10 +17,10 @@ export class PlayerEntity extends Player {
   @Column({ unique: true })
   userId: string;
 
-  @Column()
+  @Column({ nullable: true })
   energy: number;
 
-  @Column()
+  @Column({ default: 8000 })
   lifePoint: number;
 
   @Column()

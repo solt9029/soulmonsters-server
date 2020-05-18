@@ -21,15 +21,15 @@ export class GameEntity extends Game {
   secondUserId: string;
 
   @Column({ nullable: true })
-  playingUserId: PlayingUser;
+  playingUser: PlayingUser;
 
-  @Column({ nullable: true })
+  @Column({ default: Phase.DRAW })
   phase: Phase;
 
   @Column({ nullable: true })
   winningUserId: string;
 
-  @Column()
+  @Column({ default: Status.WAIT })
   status: Status;
 
   @Column({ nullable: true })
