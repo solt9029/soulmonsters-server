@@ -1,3 +1,5 @@
+import { PlayerEntity } from './../entities/player.entity';
+import { GameEntity } from './../entities/game.entity';
 import { DeckCardResolver } from './../resolvers/deck.card.resolver';
 import { DeckCardService } from './../services/deck.card.service';
 import { DeckCardEntity } from './../entities/deck.card.entity';
@@ -32,10 +34,22 @@ const {
       username: DB_USERNAME,
       password: DB_PASSWORD,
       database: DB_DATABASE,
-      entities: [DeckEntity, CardEntity, DeckCardEntity],
+      entities: [
+        DeckEntity,
+        CardEntity,
+        DeckCardEntity,
+        GameEntity,
+        PlayerEntity,
+      ],
       synchronize: DB_SYNCHRONIZE?.toLowerCase() === 'true',
     }),
-    TypeOrmModule.forFeature([DeckEntity, CardEntity, DeckCardEntity]),
+    TypeOrmModule.forFeature([
+      DeckEntity,
+      CardEntity,
+      DeckCardEntity,
+      GameEntity,
+      PlayerEntity,
+    ]),
     GraphQLModule.forRoot({
       playground: true,
       introspection: true,

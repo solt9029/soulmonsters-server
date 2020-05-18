@@ -1,3 +1,4 @@
+import { PlayerEntity } from './player.entity';
 import { DeckCardEntity } from './deck.card.entity';
 import { Deck } from './../graphql/index';
 import {
@@ -7,6 +8,7 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
   OneToMany,
+  OneToOne,
 } from 'typeorm';
 
 @Entity({ name: 'decks' })
@@ -28,7 +30,13 @@ export class DeckEntity extends Deck {
 
   @OneToMany(
     () => DeckCardEntity,
-    deckCardEntity => deckCardEntity.card,
+    deckCardEntity => deckCardEntity.deck,
   )
   deckCards: DeckCardEntity[];
+
+  @OneToOne(
+    () => PlayerEntity,
+    playerEntity => playerEntity.deck,
+  )
+  player: PlayerEntity;
 }

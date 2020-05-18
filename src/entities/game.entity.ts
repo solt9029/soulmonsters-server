@@ -1,5 +1,13 @@
-import { Game, Phase, Status } from './../graphql/index';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { PlayerEntity } from './player.entity';
+import { Game, Phase, Status, PlayingUser } from './../graphql/index';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
+} from 'typeorm';
 
 @Entity({ name: 'games' })
 export class GameEntity extends Game {
@@ -13,7 +21,7 @@ export class GameEntity extends Game {
   secondUserId: string;
 
   @Column({ nullable: true })
-  playingUserId: string;
+  playingUserId: PlayingUser; // first or second enumにする
 
   @Column({ nullable: true })
   phase: Phase;
@@ -21,12 +29,24 @@ export class GameEntity extends Game {
   @Column({ nullable: true })
   winningUserId: string;
 
+  @Column()
+  status: Status;
+
   @Column({ nullable: true })
   startedAt: Date;
 
   @Column({ nullable: true })
   endedAt: Date;
 
-  @Column()
-  status: Status;
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @OneToMany(
+    () => PlayerEntity,
+    playerEntity => playerEntity.game,
+  )
+  players: PlayerEntity[];
 }
