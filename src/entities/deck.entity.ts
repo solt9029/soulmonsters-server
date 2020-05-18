@@ -37,6 +37,7 @@ export class DeckEntity extends Deck {
   @OneToOne(
     () => PlayerEntity,
     playerEntity => playerEntity.deck,
+    { nullable: true },
   )
   player: PlayerEntity;
 }
