@@ -1,9 +1,7 @@
 import { PlayingUser } from './../graphql/index';
 import { PlayerEntity } from './../entities/player.entity';
 import { GameEntity } from './../entities/game.entity';
-import { DeckEntity } from './../entities/deck.entity';
-import { Injectable, NotAcceptableException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable } from '@nestjs/common';
 import { Repository, Connection, EntityRepository } from 'typeorm';
 import { Status } from 'src/graphql';
 
