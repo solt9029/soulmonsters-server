@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   OneToOne,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity({ name: 'players' })
@@ -30,6 +31,7 @@ export class PlayerEntity extends Player {
     () => DeckEntity,
     deckEntity => deckEntity.player,
   )
+  @JoinColumn()
   deck: DeckEntity;
 
   @ManyToOne(

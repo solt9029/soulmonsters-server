@@ -1,3 +1,5 @@
+import { GameCardEntityFactory } from './../factories/game.card.entity.factory';
+import { GameCardEntity } from './../entities/game.card.entity';
 import { DeckCardEntity } from './../entities/deck.card.entity';
 import { PlayingUser } from './../graphql/index';
 import { PlayerEntity } from './../entities/player.entity';
@@ -20,13 +22,19 @@ export class PlayerRepository extends Repository<PlayerEntity> {}
 @EntityRepository(DeckCardEntity)
 export class DeckCardRepository extends Repository<DeckCardEntity> {}
 
+@EntityRepository(GameCardEntity)
+export class GameCardRepository extends Repository<GameCardEntity> {}
+
 @Injectable()
 export class GameService {
   private static get MIN_COUNT() {
     return 40;
   }
 
-  constructor(private connection: Connection) {}
+  constructor(
+    private connection: Connection,
+    private gameCardEntityFactory: GameCardEntityFactory,
+  ) {}
 
   async start(userId: string, deckId: number) {
     return this.connection.transaction(async manager => {
@@ -35,17 +43,24 @@ export class GameService {
       );
       const gameRepository = manager.getCustomRepository(GameRepository);
       const playerRepository = manager.getCustomRepository(PlayerRepository);
+      const gameCardRepository = manager.getCustomRepository(
+        GameCardRepository,
+      );
 
-      const deckCards = await deckCardRepository
+      const deckCardEntities = await deckCardRepository
         .createQueryBuilder('deckCards')
         .setLock('pessimistic_read')
-        .select()
+        .leftJoinAndSelect('deckCards.card', 'card')
+        .leftJoinAndSelect('deckCards.deck', 'deck')
         .where('deckCards.deckId = :deckId', { deckId })
         .getMany();
-      if (deckCards.length > 0 && deckCards[0].deck.userId !== userId) {
+      if (
+        deckCardEntities.length > 0 &&
+        deckCardEntities[0].deck.userId !== userId
+      ) {
         throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
       }
-      if (deckCards.length < GameService.MIN_COUNT) {
+      if (deckCardEntities.length < GameService.MIN_COUNT) {
         throw new BadRequestException('Min Count');
       }
 
@@ -62,19 +77,28 @@ export class GameService {
           firstUserId: userId,
         });
         const gameId = gameInsertResult.identifiers[0].id;
+        const gameCardEntities = this.gameCardEntityFactory.create(
+          deckCardEntities,
+        );
+        await gameCardRepository.insert(gameCardEntities);
         await playerRepository.insert({
           userId,
           deck: { id: deckId },
           lastViewedAt: new Date(),
           game: { id: gameId },
         });
+
         return await gameRepository.findOne({
           where: { id: gameId },
-          relations: ['players'],
+          relations: ['players', 'players.deck'],
         });
       }
 
       // join the waiting game
+      const gameCardEntities = this.gameCardEntityFactory.create(
+        deckCardEntities,
+      );
+      await gameCardRepository.insert(gameCardEntities);
       const playingUser =
         Math.floor(Math.random() * 2) === 1
           ? PlayingUser.FIRST

@@ -59,7 +59,8 @@ export enum Zone {
     BATTLE = "BATTLE",
     DECK = "DECK",
     SOUL = "SOUL",
-    MORGUE = "MORGUE"
+    MORGUE = "MORGUE",
+    HAND = "HAND"
 }
 
 export class DeckCardUpdateInput {
