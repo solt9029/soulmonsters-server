@@ -1,3 +1,4 @@
+import { GameCardEntity } from './../entities/game.card.entity';
 import { GameResolver } from './../resolvers/game.resolver';
 import { GameService } from './../services/game.service';
 import { PlayerEntity } from './../entities/player.entity';
@@ -42,6 +43,7 @@ const {
         DeckCardEntity,
         GameEntity,
         PlayerEntity,
+        GameCardEntity,
       ],
       synchronize: DB_SYNCHRONIZE?.toLowerCase() === 'true',
     }),
@@ -51,6 +53,7 @@ const {
       DeckCardEntity,
       GameEntity,
       PlayerEntity,
+      GameCardEntity,
     ]),
     GraphQLModule.forRoot({
       playground: true,

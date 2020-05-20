@@ -15,6 +15,11 @@ export enum Attribute {
     BLACK = "BLACK"
 }
 
+export enum BattlePosition {
+    ATTACK = "ATTACK",
+    DEFENCE = "DEFENCE"
+}
+
 export enum Kind {
     MONSTER = "MONSTER",
     CIRCLE_MONSTER = "CIRCLE_MONSTER",
@@ -48,6 +53,13 @@ export enum Type {
     RECTANGLE = "RECTANGLE",
     WHITE_STAR = "WHITE_STAR",
     BLACK_STA = "BLACK_STA"
+}
+
+export enum Zone {
+    BATTLE = "BATTLE",
+    DECK = "DECK",
+    SOUL = "SOUL",
+    MORGUE = "MORGUE"
 }
 
 export class DeckCardUpdateInput {
@@ -102,6 +114,23 @@ export class Game implements Node {
     endedAt?: DateTime;
     status: Status;
     players?: Player[];
+}
+
+export class GameCard implements Node {
+    id: number;
+    originalUserId: string;
+    currentUserId: string;
+    zone: Zone;
+    position: number;
+    battlePosition?: BattlePosition;
+    name: string;
+    kind: Kind;
+    type: Type;
+    attribute?: Attribute;
+    attack?: number;
+    defence?: number;
+    cost?: number;
+    detail?: string;
 }
 
 export abstract class IMutation {

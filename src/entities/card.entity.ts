@@ -1,6 +1,7 @@
 import { DeckCardEntity } from './deck.card.entity';
 import { Card, Kind, Type, Attribute } from './../graphql/index';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { GameCardEntity } from './game.card.entity';
 
 @Entity({ name: 'cards' })
 export class CardEntity extends Card {
@@ -16,19 +17,19 @@ export class CardEntity extends Card {
   @Column()
   type: Type;
 
-  @Column()
+  @Column({ nullable: true })
   attribute: Attribute;
 
-  @Column()
+  @Column({ nullable: true })
   attack: number;
 
-  @Column()
+  @Column({ nullable: true })
   defence: number;
 
-  @Column()
+  @Column({ nullable: true })
   cost: number;
 
-  @Column('text')
+  @Column('text', { nullable: true })
   detail: string;
 
   @Column('text')
@@ -39,4 +40,10 @@ export class CardEntity extends Card {
     deckCardEntity => deckCardEntity.card,
   )
   deckCards: DeckCardEntity[];
+
+  @OneToMany(
+    () => GameCardEntity,
+    gameCardEntity => gameCardEntity.card,
+  )
+  gameCards: GameCardEntity[];
 }
