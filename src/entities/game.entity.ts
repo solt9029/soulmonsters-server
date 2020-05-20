@@ -1,3 +1,4 @@
+import { GameCardEntity } from './game.card.entity';
 import { PlayerEntity } from './player.entity';
 import { Game, Phase, Status, PlayingUser } from './../graphql/index';
 import {
@@ -49,4 +50,10 @@ export class GameEntity extends Game {
     playerEntity => playerEntity.game,
   )
   players: PlayerEntity[];
+
+  @OneToMany(
+    () => GameCardEntity,
+    gameCardEntity => gameCardEntity.game,
+  )
+  gameCards: GameCardEntity[];
 }

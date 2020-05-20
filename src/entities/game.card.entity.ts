@@ -1,3 +1,4 @@
+import { GameEntity } from './game.entity';
 import { CardEntity } from './card.entity';
 import {
   Attribute,
@@ -58,4 +59,10 @@ export class GameCardEntity extends GameCard {
     cardEntity => cardEntity.gameCards,
   )
   card: CardEntity;
+
+  @ManyToOne(
+    () => GameEntity,
+    gameEntity => gameEntity.gameCards,
+  )
+  game: GameEntity;
 }

@@ -1,3 +1,4 @@
+import { GameEntity } from './../entities/game.entity';
 import { CardEntity } from '../entities/card.entity';
 import { DeckCardEntity } from '../entities/deck.card.entity';
 import { GameCardEntity } from '../entities/game.card.entity';
@@ -20,7 +21,7 @@ export class GameCardEntityFactory {
     return 5;
   }
 
-  create(deckCardEntities: DeckCardEntity[]): GameCardEntity[] {
+  create(deckCardEntities: DeckCardEntity[], gameId: number): GameCardEntity[] {
     if (deckCardEntities.length <= 0) {
       return [];
     }
@@ -52,6 +53,8 @@ export class GameCardEntityFactory {
       gameCardEntity.cost = value.cost;
       gameCardEntity.detail = value.detail;
       gameCardEntity.card = value;
+      gameCardEntity.game = new GameEntity();
+      gameCardEntity.game.id = gameId;
 
       return gameCardEntity;
     });

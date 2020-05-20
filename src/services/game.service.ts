@@ -79,6 +79,7 @@ export class GameService {
         const gameId = gameInsertResult.identifiers[0].id;
         const gameCardEntities = this.gameCardEntityFactory.create(
           deckCardEntities,
+          gameId,
         );
         await gameCardRepository.insert(gameCardEntities);
         await playerRepository.insert({
@@ -97,6 +98,7 @@ export class GameService {
       // join the waiting game
       const gameCardEntities = this.gameCardEntityFactory.create(
         deckCardEntities,
+        gameEntity.id,
       );
       await gameCardRepository.insert(gameCardEntities);
       const playingUser =
@@ -125,7 +127,7 @@ export class GameService {
       );
       return await gameRepository.findOne({
         where: { id: gameEntity.id },
-        relations: ['players'],
+        relations: ['players', 'players.deck'],
       });
     });
   }
