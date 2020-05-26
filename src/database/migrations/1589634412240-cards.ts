@@ -136,6 +136,96 @@ export class Cards1589634412240 implements MigrationInterface {
         "https://lh3.googleusercontent.com/pw/ACtC-3e_TwurBT8oL0wbI1qD8Vw6fkZrqu1xGbcEFb0kHH_JGXbLyh3oyOhSJb53C_kgtIBwlBWOIB1MANxe3Kv3Nu5d5HXlBfa4dYUF_sTSRVrkg8VQovzxWH65l1GzRx7M3seYi3AnMBb2Blu19e6gkhCEMw=w500-h715-no?authuser=0"
       )
     `);
+
+    queryRunner.query(`
+      INSERT INTO cards VALUES (
+        9,
+        "ハモンタキーに狩られぬもの",
+        "MONSTER",
+        "RECTANGLE",
+        "GREEN",
+        200,
+        700,
+        2,
+        "■ソウルゾーンに置かれた時\n自分のモルグゾーンに置かれている□族モンスター1枚をソウルゾーンに置く。",
+        "https://lh3.googleusercontent.com/pw/ACtC-3fYBIbiKUtwra6ITCJm5NHopp_v1N_wHpf_D9zpzKDn0XG8kfIZJDY1LYzWhkTjuDvVPftOXub95dspNS5FRzLNdOKkcSrbAlI8NcclUZD-p8-oBeBjmJwjDH9tNq5zygR3dJsQ1mckrw-AWq8WMGPxkA=w500-h715-no?authuser=0"
+      )
+    `);
+
+    queryRunner.query(`
+      INSERT INTO cards VALUES (
+        10,
+        "スーパーニューボルツ",
+        "MONSTER",
+        "TRIANGLE",
+        "PURPLE",
+        1500,
+        800,
+        4,
+        "■1ターンに1度\n●自分のデッキの上からカードを1枚\n相手モンスター1枚をモルグゾーンに置く。",
+        "https://lh3.googleusercontent.com/pw/ACtC-3d88zSmuly2dZCr2w2Rpy5DkNVqNoDlsyeANFRoaaQ5v6jpBv7i92ZatsZCLRdWpyquDCW_0hPfpwSVdrEA9esVxXJtaAZ4v1VoXTUU4DlCrBCyCibmuXs8XKPQss7nH6o7woyxd6EXlBFG5A5qPwhmFw=w500-h715-no?authuser=0"
+      )
+    `);
+
+    queryRunner.query(`
+      INSERT INTO cards VALUES (
+        11,
+        "冷徹な鳥",
+        "MONSTER",
+        "TRIANGLE",
+        "BLUE",
+        600,
+        300,
+        2,
+        "■このカードが相手を直接攻撃したとき\nカードを2枚ドローする。",
+        "https://lh3.googleusercontent.com/pw/ACtC-3dNffWdGC-Ouoy24beRwhfkyRPtwTeE4p-VEtWhfSWsws4S8sJncB20iqqX3y44cj6s0H0aPFvYZsEMF8VVR8bwGI5TiiwUK_t2B7a2fsjhbFQfWlzOxipVISpkQC9Q2UjXq3Do4s3nB7At8v45KkShmw=w500-h715-no?authuser=0"
+      )
+    `);
+
+    queryRunner.query(`
+      INSERT INTO cards VALUES (
+        12,
+        "相変わらずよく分からない花",
+        "MONSTER",
+        "TRIANGLE",
+        "RED",
+        1600,
+        0,
+        4,
+        "■モルグゾーンに置かれたとき\n相手ライフに600のダメージを与える。",
+        "https://lh3.googleusercontent.com/pw/ACtC-3f6M6CIZ9WAAqA8yEWMgL170ZZQzU6EipvTZrFnGCpOtqWTTqtZl3Cazm--QjNTYOPkXC2ej-iYbCp38z-v5FmfXBNOd8vrQ1drVp--fy5bFZ27zF4VuxrqtxrIQGWdWIbUnB3f-uuGqYmb9SXxEiAIdg=w500-h715-no?authuser=0"
+      )
+    `);
+
+    queryRunner.query(`
+      INSERT INTO cards VALUES (
+        13,
+        "シマシマジュニア",
+        "MONSTER",
+        "RECTANGLE",
+        "GREEN",
+        500,
+        900,
+        3,
+        "■バトルゾーンに置かれたとき\n相手のエナジーを1減らし、自分のエナジーを1増やす。",
+        "https://lh3.googleusercontent.com/pw/ACtC-3dpMKz6NrpopGg9eSfkH4BQJ3ymFI6cgxpznUOKtMao8OhVuVWigL6cTIkL29CbTByiDTBaVtLQ6ZzJF3Mlt4omNoS6nI6GQ4KAbWKzSMp1Yaxl1CeDqn0XuFmO6CKrEFnoR3aixqcKuJdkbKW0Bz4KXg=w500-h715-no?authuser=0"
+      )
+    `);
+
+    queryRunner.query(`
+      INSERT INTO cards VALUES (
+        14,
+        "ニセキサンチョウ",
+        "MONSTER",
+        "CIRCLE",
+        "WHITE",
+        1000,
+        800,
+        3,
+        "■バトルゾーンからソウルゾーンに置かれたとき\n自分のエナジーを2増やす。",
+        "https://lh3.googleusercontent.com/pw/ACtC-3dC2NP_S5BKACEkRdqLlGk_m_QBVJ7jJ7DR3qj2Y2Ky7S-VOL1rTUhYqNu6wuVXQFav8Gdc2b7WB-P-CebvRXVUW7cMClwpwm4AGxGjpdFidfCLZdLw2kJiBW6OfX4HG7Vvqc8NYvqiq10GyENgnPJSzA=w500-h715-no?authuser=0"
+      )
+    `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<any> {
