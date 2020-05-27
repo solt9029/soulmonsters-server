@@ -61,7 +61,7 @@ export class GameService {
         GameCardRepository,
       );
 
-      const userGameEntity = await gameRepository
+      const userActiveGameEntity = await gameRepository
         .createQueryBuilder('games')
         .where('games.status != "END"')
         .andWhere(
@@ -69,7 +69,7 @@ export class GameService {
           { userId },
         )
         .getOne();
-      if (userGameEntity !== undefined) {
+      if (userActiveGameEntity !== undefined) {
         throw new BadRequestException();
       }
 
