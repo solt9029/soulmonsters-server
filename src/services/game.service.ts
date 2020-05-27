@@ -1,3 +1,4 @@
+import { InjectRepository } from '@nestjs/typeorm';
 import { GameCardEntityFactory } from './../factories/game.card.entity.factory';
 import { GameCardEntity } from './../entities/game.card.entity';
 import { DeckCardEntity } from './../entities/deck.card.entity';
@@ -32,9 +33,22 @@ export class GameService {
   }
 
   constructor(
+    @InjectRepository(GameEntity)
+    private readonly gameRepository: Repository<GameEntity>,
     private connection: Connection,
     private gameCardEntityFactory: GameCardEntityFactory,
   ) {}
+
+  async findByUserId(userId: string): Promise<GameEntity> {
+    return await this.gameRepository
+      .createQueryBuilder('games')
+      .leftJoinAndSelect('games.players', 'players')
+      .leftJoinAndSelect('games.gameCards', 'gameCards')
+      .leftJoinAndSelect('gameCards.card', 'card')
+      .where('games.firstUserId = :userId', { userId })
+      .orWhere('games.secondUserId = :userId', { userId })
+      .getOne();
+  }
 
   async start(userId: string, deckId: number) {
     return this.connection.transaction(async manager => {
@@ -46,6 +60,18 @@ export class GameService {
       const gameCardRepository = manager.getCustomRepository(
         GameCardRepository,
       );
+
+      const userGameEntity = await gameRepository
+        .createQueryBuilder('games')
+        .where('games.status != "END"')
+        .andWhere(
+          'games.firstUserId = :userId OR games.secondUserId = :userId',
+          { userId },
+        )
+        .getOne();
+      if (userGameEntity !== undefined) {
+        throw new BadRequestException();
+      }
 
       const deckCardEntities = await deckCardRepository
         .createQueryBuilder('deckCards')
@@ -60,11 +86,15 @@ export class GameService {
       ) {
         throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
       }
-      if (deckCardEntities.length < GameService.MIN_COUNT) {
+      const totalCount = deckCardEntities.reduce(
+        (accumulator, currentValue) => accumulator + currentValue.count,
+        0,
+      );
+      if (totalCount < GameService.MIN_COUNT) {
         throw new BadRequestException('Min Count');
       }
 
-      const gameEntity = await gameRepository
+      const waitingGameEntity = await gameRepository
         .createQueryBuilder('games')
         .setLock('pessimistic_read')
         .select()
@@ -72,7 +102,7 @@ export class GameService {
         .getOne();
 
       // If waiting game does not exist, create new game
-      if (gameEntity === undefined) {
+      if (waitingGameEntity === undefined) {
         const gameInsertResult = await gameRepository.insert({
           firstUserId: userId,
         });
@@ -98,7 +128,7 @@ export class GameService {
       // join the waiting game
       const gameCardEntities = this.gameCardEntityFactory.create(
         deckCardEntities,
-        gameEntity.id,
+        waitingGameEntity.id,
       );
       await gameCardRepository.insert(gameCardEntities);
       const playingUser =
@@ -110,14 +140,14 @@ export class GameService {
         deck: { id: deckId },
         energy: playingUser === PlayingUser.SECOND ? 0 : 1,
         lastViewedAt: new Date(),
-        game: { id: gameEntity.id },
+        game: { id: waitingGameEntity.id },
       });
       await playerRepository.update(
-        { userId: gameEntity.firstUserId },
+        { userId: waitingGameEntity.firstUserId },
         { energy: playingUser === PlayingUser.FIRST ? 0 : 1 },
       );
       await gameRepository.update(
-        { id: gameEntity.id },
+        { id: waitingGameEntity.id },
         {
           secondUserId: userId,
           playingUser,
@@ -126,7 +156,7 @@ export class GameService {
         },
       );
       return await gameRepository.findOne({
-        where: { id: gameEntity.id },
+        where: { id: waitingGameEntity.id },
         relations: ['players', 'players.deck'],
       });
     });

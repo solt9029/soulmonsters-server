@@ -115,6 +115,7 @@ export class Game implements Node {
     endedAt?: DateTime;
     status: Status;
     players?: Player[];
+    gameCards?: GameCard[];
 }
 
 export class GameCard implements Node {
@@ -132,6 +133,7 @@ export class GameCard implements Node {
     defence?: number;
     cost?: number;
     detail?: string;
+    card: Card;
 }
 
 export abstract class IMutation {
@@ -160,6 +162,8 @@ export abstract class IQuery {
     abstract deckCards(deckId: number): DeckCard[] | Promise<DeckCard[]>;
 
     abstract decks(): Deck[] | Promise<Deck[]>;
+
+    abstract game(): Game | Promise<Game>;
 
     abstract userData(userId: string): UserData | Promise<UserData>;
 }

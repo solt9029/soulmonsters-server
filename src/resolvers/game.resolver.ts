@@ -1,6 +1,6 @@
 import { GameService } from './../services/game.service';
 import { AuthGuard } from './../guards/auth.guard';
-import { Resolver, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { auth } from 'firebase-admin';
 import { User } from 'src/decorators/user.decorator';
@@ -9,6 +9,11 @@ import { User } from 'src/decorators/user.decorator';
 @UseGuards(AuthGuard)
 export class GameResolver {
   constructor(private readonly gameService: GameService) {}
+
+  @Query()
+  async game(@User() user: auth.DecodedIdToken) {
+    return await this.gameService.findByUserId(user.uid);
+  }
 
   @Mutation()
   async startGame(
