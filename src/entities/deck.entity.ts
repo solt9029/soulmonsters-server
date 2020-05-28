@@ -34,10 +34,9 @@ export class DeckEntity extends Deck {
   )
   deckCards: DeckCardEntity[];
 
-  @OneToOne(
+  @OneToMany(
     () => PlayerEntity,
     playerEntity => playerEntity.deck,
-    { nullable: true },
   )
-  player: PlayerEntity;
+  players: PlayerEntity[];
 }

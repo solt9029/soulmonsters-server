@@ -63,6 +63,7 @@ export class GameCardEntity extends GameCard {
   @ManyToOne(
     () => GameEntity,
     gameEntity => gameEntity.gameCards,
+    { onDelete: 'CASCADE' },
   )
   game: GameEntity;
 }

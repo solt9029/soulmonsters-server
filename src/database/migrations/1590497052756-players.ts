@@ -9,15 +9,15 @@ export class Players1590497052756 implements MigrationInterface {
         energy int(11) DEFAULT NULL,
         lifePoint int(11) NOT NULL DEFAULT '8000',
         lastViewedAt datetime NOT NULL,
-        gameId int(11) DEFAULT NULL,
         deckId int(11) DEFAULT NULL,
+        gameId int(11) DEFAULT NULL,
         PRIMARY KEY (id),
-        UNIQUE KEY IDX_7c11c744c0601ab432cfa6ff7a (userId),
-        UNIQUE KEY REL_ee5da30384a20252517bdf0785 (deckId),
+        UNIQUE KEY IDX_eea2633c74cc717f212a9ba6c7 (deckId,gameId),
+        UNIQUE KEY IDX_d05c745353b36c855f6e14179c (userId,gameId),
         KEY FK_e987db4cbe03070958e54074005 (gameId),
-        CONSTRAINT FK_e987db4cbe03070958e54074005 FOREIGN KEY (gameId) REFERENCES games (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
+        CONSTRAINT FK_e987db4cbe03070958e54074005 FOREIGN KEY (gameId) REFERENCES games (id) ON DELETE CASCADE ON UPDATE NO ACTION,
         CONSTRAINT FK_ee5da30384a20252517bdf07855 FOREIGN KEY (deckId) REFERENCES decks (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-      ) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci`);
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci`);
   }
 
   public async down(queryRunner: QueryRunner): Promise<any> {

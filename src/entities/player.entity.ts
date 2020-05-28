@@ -6,16 +6,17 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
-  OneToOne,
-  JoinColumn,
+  Unique,
 } from 'typeorm';
 
 @Entity({ name: 'players' })
+@Unique(['userId', 'game'])
+@Unique(['deck', 'game'])
 export class PlayerEntity extends Player {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
+  @Column()
   userId: string;
 
   @Column({ nullable: true })
@@ -27,16 +28,16 @@ export class PlayerEntity extends Player {
   @Column()
   lastViewedAt: Date;
 
-  @OneToOne(
+  @ManyToOne(
     () => DeckEntity,
-    deckEntity => deckEntity.player,
+    deckEntity => deckEntity.players,
   )
-  @JoinColumn()
   deck: DeckEntity;
 
   @ManyToOne(
     () => GameEntity,
     gameEntity => gameEntity.players,
+    { onDelete: 'CASCADE' },
   )
   game: GameEntity;
 }
