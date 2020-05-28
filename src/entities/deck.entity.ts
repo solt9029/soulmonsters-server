@@ -8,7 +8,6 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
   OneToMany,
-  OneToOne,
 } from 'typeorm';
 
 @Entity({ name: 'decks' })
