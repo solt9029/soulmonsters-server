@@ -165,6 +165,8 @@ export abstract class IQuery {
 
     abstract game(): Game | Promise<Game>;
 
+    abstract activeGameId(): number | Promise<number>;
+
     abstract userData(userId: string): UserData | Promise<UserData>;
 }
 

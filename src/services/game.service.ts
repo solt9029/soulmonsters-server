@@ -39,6 +39,16 @@ export class GameService {
     private gameCardEntityFactory: GameCardEntityFactory,
   ) {}
 
+  async findActiveGameByUserId(userId: string): Promise<GameEntity> {
+    return await this.gameRepository
+      .createQueryBuilder('games')
+      .where('games.status != "END"')
+      .andWhere('games.firstUserId = :userId OR games.secondUserId = :userId', {
+        userId,
+      })
+      .getOne();
+  }
+
   async findByUserId(userId: string): Promise<GameEntity> {
     return await this.gameRepository
       .createQueryBuilder('games')
