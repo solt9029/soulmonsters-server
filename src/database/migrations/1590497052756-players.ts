@@ -11,6 +11,8 @@ export class Players1590497052756 implements MigrationInterface {
         lastViewedAt datetime NOT NULL,
         deckId int(11) DEFAULT NULL,
         gameId int(11) DEFAULT NULL,
+        createdAt datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+        updatedAt datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
         PRIMARY KEY (id),
         UNIQUE KEY IDX_eea2633c74cc717f212a9ba6c7 (deckId,gameId),
         UNIQUE KEY IDX_d05c745353b36c855f6e14179c (userId,gameId),

@@ -8,6 +8,8 @@ export class DeckCards1589634532296 implements MigrationInterface {
         count int(11) NOT NULL,
         cardId int(11) DEFAULT NULL,
         deckId int(11) DEFAULT NULL,
+        createdAt datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+        updatedAt datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
         PRIMARY KEY (id),
         UNIQUE KEY IDX_7cf4fca9445dfa0f5247ec78d7 (cardId,deckId),
         KEY FK_2f311ec3f91467ed53191796250 (deckId),

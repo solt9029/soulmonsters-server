@@ -20,6 +20,8 @@ export class GameCards1590497165225 implements MigrationInterface {
         detail text COLLATE utf8_unicode_ci,
         cardId int(11) DEFAULT NULL,
         gameId int(11) DEFAULT NULL,
+        createdAt datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+        updatedAt datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
         PRIMARY KEY (id),
         KEY FK_12fe977b2121f39769a24e28923 (cardId),
         KEY FK_a19cbc424172d0e792c89a2603e (gameId),

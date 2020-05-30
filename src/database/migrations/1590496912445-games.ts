@@ -16,7 +16,7 @@ export class Games1590496912445 implements MigrationInterface {
         createdAt datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
         updatedAt datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
         PRIMARY KEY (id)
-      ) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci`);
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci`);
   }
 
   public async down(queryRunner: QueryRunner): Promise<any> {
