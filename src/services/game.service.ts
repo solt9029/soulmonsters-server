@@ -2,7 +2,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { GameCardEntityFactory } from './../factories/game.card.entity.factory';
 import { GameCardEntity } from './../entities/game.card.entity';
 import { DeckCardEntity } from './../entities/deck.card.entity';
-import { PlayingUser } from './../graphql/index';
+import { PlayingUser, Zone } from './../graphql/index';
 import { PlayerEntity } from './../entities/player.entity';
 import { GameEntity } from './../entities/game.entity';
 import {
@@ -47,6 +47,40 @@ export class GameService {
         userId,
       })
       .getOne();
+  }
+
+  async findByIdAndFilterByUserId(
+    id: number,
+    userId: string,
+  ): Promise<GameEntity> {
+    const gameEntity = await this.gameRepository.findOne({
+      where: { id },
+      relations: ['players', 'players.deck', 'gameCards', 'gameCards.card'],
+    });
+
+    // Filter game card information
+    gameEntity.gameCards = gameEntity.gameCards.map(value => {
+      if (
+        value.zone === Zone.MORGUE ||
+        value.zone === Zone.SOUL ||
+        value.zone === Zone.BATTLE
+      ) {
+        return value;
+      }
+      if (value.currentUserId === userId && value.zone !== Zone.DECK) {
+        return value;
+      }
+
+      const gameCardEntity = new GameCardEntity();
+      gameCardEntity.currentUserId = value.currentUserId;
+      gameCardEntity.originalUserId = value.originalUserId;
+      gameCardEntity.zone = value.zone;
+      gameCardEntity.position = value.position;
+
+      return gameCardEntity;
+    });
+
+    return gameEntity;
   }
 
   async findByUserId(userId: string): Promise<GameEntity> {

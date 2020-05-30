@@ -125,15 +125,15 @@ export class GameCard implements Node {
     zone: Zone;
     position: number;
     battlePosition?: BattlePosition;
-    name: string;
-    kind: Kind;
-    type: Type;
+    name?: string;
+    kind?: Kind;
+    type?: Type;
     attribute?: Attribute;
     attack?: number;
     defence?: number;
     cost?: number;
     detail?: string;
-    card: Card;
+    card?: Card;
 }
 
 export abstract class IMutation {
@@ -163,7 +163,7 @@ export abstract class IQuery {
 
     abstract decks(): Deck[] | Promise<Deck[]>;
 
-    abstract game(): Game | Promise<Game>;
+    abstract game(id: number): Game | Promise<Game>;
 
     abstract activeGameId(): number | Promise<number>;
 

@@ -11,8 +11,8 @@ export class GameResolver {
   constructor(private readonly gameService: GameService) {}
 
   @Query()
-  async game(@User() user: auth.DecodedIdToken) {
-    return await this.gameService.findByUserId(user.uid);
+  async game(@User() user: auth.DecodedIdToken, @Args('id') id: number) {
+    return await this.gameService.findByIdAndFilterByUserId(id, user.uid);
   }
 
   @Query()
