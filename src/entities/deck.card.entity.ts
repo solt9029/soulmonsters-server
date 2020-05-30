@@ -7,6 +7,8 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   Unique,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity({ name: 'deckCards' })
@@ -17,6 +19,12 @@ export class DeckCardEntity extends DeckCard {
 
   @Column()
   count: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @ManyToOne(
     () => CardEntity,

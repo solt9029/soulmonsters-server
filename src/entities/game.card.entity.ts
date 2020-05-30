@@ -8,7 +8,14 @@ import {
   BattlePosition,
   GameCard,
 } from './../graphql/index';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity({ name: 'gameCards' })
 export class GameCardEntity extends GameCard {
@@ -53,6 +60,12 @@ export class GameCardEntity extends GameCard {
 
   @Column('text', { nullable: true })
   detail: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @ManyToOne(
     () => CardEntity,
