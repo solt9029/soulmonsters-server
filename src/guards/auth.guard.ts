@@ -8,6 +8,8 @@ const {
   FIREBASE_CLIENT_EMAIL,
   FIREBASE_DATABASE_URL,
   FIREBASE_PRIVATE_KEY,
+  MOCK_USER,
+  MOCK_USER_ID,
 } = process.env;
 
 admin.initializeApp({
@@ -25,6 +27,13 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(ctx: ExecutionContext): Promise<boolean> {
     const req = GqlExecutionContext.create(ctx).getContext().req;
+
+    if (MOCK_USER === 'true') {
+      req.user = {
+        uid: MOCK_USER_ID,
+      };
+      return true;
+    }
 
     try {
       req.user = await this.userService.findByIdToken(

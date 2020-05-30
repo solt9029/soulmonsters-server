@@ -139,6 +139,7 @@ export class GameCard implements Node {
 export class GameHistory implements Node {
     id: number;
     detail: string;
+    createdAt: DateTime;
 }
 
 export abstract class IMutation {

@@ -13,5 +13,7 @@ declare namespace NodeJS {
     readonly DB_PASSWORD: string;
     readonly DB_DATABASE: string;
     readonly DB_SYNCHRONIZE: 'true' | 'false';
+    readonly MOCK_USER: 'true' | 'false';
+    readonly MOCK_USER_ID: string;
   }
 }
