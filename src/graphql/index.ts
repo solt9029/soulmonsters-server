@@ -136,6 +136,11 @@ export class GameCard implements Node {
     card?: Card;
 }
 
+export class GameHistory implements Node {
+    id: number;
+    detail: string;
+}
+
 export abstract class IMutation {
     abstract plusDeckCard(data: DeckCardUpdateInput): DeckCard | Promise<DeckCard>;
 
@@ -166,6 +171,8 @@ export abstract class IQuery {
     abstract game(id: number): Game | Promise<Game>;
 
     abstract activeGameId(): number | Promise<number>;
+
+    abstract gameHistories(gameId: number): GameHistory[] | Promise<GameHistory[]>;
 
     abstract userData(userId: string): UserData | Promise<UserData>;
 }

@@ -1,3 +1,4 @@
+import { GameHistoryEntity } from './../entities/game.history.entity';
 import { GameCardEntityFactory } from './../factories/game.card.entity.factory';
 import { GameCardEntity } from './../entities/game.card.entity';
 import { GameResolver } from './../resolvers/game.resolver';
@@ -45,6 +46,7 @@ const {
         GameEntity,
         PlayerEntity,
         GameCardEntity,
+        GameHistoryEntity,
       ],
       synchronize: DB_SYNCHRONIZE?.toLowerCase() === 'true',
     }),
@@ -55,6 +57,7 @@ const {
       GameEntity,
       PlayerEntity,
       GameCardEntity,
+      GameHistoryEntity,
     ]),
     GraphQLModule.forRoot({
       playground: true,
