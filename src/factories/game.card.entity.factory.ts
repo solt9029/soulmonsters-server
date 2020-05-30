@@ -15,6 +15,14 @@ function shuffle<T>(array: T[]): T[] {
   return newArray;
 }
 
+function isVisibleForAll(zone: Zone) {
+  return zone === Zone.BATTLE || zone === Zone.SOUL || zone === Zone.MORGUE;
+}
+
+function isVisibleForCurrentUser(zone: Zone) {
+  return zone === Zone.HAND;
+}
+
 @Injectable()
 export class GameCardEntityFactory {
   private static get HAND_COUNT() {
@@ -58,5 +66,26 @@ export class GameCardEntityFactory {
 
       return gameCardEntity;
     });
+  }
+
+  filterByUserId(
+    gameCardEntity: GameCardEntity,
+    userId: string,
+  ): GameCardEntity {
+    if (
+      isVisibleForAll(gameCardEntity.zone) ||
+      (gameCardEntity.currentUserId === userId &&
+        isVisibleForCurrentUser(gameCardEntity.zone))
+    ) {
+      return gameCardEntity;
+    }
+
+    const filteredGameCardEntity = new GameCardEntity();
+    filteredGameCardEntity.currentUserId = gameCardEntity.currentUserId;
+    filteredGameCardEntity.originalUserId = gameCardEntity.originalUserId;
+    filteredGameCardEntity.zone = gameCardEntity.zone;
+    filteredGameCardEntity.position = gameCardEntity.position;
+
+    return filteredGameCardEntity;
   }
 }

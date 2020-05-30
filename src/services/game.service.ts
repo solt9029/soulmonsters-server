@@ -58,27 +58,9 @@ export class GameService {
       relations: ['players', 'players.deck', 'gameCards', 'gameCards.card'],
     });
 
-    // Filter game card information
-    gameEntity.gameCards = gameEntity.gameCards.map(value => {
-      if (
-        value.zone === Zone.MORGUE ||
-        value.zone === Zone.SOUL ||
-        value.zone === Zone.BATTLE
-      ) {
-        return value;
-      }
-      if (value.currentUserId === userId && value.zone !== Zone.DECK) {
-        return value;
-      }
-
-      const gameCardEntity = new GameCardEntity();
-      gameCardEntity.currentUserId = value.currentUserId;
-      gameCardEntity.originalUserId = value.originalUserId;
-      gameCardEntity.zone = value.zone;
-      gameCardEntity.position = value.position;
-
-      return gameCardEntity;
-    });
+    gameEntity.gameCards = gameEntity.gameCards.map(value =>
+      this.gameCardEntityFactory.filterByUserId(value, userId),
+    );
 
     return gameEntity;
   }
