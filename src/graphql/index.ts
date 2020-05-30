@@ -116,6 +116,7 @@ export class Game implements Node {
     status: Status;
     players?: Player[];
     gameCards?: GameCard[];
+    gameHistories?: GameHistory[];
 }
 
 export class GameCard implements Node {

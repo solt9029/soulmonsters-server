@@ -55,7 +55,13 @@ export class GameService {
   ): Promise<GameEntity> {
     const gameEntity = await this.gameRepository.findOne({
       where: { id },
-      relations: ['players', 'players.deck', 'gameCards', 'gameCards.card'],
+      relations: [
+        'players',
+        'players.deck',
+        'gameCards',
+        'gameCards.card',
+        'gameHistories',
+      ],
     });
 
     gameEntity.gameCards = gameEntity.gameCards.map(value =>
@@ -63,17 +69,6 @@ export class GameService {
     );
 
     return gameEntity;
-  }
-
-  async findByUserId(userId: string): Promise<GameEntity> {
-    return await this.gameRepository
-      .createQueryBuilder('games')
-      .leftJoinAndSelect('games.players', 'players')
-      .leftJoinAndSelect('games.gameCards', 'gameCards')
-      .leftJoinAndSelect('gameCards.card', 'card')
-      .where('games.firstUserId = :userId', { userId })
-      .orWhere('games.secondUserId = :userId', { userId })
-      .getOne();
   }
 
   async start(userId: string, deckId: number) {
