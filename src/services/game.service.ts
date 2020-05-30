@@ -2,7 +2,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { GameCardEntityFactory } from './../factories/game.card.entity.factory';
 import { GameCardEntity } from './../entities/game.card.entity';
 import { DeckCardEntity } from './../entities/deck.card.entity';
-import { PlayingUser, Zone } from './../graphql/index';
+import { PlayingUser } from './../graphql/index';
 import { PlayerEntity } from './../entities/player.entity';
 import { GameEntity } from './../entities/game.entity';
 import {
