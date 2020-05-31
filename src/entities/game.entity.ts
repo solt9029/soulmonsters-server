@@ -25,6 +25,9 @@ export class GameEntity extends Game {
   @Column({ nullable: true })
   playingUser: PlayingUser;
 
+  @Column({ default: 0 })
+  turnCount: number;
+
   @Column({ default: Phase.DRAW })
   phase: Phase;
 

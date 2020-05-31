@@ -109,6 +109,7 @@ export class Game implements Node {
     firstUserId: string;
     secondUserId?: string;
     playingUser?: PlayingUser;
+    turnCount: number;
     phase?: Phase;
     winningUserId?: string;
     startedAt?: DateTime;
