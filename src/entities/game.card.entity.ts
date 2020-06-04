@@ -37,30 +37,6 @@ export class GameCardEntity extends GameCard {
   @Column({ nullable: true })
   battlePosition: BattlePosition;
 
-  @Column()
-  name: string;
-
-  @Column()
-  kind: Kind;
-
-  @Column()
-  type: Type;
-
-  @Column({ nullable: true })
-  attribute: Attribute;
-
-  @Column({ nullable: true })
-  attack: number;
-
-  @Column({ nullable: true })
-  defence: number;
-
-  @Column({ nullable: true })
-  cost: number;
-
-  @Column('text', { nullable: true })
-  detail: string;
-
   @CreateDateColumn()
   createdAt: Date;
 
