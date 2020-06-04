@@ -1,13 +1,6 @@
 import { GameEntity } from './game.entity';
 import { CardEntity } from './card.entity';
-import {
-  Attribute,
-  Kind,
-  Type,
-  Zone,
-  BattlePosition,
-  GameCard,
-} from './../graphql/index';
+import { Zone, BattlePosition, GameCard } from './../graphql/index';
 import {
   Entity,
   Column,
