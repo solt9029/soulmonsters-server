@@ -73,6 +73,7 @@ export class GameCardEntityFactory {
     }
 
     const filteredGameCardEntity = new GameCardEntity();
+    filteredGameCardEntity.id = gameCardEntity.id;
     filteredGameCardEntity.currentUserId = gameCardEntity.currentUserId;
     filteredGameCardEntity.originalUserId = gameCardEntity.originalUserId;
     filteredGameCardEntity.zone = gameCardEntity.zone;

@@ -2,8 +2,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { GameCardEntityFactory } from './../factories/game.card.entity.factory';
 import { GameCardEntity } from './../entities/game.card.entity';
 import { DeckCardEntity } from './../entities/deck.card.entity';
-import { PlayingUser } from './../graphql/index';
-import { PlayerEntity } from './../entities/player.entity';
 import { GameEntity } from './../entities/game.entity';
 import {
   Injectable,
@@ -12,13 +10,13 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { Repository, Connection, EntityRepository } from 'typeorm';
-import { Status } from 'src/graphql';
+import { GameUserEntity } from 'src/entities/game.user.entity';
 
 @EntityRepository(GameEntity)
 export class GameRepository extends Repository<GameEntity> {}
 
-@EntityRepository(PlayerEntity)
-export class PlayerRepository extends Repository<PlayerEntity> {}
+@EntityRepository(GameUserEntity)
+export class GameUserRepository extends Repository<GameUserEntity> {}
 
 @EntityRepository(DeckCardEntity)
 export class DeckCardRepository extends Repository<DeckCardEntity> {}
@@ -26,12 +24,10 @@ export class DeckCardRepository extends Repository<DeckCardEntity> {}
 @EntityRepository(GameCardEntity)
 export class GameCardRepository extends Repository<GameCardEntity> {}
 
+const MIN_COUNT = 40;
+
 @Injectable()
 export class GameService {
-  private static get MIN_COUNT() {
-    return 40;
-  }
-
   constructor(
     @InjectRepository(GameEntity)
     private readonly gameRepository: Repository<GameEntity>,
@@ -42,10 +38,9 @@ export class GameService {
   async findActiveGameByUserId(userId: string): Promise<GameEntity> {
     return await this.gameRepository
       .createQueryBuilder('games')
-      .where('games.status != "END"')
-      .andWhere('games.firstUserId = :userId OR games.secondUserId = :userId', {
-        userId,
-      })
+      .leftJoinAndSelect('games.gameUsers', 'gameUsers')
+      .where('games.winnerUserId IS NULL')
+      .andWhere('gameUsers.userId = :userId', { userId })
       .getOne();
   }
 
@@ -56,8 +51,8 @@ export class GameService {
     const gameEntity = await this.gameRepository.findOne({
       where: { id },
       relations: [
-        'players',
-        'players.deck',
+        'gameUsers',
+        'gameUsers.deck',
         'gameCards',
         'gameCards.card',
         'gameHistories',
@@ -77,21 +72,21 @@ export class GameService {
         DeckCardRepository,
       );
       const gameRepository = manager.getCustomRepository(GameRepository);
-      const playerRepository = manager.getCustomRepository(PlayerRepository);
+      const gameUserRepository = manager.getCustomRepository(
+        GameUserRepository,
+      );
       const gameCardRepository = manager.getCustomRepository(
         GameCardRepository,
       );
 
       const userActiveGameEntity = await gameRepository
         .createQueryBuilder('games')
-        .where('games.status != "END"')
-        .andWhere(
-          'games.firstUserId = :userId OR games.secondUserId = :userId',
-          { userId },
-        )
+        .leftJoinAndSelect('games.gameUsers', 'gameUsers')
+        .where('games.winnerUserId IS NULL')
+        .andWhere('gameUsers.userId = :userId', { userId })
         .getOne();
       if (userActiveGameEntity !== undefined) {
-        throw new BadRequestException();
+        throw new BadRequestException('User Active');
       }
 
       const deckCardEntities = await deckCardRepository
@@ -111,29 +106,26 @@ export class GameService {
         (accumulator, currentValue) => accumulator + currentValue.count,
         0,
       );
-      if (totalCount < GameService.MIN_COUNT) {
+      if (totalCount < MIN_COUNT) {
         throw new BadRequestException('Min Count');
       }
 
-      const waitingGameEntity = await gameRepository
-        .createQueryBuilder('games')
-        .setLock('pessimistic_read')
-        .select()
-        .where('games.status = :status', { status: Status.WAIT })
-        .getOne();
+      const waitingGameRawDataPackets: {
+        id: number;
+      }[] = await gameUserRepository.query(
+        'SELECT gameId AS id FROM gameUsers GROUP BY gameId HAVING COUNT(*) = 1 LIMIT 1 LOCK IN SHARE MODE',
+      );
 
       // If waiting game does not exist, create new game
-      if (waitingGameEntity === undefined) {
-        const gameInsertResult = await gameRepository.insert({
-          firstUserId: userId,
-        });
+      if (waitingGameRawDataPackets.length === 0) {
+        const gameInsertResult = await gameRepository.insert({});
         const gameId = gameInsertResult.identifiers[0].id;
         const gameCardEntities = this.gameCardEntityFactory.create(
           deckCardEntities,
           gameId,
         );
         await gameCardRepository.insert(gameCardEntities);
-        await playerRepository.insert({
+        await gameUserRepository.insert({
           userId,
           deck: { id: deckId },
           lastViewedAt: new Date(),
@@ -142,43 +134,46 @@ export class GameService {
 
         return await gameRepository.findOne({
           where: { id: gameId },
-          relations: ['players', 'players.deck'],
+          relations: ['gameUsers', 'gameUsers.deck'],
         });
       }
 
       // join the waiting game
+      const waitingGameEntity = await gameRepository
+        .createQueryBuilder('games')
+        .setLock('pessimistic_read')
+        .leftJoinAndSelect('games.gameUsers', 'gameUsers')
+        .where('games.id = :gameId', {
+          gameId: waitingGameRawDataPackets[0].id,
+        })
+        .getOne();
       const gameCardEntities = this.gameCardEntityFactory.create(
         deckCardEntities,
         waitingGameEntity.id,
       );
       await gameCardRepository.insert(gameCardEntities);
-      const playingUser =
+      const turnUserId =
         Math.floor(Math.random() * 2) === 1
-          ? PlayingUser.FIRST
-          : PlayingUser.SECOND;
-      await playerRepository.insert({
+          ? waitingGameEntity.gameUsers[0].userId
+          : userId;
+      await gameUserRepository.insert({
         userId,
         deck: { id: deckId },
-        energy: playingUser === PlayingUser.SECOND ? 0 : 1,
+        energy: turnUserId === userId ? 0 : 1,
         lastViewedAt: new Date(),
         game: { id: waitingGameEntity.id },
       });
-      await playerRepository.update(
-        { userId: waitingGameEntity.firstUserId },
-        { energy: playingUser === PlayingUser.FIRST ? 0 : 1 },
+      await gameUserRepository.update(
+        { userId: waitingGameEntity.gameUsers[0].userId },
+        { energy: turnUserId === userId ? 1 : 0 },
       );
       await gameRepository.update(
         { id: waitingGameEntity.id },
-        {
-          secondUserId: userId,
-          playingUser,
-          status: Status.PLAY,
-          startedAt: new Date(),
-        },
+        { startedAt: new Date() },
       );
       return await gameRepository.findOne({
         where: { id: waitingGameEntity.id },
-        relations: ['players', 'players.deck'],
+        relations: ['gameUsers', 'gameUsers.deck'],
       });
     });
   }

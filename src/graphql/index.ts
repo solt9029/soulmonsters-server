@@ -36,17 +36,6 @@ export enum Phase {
     END = "END"
 }
 
-export enum PlayingUser {
-    FIRST = "FIRST",
-    SECOND = "SECOND"
-}
-
-export enum Status {
-    WAIT = "WAIT",
-    PLAY = "PLAY",
-    END = "END"
-}
-
 export enum Type {
     CIRCLE = "CIRCLE",
     TRIANGLE = "TRIANGLE",
@@ -106,16 +95,12 @@ export class DeckCard implements Node {
 
 export class Game implements Node {
     id: number;
-    firstUserId: string;
-    secondUserId?: string;
-    playingUser?: PlayingUser;
-    turnCount: number;
+    turnUserId?: string;
     phase?: Phase;
-    winningUserId?: string;
+    winnerUserId?: string;
     startedAt?: DateTime;
     endedAt?: DateTime;
-    status: Status;
-    players?: Player[];
+    gameUsers?: GameUser[];
     gameCards?: GameCard[];
     gameHistories?: GameHistory[];
 }
@@ -144,6 +129,16 @@ export class GameHistory implements Node {
     createdAt: DateTime;
 }
 
+export class GameUser implements Node {
+    id: number;
+    userId: string;
+    energy?: number;
+    lifePoint: number;
+    lastViewedAt?: DateTime;
+    deck: Deck;
+    game: Game;
+}
+
 export abstract class IMutation {
     abstract plusDeckCard(data: DeckCardUpdateInput): DeckCard | Promise<DeckCard>;
 
@@ -152,16 +147,6 @@ export abstract class IMutation {
     abstract createDeck(data: DeckCreateInput): Deck | Promise<Deck>;
 
     abstract startGame(deckId: number): Game | Promise<Game>;
-}
-
-export class Player implements Node {
-    id: number;
-    userId: string;
-    energy?: number;
-    lifePoint: number;
-    lastViewedAt?: DateTime;
-    deck: Deck;
-    game: Game;
 }
 
 export abstract class IQuery {
