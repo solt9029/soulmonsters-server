@@ -19,7 +19,7 @@ export class GameEntity extends Game {
   @Column({ nullable: true })
   turnUserId: string;
 
-  @Column({ default: Phase.DRAW })
+  @Column({ nullable: true })
   phase: Phase;
 
   @Column({ nullable: true })
