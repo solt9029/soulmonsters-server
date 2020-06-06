@@ -6,6 +6,21 @@
 
 /* tslint:disable */
 /* eslint-disable */
+export enum Action {
+    START_DRAW_TIME = "START_DRAW_TIME",
+    START_ENERGY_TIME = "START_ENERGY_TIME",
+    START_PUT_TIME = "START_PUT_TIME",
+    START_SOMETHING_TIME = "START_SOMETHING_TIME",
+    START_BATTLE_TIME = "START_BATTLE_TIME",
+    START_END_TIME = "START_END_TIME",
+    PUT_SOUL = "PUT_SOUL",
+    CHANGE_BATTLE_POSITION = "CHANGE_BATTLE_POSITION",
+    USE_SOUL_CANON = "USE_SOUL_CANON",
+    SUMMON_MONSTER = "SUMMON_MONSTER",
+    ATTACK = "ATTACK",
+    USE_SOUL_BARRIER = "USE_SOUL_BARRIER"
+}
+
 export enum Attribute {
     RED = "RED",
     BLUE = "BLUE",
@@ -137,6 +152,7 @@ export class GameUser implements Node {
     lastViewedAt?: DateTime;
     deck: Deck;
     game: Game;
+    actions?: Action[];
 }
 
 export abstract class IMutation {

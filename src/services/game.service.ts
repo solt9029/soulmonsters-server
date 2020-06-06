@@ -1,3 +1,4 @@
+import { Action } from '../graphql/index';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GameCardEntityFactory } from './../factories/game.card.entity.factory';
 import { GameCardEntity } from './../entities/game.card.entity';
@@ -62,6 +63,14 @@ export class GameService {
     gameEntity.gameCards = gameEntity.gameCards.map(value =>
       this.gameCardEntityFactory.filterByUserId(value, userId),
     );
+
+    // TODO: Move this process to other components
+    if (gameEntity.phase === null && gameEntity.turnUserId === userId) {
+      const gameUserIndex = gameEntity.gameUsers.findIndex(
+        value => value.userId === userId,
+      );
+      gameEntity.gameUsers[gameUserIndex].actions = [Action.START_DRAW_TIME];
+    }
 
     return gameEntity;
   }
