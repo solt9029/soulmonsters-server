@@ -115,9 +115,9 @@ export class Game implements Node {
     winnerUserId?: string;
     startedAt?: DateTime;
     endedAt?: DateTime;
-    gameUsers?: GameUser[];
-    gameCards?: GameCard[];
-    gameHistories?: GameHistory[];
+    gameUsers: GameUser[];
+    gameCards: GameCard[];
+    gameHistories: GameHistory[];
 }
 
 export class GameCard implements Node {
