@@ -48,4 +48,6 @@ export class GameUserEntity extends GameUser {
     { onDelete: 'CASCADE' },
   )
   game: GameEntity;
+
+  actions = [];
 }

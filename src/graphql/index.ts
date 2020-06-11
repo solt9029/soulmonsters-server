@@ -135,7 +135,8 @@ export class GameCard implements Node {
     defence?: number;
     cost?: number;
     detail?: string;
-    card?: Card;
+    card: Card;
+    actions: Action[];
 }
 
 export class GameHistory implements Node {
@@ -152,7 +153,7 @@ export class GameUser implements Node {
     lastViewedAt?: DateTime;
     deck: Deck;
     game: Game;
-    actions?: Action[];
+    actions: Action[];
 }
 
 export abstract class IMutation {
