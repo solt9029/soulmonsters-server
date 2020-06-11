@@ -178,7 +178,7 @@ export class GameService {
       );
       await gameRepository.update(
         { id: waitingGameEntity.id },
-        { startedAt: new Date() },
+        { startedAt: new Date(), turnUserId },
       );
       return await gameRepository.findOne({
         where: { id: waitingGameEntity.id },
