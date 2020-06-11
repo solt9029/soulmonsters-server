@@ -135,7 +135,7 @@ export class GameCard implements Node {
     defence?: number;
     cost?: number;
     detail?: string;
-    card: Card;
+    card?: Card;
     actions: Action[];
 }
 
