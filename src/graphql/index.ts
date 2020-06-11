@@ -148,6 +148,7 @@ export class GameHistory implements Node {
 export class GameUser implements Node {
     id: number;
     userId: string;
+    user: User;
     energy?: number;
     lifePoint: number;
     lastViewedAt?: DateTime;
@@ -180,6 +181,12 @@ export abstract class IQuery {
     abstract gameHistories(gameId: number): GameHistory[] | Promise<GameHistory[]>;
 
     abstract userData(userId: string): UserData | Promise<UserData>;
+}
+
+export class User {
+    id: string;
+    displayName?: string;
+    photoURL?: string;
 }
 
 export class UserData implements Node {

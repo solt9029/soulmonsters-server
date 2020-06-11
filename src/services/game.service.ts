@@ -1,3 +1,4 @@
+import { UserService } from './user.service';
 import { Action } from '../graphql/index';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GameCardEntityFactory } from './../factories/game.card.entity.factory';
@@ -32,6 +33,7 @@ export class GameService {
   constructor(
     @InjectRepository(GameEntity)
     private readonly gameRepository: Repository<GameEntity>,
+    private readonly userService: UserService,
     private connection: Connection,
     private gameCardEntityFactory: GameCardEntityFactory,
   ) {}
@@ -58,6 +60,18 @@ export class GameService {
         'gameCards.card',
         'gameHistories',
       ],
+    });
+
+    gameEntity.gameUsers.forEach(async (value, index) => {
+      const { displayName, photoURL } = await this.userService.findById(
+        value.userId,
+      );
+      // TODO: use user factory instead of code below.
+      gameEntity.gameUsers[index].user = {
+        id: value.userId,
+        displayName,
+        photoURL,
+      };
     });
 
     gameEntity.gameCards = gameEntity.gameCards.map(value =>
