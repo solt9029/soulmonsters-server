@@ -76,6 +76,17 @@ export class DeckCreateInput {
     name: string;
 }
 
+export class DispatchGameActionInput {
+    type: ActionType;
+    payload?: GameActionPayload;
+}
+
+export class GameActionPayload {
+    targetGameCardIds?: number[];
+    costGameCardIds?: number[];
+    targetGameUserIds?: string[];
+}
+
 export interface Node {
     id: number;
 }
@@ -165,6 +176,8 @@ export abstract class IMutation {
     abstract createDeck(data: DeckCreateInput): Deck | Promise<Deck>;
 
     abstract startGame(deckId: number): Game | Promise<Game>;
+
+    abstract dispatchGameAction(data: DispatchGameActionInput): Game | Promise<Game>;
 }
 
 export abstract class IQuery {
