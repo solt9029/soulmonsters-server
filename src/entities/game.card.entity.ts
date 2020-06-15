@@ -49,5 +49,5 @@ export class GameCardEntity extends GameCard {
   )
   game: GameEntity;
 
-  actions = [];
+  actionTypes = [];
 }

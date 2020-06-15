@@ -6,7 +6,7 @@
 
 /* tslint:disable */
 /* eslint-disable */
-export enum Action {
+export enum ActionType {
     START_DRAW_TIME = "START_DRAW_TIME",
     START_ENERGY_TIME = "START_ENERGY_TIME",
     START_PUT_TIME = "START_PUT_TIME",
@@ -136,7 +136,7 @@ export class GameCard implements Node {
     cost?: number;
     detail?: string;
     card?: Card;
-    actions: Action[];
+    actionTypes: ActionType[];
 }
 
 export class GameHistory implements Node {
@@ -154,7 +154,7 @@ export class GameUser implements Node {
     lastViewedAt?: DateTime;
     deck: Deck;
     game: Game;
-    actions: Action[];
+    actionTypes: ActionType[];
 }
 
 export abstract class IMutation {

@@ -49,5 +49,5 @@ export class GameUserEntity extends GameUser {
   )
   game: GameEntity;
 
-  actions = [];
+  actionTypes = [];
 }
