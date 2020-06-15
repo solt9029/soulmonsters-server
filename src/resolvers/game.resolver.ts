@@ -1,3 +1,4 @@
+import { DispatchGameActionInput } from './../graphql/index';
 import { GameService } from './../services/game.service';
 import { AuthGuard } from './../guards/auth.guard';
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
@@ -30,5 +31,14 @@ export class GameResolver {
     @Args('deckId') deckId: number,
   ) {
     return await this.gameService.start(user.uid, deckId);
+  }
+
+  @Mutation()
+  async dispatchGameAction(
+    @User() user: auth.DecodedIdToken,
+    @Args('id') id: number,
+    @Args('data') data: DispatchGameActionInput,
+  ) {
+    return await this.gameService.reduce(id, user.uid, data);
   }
 }

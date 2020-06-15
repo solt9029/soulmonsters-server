@@ -177,7 +177,7 @@ export abstract class IMutation {
 
     abstract startGame(deckId: number): Game | Promise<Game>;
 
-    abstract dispatchGameAction(data: DispatchGameActionInput): Game | Promise<Game>;
+    abstract dispatchGameAction(id: number, data: DispatchGameActionInput): Game | Promise<Game>;
 }
 
 export abstract class IQuery {

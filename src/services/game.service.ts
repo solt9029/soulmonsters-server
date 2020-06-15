@@ -1,3 +1,4 @@
+import { DispatchGameActionInput, Phase, Zone } from './../graphql/index';
 import { UserService } from './user.service';
 import { ActionType } from '../graphql/index';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -89,6 +90,53 @@ export class GameService {
     }
 
     return gameEntity;
+  }
+
+  async reduce(id: number, userId: string, data: DispatchGameActionInput) {
+    return this.connection.transaction(async manager => {
+      const gameRepository = manager.getCustomRepository(GameRepository);
+      const gameCardRepository = manager.getCustomRepository(
+        GameCardRepository,
+      );
+      const gameEntity = await gameRepository
+        .createQueryBuilder('games')
+        .leftJoinAndSelect('games.gameUsers', 'gameUsers')
+        .leftJoinAndSelect('games.gameCards', 'gameCards')
+        .leftJoinAndSelect('gameCards.card', 'card')
+        .where('games.id = :id', { id })
+        .getOne();
+
+      // TODO: validate (for rule and status)
+      if (data.type === ActionType.START_DRAW_TIME) {
+        if (gameEntity.turnUserId !== userId || gameEntity.phase !== null) {
+          throw new BadRequestException();
+        }
+      }
+
+      // TODO:check events
+
+      // TODO: process (see status again here)
+      if (data.type === ActionType.START_DRAW_TIME) {
+        await gameRepository.update({ id }, { phase: Phase.DRAW });
+        const yourDeckGameCards = gameEntity.gameCards
+          .filter(
+            value => value.zone === Zone.DECK && value.currentUserId === userId,
+          )
+          .sort((a, b) => b.position - a.position);
+        if (yourDeckGameCards.length <= 0) {
+          // TODO: the opponent user wins
+        }
+        const yourHandGameCards = gameEntity.gameCards
+          .filter(
+            value => value.zone === Zone.HAND && value.currentUserId === userId,
+          )
+          .sort((a, b) => b.position - a.position);
+        await gameCardRepository.update(
+          { id: yourDeckGameCards[0].id },
+          { zone: Zone.HAND, position: yourHandGameCards[0].position + 1 },
+        );
+      }
+    });
   }
 
   async start(userId: string, deckId: number) {
