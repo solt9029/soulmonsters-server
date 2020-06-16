@@ -136,6 +136,8 @@ export class GameService {
           { zone: Zone.HAND, position: yourHandGameCards[0].position + 1 },
         );
       }
+
+      return await this.findByIdAndFilterByUserId(id, userId);
     });
   }
 
