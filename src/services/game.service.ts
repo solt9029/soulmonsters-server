@@ -39,8 +39,6 @@ export class GameService {
     private readonly userService: UserService,
     private connection: Connection,
     private gameCardEntityFactory: GameCardEntityFactory,
-    private gameUserEntityFactory: GameUserEntityFactory,
-    private actionGrantLogic: ActionGrantLogic,
   ) {}
 
   async findActiveGameByUserId(userId: string): Promise<GameEntity> {
@@ -52,11 +50,8 @@ export class GameService {
       .getOne();
   }
 
-  async findByIdAndFilterByUserId(
-    id: number,
-    userId: string,
-  ): Promise<GameEntity> {
-    let gameEntity = await this.gameRepository.findOne({
+  async findById(id: number): Promise<GameEntity> {
+    return await this.gameRepository.findOne({
       where: { id },
       relations: [
         'gameUsers',
@@ -66,21 +61,6 @@ export class GameService {
         'gameHistories',
       ],
     });
-
-    gameEntity.gameUsers = await Promise.all(
-      gameEntity.gameUsers.map(async value => {
-        const userRecord = await this.userService.findById(value.userId);
-        return this.gameUserEntityFactory.addUser(value, userRecord);
-      }),
-    );
-
-    gameEntity.gameCards = gameEntity.gameCards.map(value =>
-      this.gameCardEntityFactory.filterByUserId(value, userId),
-    );
-
-    gameEntity = this.actionGrantLogic.grantActions(gameEntity, userId);
-
-    return gameEntity;
   }
 
   async reduce(id: number, userId: string, data: DispatchGameActionInput) {
@@ -127,8 +107,6 @@ export class GameService {
           { zone: Zone.HAND, position: yourHandGameCards[0].position + 1 },
         );
       }
-
-      return await this.findByIdAndFilterByUserId(id, userId);
     });
   }
 
