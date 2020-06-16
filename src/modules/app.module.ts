@@ -1,3 +1,4 @@
+import { GameUserEntityFactory } from '../factories/game.user.entity.factory';
 import { ActionGrantLogic } from './../logics/action.grant.logic';
 import { GameHistoryEntity } from './../entities/game.history.entity';
 import { GameCardEntityFactory } from './../factories/game.card.entity.factory';
@@ -85,6 +86,7 @@ const {
     GameService,
     GameResolver,
     GameCardEntityFactory,
+    GameUserEntityFactory,
     ActionGrantLogic,
   ],
 })

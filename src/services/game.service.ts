@@ -1,3 +1,4 @@
+import { GameUserEntityFactory } from '../factories/game.user.entity.factory';
 import { ActionGrantLogic } from './../logics/action.grant.logic';
 import { DispatchGameActionInput, Phase, Zone } from './../graphql/index';
 import { UserService } from './user.service';
@@ -38,6 +39,7 @@ export class GameService {
     private readonly userService: UserService,
     private connection: Connection,
     private gameCardEntityFactory: GameCardEntityFactory,
+    private gameUserEntityFactory: GameUserEntityFactory,
     private actionGrantLogic: ActionGrantLogic,
   ) {}
 
@@ -67,11 +69,8 @@ export class GameService {
 
     gameEntity.gameUsers = await Promise.all(
       gameEntity.gameUsers.map(async value => {
-        const { displayName, photoURL, uid } = await this.userService.findById(
-          value.userId,
-        );
-        value.user = { id: uid, displayName, photoURL };
-        return value;
+        const userRecord = await this.userService.findById(value.userId);
+        return this.gameUserEntityFactory.addUser(value, userRecord);
       }),
     );
 
