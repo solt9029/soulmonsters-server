@@ -67,6 +67,12 @@ export enum Zone {
     HAND = "HAND"
 }
 
+export class ActionPayload {
+    targetGameCardIds?: number[];
+    costGameCardIds?: number[];
+    targetGameUserIds?: string[];
+}
+
 export class DeckCardUpdateInput {
     deckId: number;
     cardId: number;
@@ -78,13 +84,7 @@ export class DeckCreateInput {
 
 export class DispatchGameActionInput {
     type: ActionType;
-    payload?: GameActionPayload;
-}
-
-export class GameActionPayload {
-    targetGameCardIds?: number[];
-    costGameCardIds?: number[];
-    targetGameUserIds?: string[];
+    payload?: ActionPayload;
 }
 
 export interface Node {
