@@ -69,6 +69,7 @@ export class GameService {
       );
       const gameEntity = await gameRepository
         .createQueryBuilder('games')
+        .setLock('pessimistic_read')
         .leftJoinAndSelect('games.gameUsers', 'gameUsers')
         .leftJoinAndSelect('games.gameCards', 'gameCards')
         .leftJoinAndSelect('gameCards.card', 'card')
