@@ -81,11 +81,54 @@ export class GameService {
 
     // TODO: Move this process to other components
     if (gameEntity.phase === null && gameEntity.turnUserId === userId) {
-      const gameUserIndex = gameEntity.gameUsers.findIndex(
+      const yourGameUserIndex = gameEntity.gameUsers.findIndex(
         value => value.userId === userId,
       );
-      gameEntity.gameUsers[gameUserIndex].actionTypes = [
+      gameEntity.gameUsers[yourGameUserIndex].actionTypes = [
         ActionType.START_DRAW_TIME,
+      ];
+    }
+    if (gameEntity.phase === Phase.DRAW && gameEntity.turnUserId === userId) {
+      const yourGameUserIndex = gameEntity.gameUsers.findIndex(
+        value => value.userId === userId,
+      );
+      gameEntity.gameUsers[yourGameUserIndex].actionTypes = [
+        ActionType.START_ENERGY_TIME,
+      ];
+    }
+    if (gameEntity.phase === Phase.ENERGY && gameEntity.turnUserId === userId) {
+      const yourGameUserIndex = gameEntity.gameUsers.findIndex(
+        value => value.userId === userId,
+      );
+      gameEntity.gameUsers[yourGameUserIndex].actionTypes = [
+        ActionType.START_PUT_TIME,
+      ];
+    }
+    if (gameEntity.phase === Phase.PUT && gameEntity.turnUserId === userId) {
+      const yourGameUserIndex = gameEntity.gameUsers.findIndex(
+        value => value.userId === userId,
+      );
+      gameEntity.gameUsers[yourGameUserIndex].actionTypes = [
+        ActionType.START_SOMETHING_TIME,
+      ];
+    }
+    if (
+      gameEntity.phase === Phase.SOMETHING &&
+      gameEntity.turnUserId === userId
+    ) {
+      const yourGameUserIndex = gameEntity.gameUsers.findIndex(
+        value => value.userId === userId,
+      );
+      gameEntity.gameUsers[yourGameUserIndex].actionTypes = [
+        ActionType.START_BATTLE_TIME,
+      ];
+    }
+    if (gameEntity.phase === Phase.BATTLE && gameEntity.turnUserId === userId) {
+      const yourGameUserIndex = gameEntity.gameUsers.findIndex(
+        value => value.userId === userId,
+      );
+      gameEntity.gameUsers[yourGameUserIndex].actionTypes = [
+        ActionType.START_END_TIME,
       ];
     }
 
