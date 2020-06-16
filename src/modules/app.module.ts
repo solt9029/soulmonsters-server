@@ -1,3 +1,4 @@
+import { ActionGrantLogic } from './../logics/action.grant.logic';
 import { GameHistoryEntity } from './../entities/game.history.entity';
 import { GameCardEntityFactory } from './../factories/game.card.entity.factory';
 import { GameCardEntity } from './../entities/game.card.entity';
@@ -84,6 +85,7 @@ const {
     GameService,
     GameResolver,
     GameCardEntityFactory,
+    ActionGrantLogic,
   ],
 })
 export class AppModule {}

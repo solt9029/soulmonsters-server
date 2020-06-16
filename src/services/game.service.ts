@@ -1,3 +1,4 @@
+import { ActionGrantLogic } from './../logics/action.grant.logic';
 import { DispatchGameActionInput, Phase, Zone } from './../graphql/index';
 import { UserService } from './user.service';
 import { ActionType } from '../graphql/index';
@@ -14,7 +15,6 @@ import {
 } from '@nestjs/common';
 import { Repository, Connection, EntityRepository } from 'typeorm';
 import { GameUserEntity } from 'src/entities/game.user.entity';
-import { grantActions } from 'src/utils/actions/grant';
 
 @EntityRepository(GameEntity)
 export class GameRepository extends Repository<GameEntity> {}
@@ -38,6 +38,7 @@ export class GameService {
     private readonly userService: UserService,
     private connection: Connection,
     private gameCardEntityFactory: GameCardEntityFactory,
+    private actionGrantLogic: ActionGrantLogic,
   ) {}
 
   async findActiveGameByUserId(userId: string): Promise<GameEntity> {
@@ -80,7 +81,7 @@ export class GameService {
       this.gameCardEntityFactory.filterByUserId(value, userId),
     );
 
-    gameEntity = grantActions(gameEntity, userId);
+    gameEntity = this.actionGrantLogic.grantActions(gameEntity, userId);
 
     return gameEntity;
   }
