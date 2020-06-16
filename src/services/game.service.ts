@@ -1,5 +1,3 @@
-import { GameUserEntityFactory } from '../factories/game.user.entity.factory';
-import { ActionGrantLogic } from './../logics/action.grant.logic';
 import { DispatchGameActionInput, Phase, Zone } from './../graphql/index';
 import { UserService } from './user.service';
 import { ActionType } from '../graphql/index';
