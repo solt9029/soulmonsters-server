@@ -1,6 +1,6 @@
+import { GameUser } from './../graphql/index';
 import { DeckEntity } from './deck.entity';
 import { GameEntity } from './game.entity';
-import { Player } from './../graphql/index';
 import {
   Entity,
   Column,
@@ -11,10 +11,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity({ name: 'players' })
+@Entity({ name: 'gameUsers' })
 @Unique(['userId', 'game'])
 @Unique(['deck', 'game'])
-export class PlayerEntity extends Player {
+export class GameUserEntity extends GameUser {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -38,14 +38,16 @@ export class PlayerEntity extends Player {
 
   @ManyToOne(
     () => DeckEntity,
-    deckEntity => deckEntity.players,
+    deckEntity => deckEntity.gameUsers,
   )
   deck: DeckEntity;
 
   @ManyToOne(
     () => GameEntity,
-    gameEntity => gameEntity.players,
+    gameEntity => gameEntity.gameUsers,
     { onDelete: 'CASCADE' },
   )
   game: GameEntity;
+
+  actionTypes = [];
 }

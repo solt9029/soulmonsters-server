@@ -1,13 +1,6 @@
 import { GameEntity } from './game.entity';
 import { CardEntity } from './card.entity';
-import {
-  Attribute,
-  Kind,
-  Type,
-  Zone,
-  BattlePosition,
-  GameCard,
-} from './../graphql/index';
+import { Zone, BattlePosition, GameCard } from './../graphql/index';
 import {
   Entity,
   Column,
@@ -37,30 +30,6 @@ export class GameCardEntity extends GameCard {
   @Column({ nullable: true })
   battlePosition: BattlePosition;
 
-  @Column()
-  name: string;
-
-  @Column()
-  kind: Kind;
-
-  @Column()
-  type: Type;
-
-  @Column({ nullable: true })
-  attribute: Attribute;
-
-  @Column({ nullable: true })
-  attack: number;
-
-  @Column({ nullable: true })
-  defence: number;
-
-  @Column({ nullable: true })
-  cost: number;
-
-  @Column('text', { nullable: true })
-  detail: string;
-
   @CreateDateColumn()
   createdAt: Date;
 
@@ -79,4 +48,6 @@ export class GameCardEntity extends GameCard {
     { onDelete: 'CASCADE' },
   )
   game: GameEntity;
+
+  actionTypes = [];
 }

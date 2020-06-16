@@ -52,14 +52,6 @@ export class GameCardEntityFactory {
         index >= GameCardEntityFactory.HAND_COUNT
           ? index - GameCardEntityFactory.HAND_COUNT
           : index;
-      gameCardEntity.name = value.name;
-      gameCardEntity.kind = value.kind;
-      gameCardEntity.type = value.type;
-      gameCardEntity.attribute = value.attribute;
-      gameCardEntity.attack = value.attack;
-      gameCardEntity.defence = value.defence;
-      gameCardEntity.cost = value.cost;
-      gameCardEntity.detail = value.detail;
       gameCardEntity.card = value;
       gameCardEntity.game = new GameEntity();
       gameCardEntity.game.id = gameId;
@@ -81,6 +73,7 @@ export class GameCardEntityFactory {
     }
 
     const filteredGameCardEntity = new GameCardEntity();
+    filteredGameCardEntity.id = gameCardEntity.id;
     filteredGameCardEntity.currentUserId = gameCardEntity.currentUserId;
     filteredGameCardEntity.originalUserId = gameCardEntity.originalUserId;
     filteredGameCardEntity.zone = gameCardEntity.zone;

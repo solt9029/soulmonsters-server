@@ -1,9 +1,10 @@
+import { GameUserEntityFactory } from '../factories/game.user.entity.factory';
+import { ActionGrantLogic } from './../logics/action.grant.logic';
 import { GameHistoryEntity } from './../entities/game.history.entity';
 import { GameCardEntityFactory } from './../factories/game.card.entity.factory';
 import { GameCardEntity } from './../entities/game.card.entity';
 import { GameResolver } from './../resolvers/game.resolver';
 import { GameService } from './../services/game.service';
-import { PlayerEntity } from './../entities/player.entity';
 import { GameEntity } from './../entities/game.entity';
 import { DeckCardResolver } from './../resolvers/deck.card.resolver';
 import { DeckCardService } from './../services/deck.card.service';
@@ -19,6 +20,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from '../controllers/app.controller';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { GameUserEntity } from 'src/entities/game.user.entity';
 
 const {
   DB_TYPE,
@@ -44,7 +46,7 @@ const {
         CardEntity,
         DeckCardEntity,
         GameEntity,
-        PlayerEntity,
+        GameUserEntity,
         GameCardEntity,
         GameHistoryEntity,
       ],
@@ -55,7 +57,7 @@ const {
       CardEntity,
       DeckCardEntity,
       GameEntity,
-      PlayerEntity,
+      GameUserEntity,
       GameCardEntity,
       GameHistoryEntity,
     ]),
@@ -84,6 +86,8 @@ const {
     GameService,
     GameResolver,
     GameCardEntityFactory,
+    GameUserEntityFactory,
+    ActionGrantLogic,
   ],
 })
 export class AppModule {}

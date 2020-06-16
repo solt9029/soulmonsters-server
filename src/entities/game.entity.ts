@@ -1,7 +1,7 @@
 import { GameHistoryEntity } from './game.history.entity';
 import { GameCardEntity } from './game.card.entity';
-import { PlayerEntity } from './player.entity';
-import { Game, Phase, Status, PlayingUser } from './../graphql/index';
+import { GameUserEntity } from './game.user.entity';
+import { Game, Phase } from './../graphql/index';
 import {
   Entity,
   Column,
@@ -16,23 +16,14 @@ export class GameEntity extends Game {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  firstUserId: string;
+  @Column({ nullable: true })
+  turnUserId: string;
 
   @Column({ nullable: true })
-  secondUserId: string;
-
-  @Column({ nullable: true })
-  playingUser: PlayingUser;
-
-  @Column({ default: Phase.DRAW })
   phase: Phase;
 
   @Column({ nullable: true })
-  winningUserId: string;
-
-  @Column({ default: Status.WAIT })
-  status: Status;
+  winnerUserId: string;
 
   @Column({ nullable: true })
   startedAt: Date;
@@ -47,10 +38,10 @@ export class GameEntity extends Game {
   updatedAt: Date;
 
   @OneToMany(
-    () => PlayerEntity,
-    playerEntity => playerEntity.game,
+    () => GameUserEntity,
+    gameUserEntity => gameUserEntity.game,
   )
-  players: PlayerEntity[];
+  gameUsers: GameUserEntity[];
 
   @OneToMany(
     () => GameCardEntity,

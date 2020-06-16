@@ -1,4 +1,4 @@
-import { PlayerEntity } from './player.entity';
+import { GameUserEntity } from './game.user.entity';
 import { DeckCardEntity } from './deck.card.entity';
 import { Deck } from './../graphql/index';
 import {
@@ -34,8 +34,8 @@ export class DeckEntity extends Deck {
   deckCards: DeckCardEntity[];
 
   @OneToMany(
-    () => PlayerEntity,
-    playerEntity => playerEntity.deck,
+    () => GameUserEntity,
+    gameUserEntity => gameUserEntity.deck,
   )
-  players: PlayerEntity[];
+  gameUsers: GameUserEntity[];
 }
