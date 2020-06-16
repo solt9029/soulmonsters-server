@@ -65,17 +65,15 @@ export class GameService {
       ],
     });
 
-    for (let i = 0; i < gameEntity.gameUsers.length; i++) {
-      const { displayName, photoURL, uid } = await this.userService.findById(
-        gameEntity.gameUsers[i].userId,
-      );
-      // TODO: use factory instead of this code.
-      gameEntity.gameUsers[i].user = {
-        id: uid,
-        displayName,
-        photoURL,
-      };
-    }
+    gameEntity.gameUsers = await Promise.all(
+      gameEntity.gameUsers.map(async value => {
+        const { displayName, photoURL, uid } = await this.userService.findById(
+          value.userId,
+        );
+        value.user = { id: uid, displayName, photoURL };
+        return value;
+      }),
+    );
 
     gameEntity.gameCards = gameEntity.gameCards.map(value =>
       this.gameCardEntityFactory.filterByUserId(value, userId),
