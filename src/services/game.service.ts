@@ -76,6 +76,8 @@ export class GameService {
         .where('games.id = :id', { id })
         .getOne();
 
+      // TODO: use grantActions to check whether the dispatched action is available?
+
       // TODO: validate (for rule and status)
       if (data.type === ActionType.START_DRAW_TIME) {
         if (gameEntity.turnUserId !== userId || gameEntity.phase !== null) {
