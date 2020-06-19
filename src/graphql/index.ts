@@ -68,6 +68,7 @@ export enum Zone {
 }
 
 export class ActionPayload {
+    gameCardId?: number;
     targetGameCardIds?: number[];
     costGameCardIds?: number[];
     targetGameUserIds?: number[];
