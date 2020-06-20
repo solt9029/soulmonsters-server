@@ -165,7 +165,7 @@ export class GameService {
       { userId, game: { id } },
       { energy: newEnergy },
     );
-    await gameRepository.update({ id }, { phase: Phase.PUT });
+    await gameRepository.update({ id }, { phase: Phase.ENERGY });
   }
 
   async start(userId: string, deckId: number) {
