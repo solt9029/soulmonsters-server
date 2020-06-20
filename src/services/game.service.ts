@@ -12,7 +12,12 @@ import {
   HttpStatus,
   HttpException,
 } from '@nestjs/common';
-import { Repository, Connection, EntityRepository } from 'typeorm';
+import {
+  Repository,
+  Connection,
+  EntityRepository,
+  EntityManager,
+} from 'typeorm';
 import { GameUserEntity } from 'src/entities/game.user.entity';
 
 @EntityRepository(GameEntity)
@@ -61,12 +66,13 @@ export class GameService {
     });
   }
 
-  async reduce(id: number, userId: string, data: DispatchGameActionInput) {
+  async dispatchAction(
+    id: number,
+    userId: string,
+    data: DispatchGameActionInput,
+  ) {
     return this.connection.transaction(async manager => {
       const gameRepository = manager.getCustomRepository(GameRepository);
-      const gameCardRepository = manager.getCustomRepository(
-        GameCardRepository,
-      );
       const gameEntity = await gameRepository
         .createQueryBuilder('games')
         .setLock('pessimistic_read')
@@ -88,27 +94,76 @@ export class GameService {
       // TODO:check events
 
       // TODO: process (see status again here)
-      if (data.type === ActionType.START_DRAW_TIME) {
-        await gameRepository.update({ id }, { phase: Phase.DRAW });
-        const yourDeckGameCards = gameEntity.gameCards
-          .filter(
-            value => value.zone === Zone.DECK && value.currentUserId === userId,
-          )
-          .sort((a, b) => b.position - a.position);
-        if (yourDeckGameCards.length <= 0) {
-          // TODO: the opponent user wins
-        }
-        const yourHandGameCards = gameEntity.gameCards
-          .filter(
-            value => value.zone === Zone.HAND && value.currentUserId === userId,
-          )
-          .sort((a, b) => b.position - a.position);
-        await gameCardRepository.update(
-          { id: yourDeckGameCards[0].id },
-          { zone: Zone.HAND, position: yourHandGameCards[0].position + 1 },
-        );
+      switch (data.type) {
+        case ActionType.START_DRAW_TIME:
+          return await this.handleStartDrawTimeAction(
+            manager,
+            id,
+            userId,
+            gameEntity,
+          );
+        case ActionType.START_ENERGY_TIME:
+          return await this.handleStartEnergyTimeAction(
+            manager,
+            id,
+            userId,
+            gameEntity,
+          );
+        default:
+          return;
       }
     });
+  }
+
+  private async handleStartDrawTimeAction(
+    manager: EntityManager,
+    id: number,
+    userId: string,
+    gameEntity: GameEntity,
+  ) {
+    const gameRepository = manager.getCustomRepository(GameRepository);
+    const gameCardRepository = manager.getCustomRepository(GameCardRepository);
+    await gameRepository.update({ id }, { phase: Phase.DRAW });
+    const yourDeckGameCards = gameEntity.gameCards
+      .filter(
+        value => value.zone === Zone.DECK && value.currentUserId === userId,
+      )
+      .sort((a, b) => b.position - a.position);
+    if (yourDeckGameCards.length <= 0) {
+      // TODO: the opponent user wins
+    }
+    const yourHandGameCards = gameEntity.gameCards
+      .filter(
+        value => value.zone === Zone.HAND && value.currentUserId === userId,
+      )
+      .sort((a, b) => b.position - a.position);
+    await gameCardRepository.update(
+      { id: yourDeckGameCards[0].id },
+      { zone: Zone.HAND, position: yourHandGameCards[0].position + 1 },
+    );
+  }
+
+  private async handleStartEnergyTimeAction(
+    manager: EntityManager,
+    id: number,
+    userId: string,
+    gameEntity: GameEntity,
+  ) {
+    const gameUserRepository = manager.getCustomRepository(GameUserRepository);
+    const yourGameUser = gameEntity.gameUsers.find(
+      value => value.userId === userId,
+    );
+    if (!yourGameUser) {
+      throw new BadRequestException('User Not Found');
+    }
+    let newEnergy = yourGameUser.energy + 2;
+    if (newEnergy > 8) {
+      newEnergy = 8;
+    }
+    await gameUserRepository.update(
+      { userId, game: { id } },
+      { energy: newEnergy },
+    );
   }
 
   async start(userId: string, deckId: number) {

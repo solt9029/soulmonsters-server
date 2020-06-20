@@ -64,7 +64,7 @@ export class GameResolver {
     @Args('id') id: number,
     @Args('data') data: DispatchGameActionInput,
   ) {
-    await this.gameService.reduce(id, user.uid, data);
+    await this.gameService.dispatchAction(id, user.uid, data);
     return await this.game(user, id);
   }
 }
