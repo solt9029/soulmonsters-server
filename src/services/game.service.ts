@@ -150,6 +150,7 @@ export class GameService {
     gameEntity: GameEntity,
   ) {
     const gameUserRepository = manager.getCustomRepository(GameUserRepository);
+    const gameRepository = manager.getCustomRepository(GameRepository);
     const yourGameUser = gameEntity.gameUsers.find(
       value => value.userId === userId,
     );
@@ -164,6 +165,7 @@ export class GameService {
       { userId, game: { id } },
       { energy: newEnergy },
     );
+    await gameRepository.update({ id }, { phase: Phase.PUT });
   }
 
   async start(userId: string, deckId: number) {
