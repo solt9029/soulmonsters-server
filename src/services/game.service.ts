@@ -109,6 +109,15 @@ export class GameService {
             userId,
             gameEntity,
           );
+        case ActionType.START_PUT_TIME:
+          return await this.handleStartPutTimeAction(manager, id);
+        case ActionType.PUT_SOUL:
+          return await this.handlePutSoulAction(
+            manager,
+            userId,
+            data,
+            gameEntity,
+          );
         default:
           return;
       }
@@ -166,6 +175,33 @@ export class GameService {
       { energy: newEnergy },
     );
     await gameRepository.update({ id }, { phase: Phase.ENERGY });
+  }
+
+  private async handleStartPutTimeAction(manager: EntityManager, id: number) {
+    const gameRepository = manager.getCustomRepository(GameRepository);
+    await gameRepository.update({ id }, { phase: Phase.PUT });
+  }
+
+  private async handlePutSoulAction(
+    manager: EntityManager,
+    userId: string,
+    data: DispatchGameActionInput,
+    gameEntity: GameEntity,
+  ) {
+    const yourSoulGameCards = gameEntity.gameCards
+      .filter(
+        value => value.zone === Zone.SOUL && value.currentUserId === userId,
+      )
+      .sort((a, b) => b.position - a.position);
+    const yourSoulGameCardMaxPosition =
+      yourSoulGameCards.length > 0 ? yourSoulGameCards[0].position : -1;
+    const gameCardRepository = manager.getCustomRepository(GameCardRepository);
+    await gameCardRepository.update(
+      { id: data.gameCardId },
+      { position: yourSoulGameCardMaxPosition + 1, zone: Zone.SOUL },
+    );
+    // TODO: 手札のposition詰める処理も行う
+    // TODO: add status that the user has already put a card on the soul zone.
   }
 
   async start(userId: string, deckId: number) {
