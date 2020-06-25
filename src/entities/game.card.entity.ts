@@ -8,9 +8,11 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  Unique,
 } from 'typeorm';
 
 @Entity({ name: 'gameCards' })
+@Unique(['position', 'zone', 'currentUserId'])
 export class GameCardEntity extends GameCard {
   @PrimaryGeneratedColumn()
   id: number;
