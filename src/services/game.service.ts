@@ -123,6 +123,12 @@ export class GameService {
             data,
             gameEntity,
           );
+        case ActionType.START_SOMETHING_TIME:
+          return await this.handleStartSomethingTimeAction(manager, id);
+        case ActionType.START_BATTLE_TIME:
+          return await this.handleStartBattleTimeAction(manager, id);
+        case ActionType.START_END_TIME:
+          return await this.handleStartEndTimeAction(manager, id);
         default:
           return;
       }
@@ -210,6 +216,27 @@ export class GameService {
       `UPDATE gameCards SET position = position - 1 WHERE gameId = ${gameEntity.id} AND zone = "HAND" AND currentUserId = "${userId}" AND position > ${gameCard.position} ORDER BY position`,
     );
     // TODO: add status that the user has already put a card on the soul zone.
+  }
+
+  private async handleStartSomethingTimeAction(
+    manager: EntityManager,
+    id: number,
+  ) {
+    const gameRepository = manager.getCustomRepository(GameRepository);
+    await gameRepository.update({ id }, { phase: Phase.SOMETHING });
+  }
+
+  private async handleStartBattleTimeAction(
+    manager: EntityManager,
+    id: number,
+  ) {
+    const gameRepository = manager.getCustomRepository(GameRepository);
+    await gameRepository.update({ id }, { phase: Phase.BATTLE });
+  }
+
+  private async handleStartEndTimeAction(manager: EntityManager, id: number) {
+    const gameRepository = manager.getCustomRepository(GameRepository);
+    await gameRepository.update({ id }, { phase: Phase.END });
   }
 
   async start(userId: string, deckId: number) {
