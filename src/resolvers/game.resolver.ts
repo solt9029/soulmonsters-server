@@ -32,11 +32,10 @@ export class GameResolver {
       }),
     );
 
-    gameEntity.gameCards = gameEntity.gameCards.map(value =>
-      this.gameCardEntityFactory.filterByUserId(value, user.uid),
-    );
-
     // TODO: should reflect status here.
+    gameEntity.gameCards = gameEntity.gameCards
+      .map(value => this.gameCardEntityFactory.addInfo(value))
+      .map(value => this.gameCardEntityFactory.filterByUserId(value, user.uid));
 
     gameEntity = this.actionGrantLogic.grantActions(gameEntity, user.uid);
 

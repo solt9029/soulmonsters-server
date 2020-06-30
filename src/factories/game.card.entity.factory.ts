@@ -60,6 +60,18 @@ export class GameCardEntityFactory {
     });
   }
 
+  addInfo(gameCardEntity: GameCardEntity) {
+    gameCardEntity.name = gameCardEntity.card.name;
+    gameCardEntity.kind = gameCardEntity.card.kind;
+    gameCardEntity.type = gameCardEntity.card.type;
+    gameCardEntity.attribute = gameCardEntity.card.attribute;
+    gameCardEntity.attack = gameCardEntity.card.attack;
+    gameCardEntity.defence = gameCardEntity.card.defence;
+    gameCardEntity.cost = gameCardEntity.card.cost;
+    gameCardEntity.detail = gameCardEntity.card.detail;
+    return gameCardEntity;
+  }
+
   filterByUserId(
     gameCardEntity: GameCardEntity,
     userId: string,
