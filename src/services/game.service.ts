@@ -196,11 +196,14 @@ export class GameService {
     const yourSoulGameCardMaxPosition =
       yourSoulGameCards.length > 0 ? yourSoulGameCards[0].position : -1;
     const gameCardRepository = manager.getCustomRepository(GameCardRepository);
+    const gameCard = await gameCardRepository.findOne({ id: data.gameCardId });
     await gameCardRepository.update(
       { id: data.gameCardId },
       { position: yourSoulGameCardMaxPosition + 1, zone: Zone.SOUL },
     );
-    // TODO: 手札のposition詰める処理も行う
+    await gameCardRepository.query(
+      `UPDATE gameCards SET position = position - 1 WHERE gameId = ${gameEntity.id} AND zone = "HAND" AND currentUserId = "${userId}" AND position > ${gameCard.position} ORDER BY position`,
+    );
     // TODO: add status that the user has already put a card on the soul zone.
   }
 
