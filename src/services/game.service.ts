@@ -1,3 +1,5 @@
+import { ActionValidationLogic } from './../logics/action.validation.logic';
+import { ActionGrantLogic } from './../logics/action.grant.logic';
 import { DispatchGameActionInput, Phase, Zone } from './../graphql/index';
 import { UserService } from './user.service';
 import { ActionType } from '../graphql/index';
@@ -42,6 +44,8 @@ export class GameService {
     private readonly userService: UserService,
     private connection: Connection,
     private gameCardEntityFactory: GameCardEntityFactory,
+    private actionGrantLogic: ActionGrantLogic,
+    private actionValidationLogic: ActionValidationLogic,
   ) {}
 
   async findActiveGameByUserId(userId: string): Promise<GameEntity> {
@@ -82,18 +86,19 @@ export class GameService {
         .where('games.id = :id', { id })
         .getOne();
 
-      // TODO: use grantActions to check whether the dispatched action is available?
+      const grantedGameEntity = this.actionGrantLogic.grantActions(
+        gameEntity,
+        userId,
+      );
 
-      // TODO: validate (for rule and status)
-      if (data.type === ActionType.START_DRAW_TIME) {
-        if (gameEntity.turnUserId !== userId || gameEntity.phase !== null) {
-          throw new BadRequestException();
-        }
-      }
+      this.actionValidationLogic.validateActions(
+        data,
+        grantedGameEntity,
+        userId,
+      );
 
       // TODO:check events
 
-      // TODO: process (see status again here)
       switch (data.type) {
         case ActionType.START_DRAW_TIME:
           return await this.handleStartDrawTimeAction(
