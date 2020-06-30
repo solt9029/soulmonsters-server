@@ -1,4 +1,4 @@
-import { ActionType, Phase, Zone } from './../graphql/index';
+import { ActionType, Phase, Zone, Kind } from './../graphql/index';
 import { GameEntity } from './../entities/game.entity';
 import { Injectable } from '@nestjs/common';
 
@@ -61,6 +61,16 @@ export class ActionGrantLogic {
       gameEntity.gameUsers[yourGameUserIndex].actionTypes = [
         ActionType.START_BATTLE_TIME,
       ];
+
+      for (let i = 0; i < gameEntity.gameCards.length; i++) {
+        if (
+          gameEntity.gameCards[i].zone === Zone.HAND &&
+          gameEntity.gameCards[i].currentUserId === userId &&
+          gameEntity.gameCards[i].kind === Kind.MONSTER
+        ) {
+          gameEntity.gameCards[i].actionTypes.push(ActionType.SUMMON_MONSTER);
+        }
+      }
     }
 
     if (gameEntity.phase === Phase.BATTLE && gameEntity.turnUserId === userId) {

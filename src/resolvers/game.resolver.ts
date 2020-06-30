@@ -36,6 +36,8 @@ export class GameResolver {
       this.gameCardEntityFactory.filterByUserId(value, user.uid),
     );
 
+    // TODO: should reflect status here.
+
     gameEntity = this.actionGrantLogic.grantActions(gameEntity, user.uid);
 
     return gameEntity;
