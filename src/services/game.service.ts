@@ -248,7 +248,7 @@ export class GameService {
 
     // reduce energy
     await gameUserRepository.query(
-      `UPDATE gameUsers SET energy = energy - ${gameCard.card.cost} WHERE gameId = ${gameEntity.id} AND userId = ${userId}`,
+      `UPDATE gameUsers SET energy = energy - ${gameCard.card.cost} WHERE gameId = ${gameEntity.id} AND userId = '${userId}'`,
     );
 
     const yourBattleGameCards = gameEntity.gameCards
