@@ -125,6 +125,13 @@ export class GameService {
           );
         case ActionType.START_SOMETHING_TIME:
           return await this.handleStartSomethingTimeAction(manager, id);
+        case ActionType.SUMMON_MONSTER:
+          return await this.handleSummonMonsterAction(
+            manager,
+            userId,
+            data,
+            gameEntity,
+          );
         case ActionType.START_BATTLE_TIME:
           return await this.handleStartBattleTimeAction(manager, id);
         case ActionType.START_END_TIME:
@@ -224,6 +231,44 @@ export class GameService {
   ) {
     const gameRepository = manager.getCustomRepository(GameRepository);
     await gameRepository.update({ id }, { phase: Phase.SOMETHING });
+  }
+
+  private async handleSummonMonsterAction(
+    manager: EntityManager,
+    userId: string,
+    data: DispatchGameActionInput,
+    gameEntity: GameEntity,
+  ) {
+    const gameCardRepository = manager.getCustomRepository(GameCardRepository);
+    const gameUserRepository = manager.getCustomRepository(GameUserRepository);
+
+    const gameCard = gameEntity.gameCards.find(
+      value => value.id === data.gameCardId,
+    );
+
+    // reduce energy
+    await gameUserRepository.query(
+      `UPDATE gameUsers SET energy = energy - ${gameCard.card.cost} WHERE gameId = ${gameEntity.id} AND userId = ${userId}`,
+    );
+
+    const yourBattleGameCards = gameEntity.gameCards
+      .filter(
+        value => value.zone === Zone.BATTLE && value.currentUserId === userId,
+      )
+      .sort((a, b) => b.position - a.position);
+    const yourBattleGameCardMaxPosition =
+      yourBattleGameCards.length > 0 ? yourBattleGameCards[0].position : -1;
+
+    // put the target monster card on your battle zone
+    await gameCardRepository.update(
+      { id: data.gameCardId },
+      { position: yourBattleGameCardMaxPosition + 1, zone: Zone.BATTLE },
+    );
+
+    // pack your hand cards
+    await gameCardRepository.query(
+      `UPDATE gameCards SET position = position - 1 WHERE gameId = ${gameEntity.id} AND zone = "HAND" AND currentUserId = "${userId}" AND position > ${gameCard.position} ORDER BY position`,
+    );
   }
 
   private async handleStartBattleTimeAction(
