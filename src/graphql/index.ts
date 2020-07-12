@@ -18,8 +18,7 @@ export enum ActionType {
     USE_SOUL_CANON = "USE_SOUL_CANON",
     SUMMON_MONSTER = "SUMMON_MONSTER",
     ATTACK = "ATTACK",
-    USE_SOUL_BARRIER = "USE_SOUL_BARRIER",
-    BATTLE = "BATTLE"
+    USE_SOUL_BARRIER = "USE_SOUL_BARRIER"
 }
 
 export enum Attribute {

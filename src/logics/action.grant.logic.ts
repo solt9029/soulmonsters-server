@@ -80,7 +80,7 @@ export class ActionGrantLogic {
           gameEntity.gameCards[i].currentUserId === userId
         ) {
           // TODO: check status before this addition
-          gameEntity.gameCards[i].actionTypes.push(ActionType.BATTLE);
+          gameEntity.gameCards[i].actionTypes.push(ActionType.ATTACK);
         }
       }
     }
