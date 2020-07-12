@@ -74,6 +74,18 @@ export class ActionGrantLogic {
     }
 
     if (gameEntity.phase === Phase.BATTLE && gameEntity.turnUserId === userId) {
+      for (let i = 0; i < gameEntity.gameCards.length; i++) {
+        if (
+          gameEntity.gameCards[i].zone === Zone.BATTLE &&
+          gameEntity.gameCards[i].currentUserId === userId
+        ) {
+          // TODO: check status before this addition
+          gameEntity.gameCards[i].actionTypes.push(ActionType.BATTLE);
+        }
+      }
+    }
+
+    if (gameEntity.phase === Phase.BATTLE && gameEntity.turnUserId === userId) {
       const yourGameUserIndex = gameEntity.gameUsers.findIndex(
         value => value.userId === userId,
       );
