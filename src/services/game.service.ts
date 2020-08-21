@@ -276,7 +276,11 @@ export class GameService {
     // put the target monster card on your battle zone
     await gameCardRepository.update(
       { id: data.gameCardId },
-      { position: yourBattleGameCardMaxPosition + 1, zone: Zone.BATTLE },
+      {
+        position: yourBattleGameCardMaxPosition + 1,
+        zone: Zone.BATTLE,
+        battlePosition: BattlePosition.ATTACK, // TODO: make this param selectable
+      },
     );
 
     // pack your hand cards
