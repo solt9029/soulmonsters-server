@@ -103,6 +103,11 @@ export class GameService {
       );
 
       // TODO: reflect status for gameEntity
+      // [WARNING] this implementation is just for handleAttackAction. not correct!
+      for (let i = 0; i < gameEntity.gameCards.length; i++) {
+        gameEntity.gameCards[i].attack = gameEntity.gameCards[i].card.attack;
+        gameEntity.gameCards[i].defence = gameEntity.gameCards[i].card.defence;
+      }
 
       // TODO:check events
 
