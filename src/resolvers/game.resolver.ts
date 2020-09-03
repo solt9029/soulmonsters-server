@@ -32,9 +32,10 @@ export class GameResolver {
       }),
     );
 
-    gameEntity.gameCards = gameEntity.gameCards.map(value =>
-      this.gameCardEntityFactory.filterByUserId(value, user.uid),
-    );
+    // TODO: should reflect status here.
+    gameEntity.gameCards = gameEntity.gameCards
+      .map(value => this.gameCardEntityFactory.addInfo(value))
+      .map(value => this.gameCardEntityFactory.filterByUserId(value, user.uid));
 
     gameEntity = this.actionGrantLogic.grantActions(gameEntity, user.uid);
 
@@ -64,7 +65,7 @@ export class GameResolver {
     @Args('id') id: number,
     @Args('data') data: DispatchGameActionInput,
   ) {
-    await this.gameService.reduce(id, user.uid, data);
+    await this.gameService.dispatchAction(id, user.uid, data);
     return await this.game(user, id);
   }
 }

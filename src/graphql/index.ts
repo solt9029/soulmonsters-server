@@ -70,7 +70,7 @@ export enum Zone {
 export class ActionPayload {
     targetGameCardIds?: number[];
     costGameCardIds?: number[];
-    targetGameUserIds?: string[];
+    targetGameUserIds?: number[];
 }
 
 export class DeckCardUpdateInput {
@@ -84,6 +84,7 @@ export class DeckCreateInput {
 
 export class DispatchGameActionInput {
     type: ActionType;
+    gameCardId?: number;
     payload?: ActionPayload;
 }
 

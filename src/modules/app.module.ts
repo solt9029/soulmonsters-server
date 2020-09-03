@@ -1,3 +1,4 @@
+import { ActionValidationLogic } from './../logics/action.validation.logic';
 import { GameUserEntityFactory } from '../factories/game.user.entity.factory';
 import { ActionGrantLogic } from './../logics/action.grant.logic';
 import { GameHistoryEntity } from './../entities/game.history.entity';
@@ -88,6 +89,7 @@ const {
     GameCardEntityFactory,
     GameUserEntityFactory,
     ActionGrantLogic,
+    ActionValidationLogic,
   ],
 })
 export class AppModule {}
