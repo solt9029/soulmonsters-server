@@ -68,6 +68,7 @@ export async function handleAttackAction(
         await gameCardRepository.query(
           `UPDATE gameCards SET position = position - 1 WHERE gameId = ${gameEntity.id} AND zone = "BATTLE" AND currentUserId = "${opponentGameUser.id}" AND position > ${targetGameCard.position} ORDER BY position`,
         );
+        // TODO: plus 1 energy
       }
       if (gameCard.attack <= targetGameCard.attack) {
         await gameCardRepository.update(
@@ -77,6 +78,7 @@ export async function handleAttackAction(
         await gameCardRepository.query(
           `UPDATE gameCards SET position = position - 1 WHERE gameId = ${gameEntity.id} AND zone = "BATTLE" AND currentUserId = "${yourGameUser.id}" AND position > ${gameCard.position} ORDER BY position`,
         );
+        // TODO: plus 1 energy
       }
       if (gameCard.attack != targetGameCard.attack) {
         const damagePoint = Math.abs(gameCard.attack - targetGameCard.attack);
