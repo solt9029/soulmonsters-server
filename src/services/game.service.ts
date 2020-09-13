@@ -1,9 +1,9 @@
+import { handleAction } from './../actions/action.handler';
 import { GameStateEntity } from '../entities/game.state.entity';
 import { ActionValidator } from '../actions/action.validator';
 import { ActionGrantor } from '../actions/action.grantor';
 import { DispatchGameActionInput } from './../graphql/index';
 import { UserService } from './user.service';
-import { ActionType } from '../graphql/index';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GameCardEntityFactory } from './../factories/game.card.entity.factory';
 import { GameCardEntity } from './../entities/game.card.entity';
@@ -17,15 +17,6 @@ import {
 } from '@nestjs/common';
 import { Repository, Connection, EntityRepository } from 'typeorm';
 import { GameUserEntity } from 'src/entities/game.user.entity';
-import { handleAttackAction } from 'src/actions/handlers/attack.action.handler';
-import { handleStartDrawTimeAction } from 'src/actions/handlers/start.draw.time.action.handler';
-import { handleStartEnergyTimeAction } from 'src/actions/handlers/start.energy.time.action.handler';
-import { handleStartPutTimeAction } from 'src/actions/handlers/start.put.time.action.handler';
-import { handlePutSoulAction } from 'src/actions/handlers/put.soul.action.handler';
-import { handleStartSomethingTimeAction } from 'src/actions/handlers/start.something.time.action.handler';
-import { handleSummonMonsterAction } from 'src/actions/handlers/summon.monster.action.handler';
-import { handleStartBattleTimeAction } from 'src/actions/handlers/start.battle.time.action.handler';
-import { handleStartEndTimeAction } from 'src/actions/handlers/start.end.time.action.handler';
 
 @EntityRepository(GameEntity)
 export class GameRepository extends Repository<GameEntity> {}
@@ -110,43 +101,7 @@ export class GameService {
 
       // TODO:check events
 
-      switch (data.type) {
-        case ActionType.START_DRAW_TIME:
-          return await handleStartDrawTimeAction(
-            manager,
-            id,
-            userId,
-            gameEntity,
-          );
-        case ActionType.START_ENERGY_TIME:
-          return await handleStartEnergyTimeAction(
-            manager,
-            id,
-            userId,
-            gameEntity,
-          );
-        case ActionType.START_PUT_TIME:
-          return await handleStartPutTimeAction(manager, id);
-        case ActionType.PUT_SOUL:
-          return await handlePutSoulAction(manager, userId, data, gameEntity);
-        case ActionType.START_SOMETHING_TIME:
-          return await handleStartSomethingTimeAction(manager, id);
-        case ActionType.SUMMON_MONSTER:
-          return await handleSummonMonsterAction(
-            manager,
-            userId,
-            data,
-            gameEntity,
-          );
-        case ActionType.START_BATTLE_TIME:
-          return await handleStartBattleTimeAction(manager, id);
-        case ActionType.START_END_TIME:
-          return await handleStartEndTimeAction(manager, id);
-        case ActionType.ATTACK:
-          return await handleAttackAction(manager, userId, data, gameEntity);
-        default:
-          return;
-      }
+      return await handleAction(id, data, manager, userId, gameEntity);
     });
   }
 
