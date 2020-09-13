@@ -1,10 +1,11 @@
+import { GameUserEntity } from 'src/entities/game.user.entity';
+import { GameEntity } from './../../entities/game.entity';
 import { Zone } from 'src/graphql';
 import {
   GameUserRepository,
   GameCardRepository,
   GameStateRepository,
 } from '../../services/game.service';
-import { GameEntity } from '../../entities/game.entity';
 import {
   DispatchGameActionInput,
   BattlePosition,
@@ -55,9 +56,6 @@ export async function handleAttackAction(
       .sort((a, b) => b.position - a.position);
     const opponentSoulGameCardMaxPosition =
       opponentSoulGameCards.length > 0 ? opponentSoulGameCards[0].position : -1;
-    console.log(targetGameCard);
-    console.log(yourSoulGameCardMaxPosition);
-    console.log(opponentSoulGameCardMaxPosition);
 
     if (targetGameCard.battlePosition === BattlePosition.ATTACK) {
       if (gameCard.attack >= targetGameCard.attack) {
@@ -68,7 +66,13 @@ export async function handleAttackAction(
         await gameCardRepository.query(
           `UPDATE gameCards SET position = position - 1 WHERE gameId = ${gameEntity.id} AND zone = "BATTLE" AND currentUserId = "${opponentGameUser.id}" AND position > ${targetGameCard.position} ORDER BY position`,
         );
-        // TODO: plus 1 energy
+        if (opponentGameUser.energy < 8) {
+          await manager.update(
+            GameUserEntity,
+            { id: opponentGameUser.id },
+            { energy: opponentGameUser.energy + 1 },
+          );
+        }
       }
       if (gameCard.attack <= targetGameCard.attack) {
         await gameCardRepository.update(
@@ -78,7 +82,13 @@ export async function handleAttackAction(
         await gameCardRepository.query(
           `UPDATE gameCards SET position = position - 1 WHERE gameId = ${gameEntity.id} AND zone = "BATTLE" AND currentUserId = "${yourGameUser.id}" AND position > ${gameCard.position} ORDER BY position`,
         );
-        // TODO: plus 1 energy
+        if (yourGameUser.energy < 8) {
+          await manager.update(
+            GameUserEntity,
+            { id: yourGameUser.id },
+            { energy: yourGameUser.energy + 1 },
+          );
+        }
       }
       if (gameCard.attack != targetGameCard.attack) {
         const damagePoint = Math.abs(gameCard.attack - targetGameCard.attack);
