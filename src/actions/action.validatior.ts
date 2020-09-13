@@ -1,10 +1,10 @@
-import { DispatchGameActionInput } from './../graphql/index';
+import { DispatchGameActionInput } from '../graphql/index';
 import { ActionType } from '../graphql/index';
 import { GameEntity } from '../entities/game.entity';
 import { Injectable, BadRequestException } from '@nestjs/common';
 
 @Injectable()
-export class ActionValidationLogic {
+export class ActionValidator {
   validateActions(
     data: DispatchGameActionInput,
     grantedGameEntity: GameEntity,

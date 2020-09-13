@@ -1,5 +1,5 @@
 import { GameStateEntity } from '../entities/game.state.entity';
-import { ActionValidationLogic } from './../logics/action.validation.logic';
+import { ActionValidator } from '../actions/action.validatior';
 import { ActionGrantor } from '../actions/action.grantor';
 import { DispatchGameActionInput } from './../graphql/index';
 import { UserService } from './user.service';
@@ -15,12 +15,7 @@ import {
   HttpStatus,
   HttpException,
 } from '@nestjs/common';
-import {
-  Repository,
-  Connection,
-  EntityRepository,
-  EntityManager,
-} from 'typeorm';
+import { Repository, Connection, EntityRepository } from 'typeorm';
 import { GameUserEntity } from 'src/entities/game.user.entity';
 import { handleAttackAction } from 'src/handlers/attack.action.handler';
 import { handleStartDrawTimeAction } from 'src/handlers/start.draw.time.action.handler';
@@ -58,7 +53,7 @@ export class GameService {
     private connection: Connection,
     private gameCardEntityFactory: GameCardEntityFactory,
     private actionGrantor: ActionGrantor,
-    private actionValidationLogic: ActionValidationLogic,
+    private actionValidator: ActionValidator,
   ) {}
 
   async findActiveGameByUserId(userId: string): Promise<GameEntity> {
@@ -104,11 +99,7 @@ export class GameService {
         userId,
       );
 
-      this.actionValidationLogic.validateActions(
-        data,
-        grantedGameEntity,
-        userId,
-      );
+      this.actionValidator.validateActions(data, grantedGameEntity, userId);
 
       // TODO: reflect status for gameEntity
       // [WARNING] this implementation is just for handleAttackAction. not correct!

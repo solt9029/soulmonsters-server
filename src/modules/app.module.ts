@@ -1,5 +1,5 @@
 import { GameStateEntity } from '../entities/game.state.entity';
-import { ActionValidationLogic } from './../logics/action.validation.logic';
+import { ActionValidator } from '../actions/action.validatior';
 import { GameUserEntityFactory } from '../factories/game.user.entity.factory';
 import { ActionGrantor } from '../actions/action.grantor';
 import { GameHistoryEntity } from './../entities/game.history.entity';
@@ -92,7 +92,7 @@ const {
     GameCardEntityFactory,
     GameUserEntityFactory,
     ActionGrantor,
-    ActionValidationLogic,
+    ActionValidator,
   ],
 })
 export class AppModule {}
