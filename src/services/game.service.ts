@@ -65,6 +65,8 @@ export class GameService {
         'gameCards',
         'gameCards.card',
         'gameHistories',
+        'gameStates',
+        'gameStates.gameCard',
       ],
     });
   }
