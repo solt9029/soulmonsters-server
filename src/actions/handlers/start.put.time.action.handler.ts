@@ -1,4 +1,4 @@
-import { Phase } from './../graphql/index';
+import { Phase } from '../../graphql/index';
 import { EntityManager } from 'typeorm';
 import { GameRepository } from 'src/services/game.service';
 

@@ -1,7 +1,7 @@
 import { Zone } from 'src/graphql';
-import { Phase } from '../graphql/index';
-import { GameCardRepository } from '../services/game.service';
-import { GameEntity } from '../entities/game.entity';
+import { Phase } from '../../graphql/index';
+import { GameCardRepository } from '../../services/game.service';
+import { GameEntity } from '../../entities/game.entity';
 import { EntityManager } from 'typeorm';
 import { GameRepository } from 'src/services/game.service';
 

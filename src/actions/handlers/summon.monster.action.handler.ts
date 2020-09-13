@@ -2,9 +2,9 @@ import { Zone } from 'src/graphql';
 import {
   GameCardRepository,
   GameUserRepository,
-} from './../services/game.service';
-import { DispatchGameActionInput, BattlePosition } from './../graphql/index';
-import { GameEntity } from './../entities/game.entity';
+} from '../../services/game.service';
+import { DispatchGameActionInput, BattlePosition } from '../../graphql/index';
+import { GameEntity } from '../../entities/game.entity';
 import { EntityManager } from 'typeorm';
 
 export async function handleSummonMonsterAction(

@@ -3,13 +3,13 @@ import {
   GameUserRepository,
   GameCardRepository,
   GameStateRepository,
-} from '../services/game.service';
-import { GameEntity } from '../entities/game.entity';
+} from '../../services/game.service';
+import { GameEntity } from '../../entities/game.entity';
 import {
   DispatchGameActionInput,
   BattlePosition,
   StateType,
-} from '../graphql/index';
+} from '../../graphql/index';
 import { EntityManager } from 'typeorm';
 
 export async function handleAttackAction(

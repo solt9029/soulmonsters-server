@@ -1,7 +1,7 @@
 import { Zone } from 'src/graphql';
-import { GameCardRepository } from './../services/game.service';
-import { GameEntity } from './../entities/game.entity';
-import { DispatchGameActionInput } from './../graphql/index';
+import { GameCardRepository } from '../../services/game.service';
+import { GameEntity } from '../../entities/game.entity';
+import { DispatchGameActionInput } from '../../graphql/index';
 import { EntityManager } from 'typeorm';
 
 export async function handlePutSoulAction(

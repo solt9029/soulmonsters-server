@@ -1,6 +1,9 @@
-import { Phase } from './../graphql/index';
-import { GameUserRepository, GameRepository } from './../services/game.service';
-import { GameEntity } from './../entities/game.entity';
+import { Phase } from '../../graphql/index';
+import {
+  GameUserRepository,
+  GameRepository,
+} from '../../services/game.service';
+import { GameEntity } from '../../entities/game.entity';
 import { EntityManager } from 'typeorm';
 import { BadRequestException } from '@nestjs/common';
 

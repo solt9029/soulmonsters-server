@@ -17,15 +17,15 @@ import {
 } from '@nestjs/common';
 import { Repository, Connection, EntityRepository } from 'typeorm';
 import { GameUserEntity } from 'src/entities/game.user.entity';
-import { handleAttackAction } from 'src/handlers/attack.action.handler';
-import { handleStartDrawTimeAction } from 'src/handlers/start.draw.time.action.handler';
-import { handleStartEnergyTimeAction } from 'src/handlers/start.energy.time.action.handler';
-import { handleStartPutTimeAction } from 'src/handlers/start.put.time.action.handler';
-import { handlePutSoulAction } from 'src/handlers/put.soul.action.handler';
-import { handleStartSomethingTimeAction } from 'src/handlers/start.something.time.action.handler';
-import { handleSummonMonsterAction } from 'src/handlers/summon.monster.action.handler';
-import { handleStartBattleTimeAction } from 'src/handlers/start.battle.time.action.handler';
-import { handleStartEndTimeAction } from 'src/handlers/start.end.time.action.handler';
+import { handleAttackAction } from 'src/actions/handlers/attack.action.handler';
+import { handleStartDrawTimeAction } from 'src/actions/handlers/start.draw.time.action.handler';
+import { handleStartEnergyTimeAction } from 'src/actions/handlers/start.energy.time.action.handler';
+import { handleStartPutTimeAction } from 'src/actions/handlers/start.put.time.action.handler';
+import { handlePutSoulAction } from 'src/actions/handlers/put.soul.action.handler';
+import { handleStartSomethingTimeAction } from 'src/actions/handlers/start.something.time.action.handler';
+import { handleSummonMonsterAction } from 'src/actions/handlers/summon.monster.action.handler';
+import { handleStartBattleTimeAction } from 'src/actions/handlers/start.battle.time.action.handler';
+import { handleStartEndTimeAction } from 'src/actions/handlers/start.end.time.action.handler';
 
 @EntityRepository(GameEntity)
 export class GameRepository extends Repository<GameEntity> {}
