@@ -18,6 +18,10 @@ type State =
   | {
       type: StateType.SELF_POWER_CHANGE;
       data: { attack: number; defence: number };
+    }
+  | {
+      type: StateType.PUT_SOUL_COUNT;
+      data: { value: number; gameUserId: number };
     };
 
 @Entity({ name: 'gameStates' })
@@ -35,7 +39,7 @@ export class GameStateEntity {
   @ManyToOne(
     () => GameCardEntity,
     gameCardEntity => gameCardEntity.gameStates,
-    { onDelete: 'CASCADE' },
+    { onDelete: 'CASCADE', nullable: true },
   )
   gameCard: GameCardEntity;
 

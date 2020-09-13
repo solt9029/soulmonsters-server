@@ -1,4 +1,5 @@
-import { Zone } from 'src/graphql';
+import { GameStateEntity } from './../../entities/game.state.entity';
+import { Zone, StateType } from 'src/graphql';
 import { GameCardRepository } from '../../services/game.service';
 import { GameEntity } from '../../entities/game.entity';
 import { DispatchGameActionInput } from '../../graphql/index';
@@ -24,5 +25,29 @@ export async function handlePutSoulAction(
   await gameCardRepository.query(
     `UPDATE gameCards SET position = position - 1 WHERE gameId = ${gameEntity.id} AND zone = "HAND" AND currentUserId = "${userId}" AND position > ${gameCard.position} ORDER BY position`,
   );
-  // TODO: add status that the user has already put a card on the soul zone.
+
+  // plus PUT_SOUL_COUNT
+  const yourGameUser = gameEntity.gameUsers.find(
+    value => value.userId === userId,
+  );
+  const gameStates = await manager.find(GameStateEntity, {
+    game: gameEntity,
+    gameCard: null,
+  });
+  let putSoulCountGameState = gameStates.find(
+    gameState =>
+      gameState.state.type === StateType.PUT_SOUL_COUNT &&
+      gameState.state.data.gameUserId === yourGameUser.id,
+  );
+  if (putSoulCountGameState === undefined) {
+    putSoulCountGameState = new GameStateEntity();
+    putSoulCountGameState.state = {
+      type: StateType.PUT_SOUL_COUNT,
+      data: { value: 1, gameUserId: yourGameUser.id },
+    };
+    putSoulCountGameState.game = gameEntity;
+  } else {
+    putSoulCountGameState.state.data['value']++;
+  }
+  manager.save(GameStateEntity, putSoulCountGameState);
 }
