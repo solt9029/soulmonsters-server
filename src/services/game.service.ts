@@ -6,7 +6,6 @@ import {
   Phase,
   Zone,
   BattlePosition,
-  StateType,
 } from './../graphql/index';
 import { UserService } from './user.service';
 import { ActionType } from '../graphql/index';
@@ -28,6 +27,15 @@ import {
   EntityManager,
 } from 'typeorm';
 import { GameUserEntity } from 'src/entities/game.user.entity';
+import { handleAttackAction } from 'src/handlers/attack.action.handler';
+import { handleStartDrawTimeAction } from 'src/handlers/start.draw.time.action.handler';
+import { handleStartEnergyTimeAction } from 'src/handlers/start.energy.time.action.handler';
+import { handleStartPutTimeAction } from 'src/handlers/start.put.time.action.handler';
+import { handlePutSoulAction } from 'src/handlers/put.soul.action.handler';
+import { handleStartSomethingTimeAction } from 'src/handlers/start.something.time.action.handler';
+import { handleSummonMonsterAction } from 'src/handlers/summon.monster.action.handler';
+import { handleStartBattleTimeAction } from 'src/handlers/start.battle.time.action.handler';
+import { handleStartEndTimeAction } from 'src/handlers/start.end.time.action.handler';
 
 @EntityRepository(GameEntity)
 export class GameRepository extends Repository<GameEntity> {}
@@ -118,329 +126,42 @@ export class GameService {
 
       switch (data.type) {
         case ActionType.START_DRAW_TIME:
-          return await this.handleStartDrawTimeAction(
+          return await handleStartDrawTimeAction(
             manager,
             id,
             userId,
             gameEntity,
           );
         case ActionType.START_ENERGY_TIME:
-          return await this.handleStartEnergyTimeAction(
+          return await handleStartEnergyTimeAction(
             manager,
             id,
             userId,
             gameEntity,
           );
         case ActionType.START_PUT_TIME:
-          return await this.handleStartPutTimeAction(manager, id);
+          return await handleStartPutTimeAction(manager, id);
         case ActionType.PUT_SOUL:
-          return await this.handlePutSoulAction(
-            manager,
-            userId,
-            data,
-            gameEntity,
-          );
+          return await handlePutSoulAction(manager, userId, data, gameEntity);
         case ActionType.START_SOMETHING_TIME:
-          return await this.handleStartSomethingTimeAction(manager, id);
+          return await handleStartSomethingTimeAction(manager, id);
         case ActionType.SUMMON_MONSTER:
-          return await this.handleSummonMonsterAction(
+          return await handleSummonMonsterAction(
             manager,
             userId,
             data,
             gameEntity,
           );
         case ActionType.START_BATTLE_TIME:
-          return await this.handleStartBattleTimeAction(manager, id);
+          return await handleStartBattleTimeAction(manager, id);
         case ActionType.START_END_TIME:
-          return await this.handleStartEndTimeAction(manager, id);
+          return await handleStartEndTimeAction(manager, id);
         case ActionType.ATTACK:
-          return await this.handleAttackAction(
-            manager,
-            userId,
-            data,
-            gameEntity,
-          );
+          return await handleAttackAction(manager, userId, data, gameEntity);
         default:
           return;
       }
     });
-  }
-
-  private async handleStartDrawTimeAction(
-    manager: EntityManager,
-    id: number,
-    userId: string,
-    gameEntity: GameEntity,
-  ) {
-    const gameRepository = manager.getCustomRepository(GameRepository);
-    const gameCardRepository = manager.getCustomRepository(GameCardRepository);
-    await gameRepository.update({ id }, { phase: Phase.DRAW });
-    const yourDeckGameCards = gameEntity.gameCards
-      .filter(
-        value => value.zone === Zone.DECK && value.currentUserId === userId,
-      )
-      .sort((a, b) => b.position - a.position);
-    if (yourDeckGameCards.length <= 0) {
-      // TODO: the opponent user wins
-    }
-    const yourHandGameCards = gameEntity.gameCards
-      .filter(
-        value => value.zone === Zone.HAND && value.currentUserId === userId,
-      )
-      .sort((a, b) => b.position - a.position);
-    await gameCardRepository.update(
-      { id: yourDeckGameCards[0].id },
-      { zone: Zone.HAND, position: yourHandGameCards[0].position + 1 },
-    );
-  }
-
-  private async handleStartEnergyTimeAction(
-    manager: EntityManager,
-    id: number,
-    userId: string,
-    gameEntity: GameEntity,
-  ) {
-    const gameUserRepository = manager.getCustomRepository(GameUserRepository);
-    const gameRepository = manager.getCustomRepository(GameRepository);
-    const yourGameUser = gameEntity.gameUsers.find(
-      value => value.userId === userId,
-    );
-    if (!yourGameUser) {
-      throw new BadRequestException('User Not Found');
-    }
-    let newEnergy = yourGameUser.energy + 2;
-    if (newEnergy > 8) {
-      newEnergy = 8;
-    }
-    await gameUserRepository.update(
-      { userId, game: { id } },
-      { energy: newEnergy },
-    );
-    await gameRepository.update({ id }, { phase: Phase.ENERGY });
-  }
-
-  private async handleStartPutTimeAction(manager: EntityManager, id: number) {
-    const gameRepository = manager.getCustomRepository(GameRepository);
-    await gameRepository.update({ id }, { phase: Phase.PUT });
-  }
-
-  private async handlePutSoulAction(
-    manager: EntityManager,
-    userId: string,
-    data: DispatchGameActionInput,
-    gameEntity: GameEntity,
-  ) {
-    const yourSoulGameCards = gameEntity.gameCards
-      .filter(
-        value => value.zone === Zone.SOUL && value.currentUserId === userId,
-      )
-      .sort((a, b) => b.position - a.position);
-    const yourSoulGameCardMaxPosition =
-      yourSoulGameCards.length > 0 ? yourSoulGameCards[0].position : -1;
-    const gameCardRepository = manager.getCustomRepository(GameCardRepository);
-    const gameCard = await gameCardRepository.findOne({ id: data.gameCardId });
-    await gameCardRepository.update(
-      { id: data.gameCardId },
-      { position: yourSoulGameCardMaxPosition + 1, zone: Zone.SOUL },
-    );
-    await gameCardRepository.query(
-      `UPDATE gameCards SET position = position - 1 WHERE gameId = ${gameEntity.id} AND zone = "HAND" AND currentUserId = "${userId}" AND position > ${gameCard.position} ORDER BY position`,
-    );
-    // TODO: add status that the user has already put a card on the soul zone.
-  }
-
-  private async handleStartSomethingTimeAction(
-    manager: EntityManager,
-    id: number,
-  ) {
-    const gameRepository = manager.getCustomRepository(GameRepository);
-    await gameRepository.update({ id }, { phase: Phase.SOMETHING });
-  }
-
-  private async handleSummonMonsterAction(
-    manager: EntityManager,
-    userId: string,
-    data: DispatchGameActionInput,
-    gameEntity: GameEntity,
-  ) {
-    const gameCardRepository = manager.getCustomRepository(GameCardRepository);
-    const gameUserRepository = manager.getCustomRepository(GameUserRepository);
-
-    const gameCard = gameEntity.gameCards.find(
-      value => value.id === data.gameCardId,
-    );
-
-    // reduce energy
-    await gameUserRepository.query(
-      `UPDATE gameUsers SET energy = energy - ${gameCard.card.cost} WHERE gameId = ${gameEntity.id} AND userId = '${userId}'`,
-    );
-
-    const yourBattleGameCards = gameEntity.gameCards
-      .filter(
-        value => value.zone === Zone.BATTLE && value.currentUserId === userId,
-      )
-      .sort((a, b) => b.position - a.position);
-    const yourBattleGameCardMaxPosition =
-      yourBattleGameCards.length > 0 ? yourBattleGameCards[0].position : -1;
-
-    // put the target monster card on your battle zone
-    await gameCardRepository.update(
-      { id: data.gameCardId },
-      {
-        position: yourBattleGameCardMaxPosition + 1,
-        zone: Zone.BATTLE,
-        battlePosition: BattlePosition.ATTACK, // TODO: make this param selectable
-      },
-    );
-
-    // pack your hand cards
-    await gameCardRepository.query(
-      `UPDATE gameCards SET position = position - 1 WHERE gameId = ${gameEntity.id} AND zone = "HAND" AND currentUserId = "${userId}" AND position > ${gameCard.position} ORDER BY position`,
-    );
-  }
-
-  private async handleStartBattleTimeAction(
-    manager: EntityManager,
-    id: number,
-  ) {
-    const gameRepository = manager.getCustomRepository(GameRepository);
-    await gameRepository.update({ id }, { phase: Phase.BATTLE });
-  }
-
-  private async handleStartEndTimeAction(manager: EntityManager, id: number) {
-    const gameRepository = manager.getCustomRepository(GameRepository);
-    await gameRepository.update({ id }, { phase: Phase.END });
-  }
-
-  private async handleAttackAction(
-    manager: EntityManager,
-    userId: string,
-    data: DispatchGameActionInput,
-    gameEntity: GameEntity,
-  ) {
-    const gameUserRepository = manager.getCustomRepository(GameUserRepository);
-    const gameCardRepository = manager.getCustomRepository(GameCardRepository);
-    const gameStateRepository = manager.getCustomRepository(
-      GameStateRepository,
-    );
-
-    const gameCard = gameEntity.gameCards.find(
-      value => value.id === data.gameCardId,
-    );
-    const opponentGameUser = gameEntity.gameUsers.find(
-      value => value.userId !== userId,
-    );
-
-    if (data.payload.targetGameUserIds.length === 1) {
-      await gameUserRepository.update(
-        { id: opponentGameUser.id },
-        { lifePoint: opponentGameUser.lifePoint - gameCard.attack },
-      );
-    } else {
-      const targetGameCard = gameEntity.gameCards.find(
-        value => value.id === data.gameCardId,
-      );
-      const yourGameUser = gameEntity.gameUsers.find(
-        value => value.userId === userId,
-      );
-      const yourSoulGameCards = gameEntity.gameCards
-        .filter(
-          value => value.zone === Zone.SOUL && value.currentUserId === userId,
-        )
-        .sort((a, b) => b.position - a.position);
-      const yourSoulGameCardMaxPosition =
-        yourSoulGameCards.length > 0 ? yourSoulGameCards[0].position : -1;
-      const opponentSoulGameCards = gameEntity.gameCards
-        .filter(
-          value => value.zone === Zone.SOUL && value.currentUserId !== userId,
-        )
-        .sort((a, b) => b.position - a.position);
-      const opponentSoulGameCardMaxPosition =
-        opponentSoulGameCards.length > 0
-          ? opponentSoulGameCards[0].position
-          : -1;
-
-      if (targetGameCard.battlePosition === BattlePosition.ATTACK) {
-        if (gameCard.attack >= targetGameCard.attack) {
-          await gameCardRepository.update(
-            { id: targetGameCard.id },
-            { position: opponentSoulGameCardMaxPosition + 1, zone: Zone.SOUL },
-          );
-          await gameCardRepository.query(
-            `UPDATE gameCards SET position = position - 1 WHERE gameId = ${gameEntity.id} AND zone = "HAND" AND currentUserId = "${opponentGameUser.id}" AND position > ${targetGameCard.position} ORDER BY position`,
-          );
-        }
-        if (gameCard.attack <= targetGameCard.attack) {
-          await gameCardRepository.update(
-            { id: gameCard.id },
-            { position: yourSoulGameCardMaxPosition + 1, zone: Zone.SOUL },
-          );
-          await gameCardRepository.query(
-            `UPDATE gameCards SET position = position - 1 WHERE gameId = ${gameEntity.id} AND zone = "HAND" AND currentUserId = "${yourGameUser.id}" AND position > ${gameCard.position} ORDER BY position`,
-          );
-        }
-        if (gameCard.attack != targetGameCard.attack) {
-          const damagePoint = Math.abs(gameCard.attack - targetGameCard.attack);
-          const gameUserId =
-            gameCard.attack > targetGameCard.attack
-              ? opponentGameUser.id
-              : yourGameUser.id;
-          await gameUserRepository.update(
-            { id: gameUserId },
-            { lifePoint: opponentGameUser.lifePoint - damagePoint },
-          );
-        }
-      }
-      if (targetGameCard.battlePosition === BattlePosition.DEFENCE) {
-        if (gameCard.attack > targetGameCard.defence) {
-          await gameCardRepository.update(
-            { id: targetGameCard.id },
-            { position: opponentSoulGameCardMaxPosition + 1, zone: Zone.SOUL },
-          );
-          await gameCardRepository.query(
-            `UPDATE gameCards SET position = position - 1 WHERE gameId = ${gameEntity.id} AND zone = "HAND" AND currentUserId = "${opponentGameUser.id}" AND position > ${targetGameCard.position} ORDER BY position`,
-          );
-        }
-        if (gameCard.attack < targetGameCard.defence) {
-          const damagePoint = targetGameCard.defence - gameCard.attack;
-          await gameUserRepository.update(
-            { id: yourGameUser.id },
-            { lifePoint: opponentGameUser.lifePoint - damagePoint },
-          );
-        }
-      }
-    }
-
-    // add attack count state
-    const updatedGameCard = await gameCardRepository.findOne({
-      id: data.gameCardId,
-    });
-    const gameStates = await gameStateRepository.find({
-      game: gameEntity,
-      gameCard: updatedGameCard,
-    });
-    const attackCountGameState = gameStates.find(
-      gameState => gameState.state.type === StateType.ATTACK_COUNT,
-    );
-    if (updatedGameCard.zone === Zone.BATTLE) {
-      if (attackCountGameState === undefined) {
-        gameStateRepository.insert({
-          game: gameEntity,
-          gameCard: updatedGameCard,
-          state: { type: StateType.ATTACK_COUNT, data: { value: 1 } },
-        });
-        return;
-      }
-      gameStateRepository.update(
-        { id: attackCountGameState.id },
-        {
-          state: {
-            type: StateType.ATTACK_COUNT,
-            data: { value: attackCountGameState.state.data['value'] + 1 },
-          },
-        },
-      );
-    }
   }
 
   async start(userId: string, deckId: number) {
