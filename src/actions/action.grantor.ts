@@ -7,55 +7,20 @@ import {
 } from '../graphql/index';
 import { GameEntity } from '../entities/game.entity';
 import { Injectable } from '@nestjs/common';
+import { grantStartDrawTimeAction } from './grantors/start.draw.time.action.grantor';
+import { grantStartEnergyTimeAction } from './grantors/start.energy.time.action.grantor';
+import { grantStartPutTimeAction } from './grantors/start.put.time.action.grantor';
+import { grantStartSomethingTimeAction } from './grantors/start.something.time.action.grantor';
+import { grantPutSoulAction } from './grantors/put.soul.action.grantor';
 
 @Injectable()
 export class ActionGrantor {
   grantActions(gameEntity: GameEntity, userId: string) {
-    if (gameEntity.phase === null && gameEntity.turnUserId === userId) {
-      const yourGameUserIndex = gameEntity.gameUsers.findIndex(
-        value => value.userId === userId,
-      );
-      gameEntity.gameUsers[yourGameUserIndex].actionTypes = [
-        ActionType.START_DRAW_TIME,
-      ];
-    }
-
-    if (gameEntity.phase === Phase.DRAW && gameEntity.turnUserId === userId) {
-      const yourGameUserIndex = gameEntity.gameUsers.findIndex(
-        value => value.userId === userId,
-      );
-      gameEntity.gameUsers[yourGameUserIndex].actionTypes = [
-        ActionType.START_ENERGY_TIME,
-      ];
-    }
-
-    if (gameEntity.phase === Phase.ENERGY && gameEntity.turnUserId === userId) {
-      const yourGameUserIndex = gameEntity.gameUsers.findIndex(
-        value => value.userId === userId,
-      );
-      gameEntity.gameUsers[yourGameUserIndex].actionTypes = [
-        ActionType.START_PUT_TIME,
-      ];
-    }
-
-    if (gameEntity.phase === Phase.PUT && gameEntity.turnUserId === userId) {
-      const yourGameUserIndex = gameEntity.gameUsers.findIndex(
-        value => value.userId === userId,
-      );
-      gameEntity.gameUsers[yourGameUserIndex].actionTypes.push(
-        ActionType.START_SOMETHING_TIME,
-      );
-
-      // TODO: check status before this addition
-      for (let i = 0; i < gameEntity.gameCards.length; i++) {
-        if (
-          gameEntity.gameCards[i].zone === Zone.HAND &&
-          gameEntity.gameCards[i].currentUserId === userId
-        ) {
-          gameEntity.gameCards[i].actionTypes.push(ActionType.PUT_SOUL);
-        }
-      }
-    }
+    grantStartDrawTimeAction(gameEntity, userId);
+    grantStartEnergyTimeAction(gameEntity, userId);
+    grantStartPutTimeAction(gameEntity, userId);
+    grantStartSomethingTimeAction(gameEntity, userId);
+    grantPutSoulAction(gameEntity, userId);
 
     if (
       gameEntity.phase === Phase.SOMETHING &&
