@@ -1,4 +1,4 @@
-import { GameStateEntity } from './../entities/game.states.entity';
+import { GameStateEntity } from '../entities/game.state.entity';
 import { ActionValidationLogic } from './../logics/action.validation.logic';
 import { GameUserEntityFactory } from '../factories/game.user.entity.factory';
 import { ActionGrantLogic } from './../logics/action.grant.logic';

@@ -1,4 +1,4 @@
-import { GameStateEntity } from './game.states.entity';
+import { GameStateEntity } from './game.state.entity';
 import { GameHistoryEntity } from './game.history.entity';
 import { GameCardEntity } from './game.card.entity';
 import { GameUserEntity } from './game.user.entity';

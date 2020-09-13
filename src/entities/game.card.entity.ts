@@ -1,4 +1,4 @@
-import { GameStateEntity } from './game.states.entity';
+import { GameStateEntity } from './game.state.entity';
 import { GameEntity } from './game.entity';
 import { CardEntity } from './card.entity';
 import { Zone, BattlePosition, GameCard } from './../graphql/index';

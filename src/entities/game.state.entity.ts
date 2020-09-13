@@ -10,6 +10,16 @@ import {
   ManyToOne,
 } from 'typeorm';
 
+type State =
+  | {
+      type: StateType.ATTACK_COUNT;
+      data: { value: number };
+    }
+  | {
+      type: StateType.SELF_POWER_CHANGE;
+      data: { attack: number; defence: number };
+    };
+
 @Entity({ name: 'gameStates' })
 export class GameStateEntity {
   @PrimaryGeneratedColumn()
@@ -29,11 +39,8 @@ export class GameStateEntity {
   )
   gameCard: GameCardEntity;
 
-  @Column()
-  stateType: StateType;
-
   @Column({ type: 'json' })
-  data: Record<string, any>;
+  state: State;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -5,12 +5,11 @@ export class GameStates1599965710893 implements MigrationInterface {
     queryRunner.query(`
       CREATE TABLE gameStates (
         id int(11) NOT NULL AUTO_INCREMENT,
-        stateType varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-        data json NOT NULL,
         createdAt datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
         updatedAt datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
         gameId int(11) DEFAULT NULL,
         gameCardId int(11) DEFAULT NULL,
+        state json NOT NULL,
         PRIMARY KEY (id),
         KEY FK_144387f1094beb080d9cf0c5036 (gameId),
         KEY FK_7d035df69448fca8d246e6147e2 (gameCardId),

@@ -52,7 +52,8 @@ export enum Phase {
 }
 
 export enum StateType {
-    ATTACK_COUNT = "ATTACK_COUNT"
+    ATTACK_COUNT = "ATTACK_COUNT",
+    SELF_POWER_CHANGE = "SELF_POWER_CHANGE"
 }
 
 export enum Type {
