@@ -1,4 +1,3 @@
-import { InjectRepository } from '@nestjs/typeorm';
 import { GameEntity } from '../entities/game.entity';
 import { Injectable } from '@nestjs/common';
 import { grantStartDrawTimeAction } from './grantors/start.draw.time.action.grantor';
