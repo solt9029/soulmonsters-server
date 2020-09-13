@@ -84,6 +84,8 @@ export class GameService {
         .leftJoinAndSelect('games.gameUsers', 'gameUsers')
         .leftJoinAndSelect('games.gameCards', 'gameCards')
         .leftJoinAndSelect('gameCards.card', 'card')
+        .leftJoinAndSelect('games.gameStates', 'gameStates')
+        .leftJoinAndSelect('gameStates.gameCard', 'gameCard')
         .where('games.id = :id', { id })
         .getOne();
 

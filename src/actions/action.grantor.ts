@@ -9,6 +9,7 @@ import { grantStartBattleTimeAction } from './grantors/start.battle.time.action.
 import { grantSummonMonsterAction } from './grantors/summon.monster.action.grantor';
 import { grantAttackAction } from './grantors/attack.action.grantor';
 import { grantStartEndTimeAction } from './grantors/start.end.time.action.grantor';
+import { grantFinishEndTimeAction } from './grantors/finish.end.time.action.grantor';
 
 @Injectable()
 export class ActionGrantor {
@@ -22,6 +23,7 @@ export class ActionGrantor {
     grantSummonMonsterAction(gameEntity, userId);
     grantAttackAction(gameEntity, userId);
     grantStartEndTimeAction(gameEntity, userId);
+    grantFinishEndTimeAction(gameEntity, userId);
 
     return gameEntity;
   }

@@ -11,6 +11,7 @@ import { handleSummonMonsterAction } from './handlers/summon.monster.action.hand
 import { handleStartBattleTimeAction } from './handlers/start.battle.time.action.handler';
 import { handleStartEndTimeAction } from './handlers/start.end.time.action.handler';
 import { handleAttackAction } from './handlers/attack.action.handler';
+import { handleFinishEndTimeAction } from './handlers/finish.end.time.action.handler';
 
 export async function handleAction(
   id: number,
@@ -38,6 +39,8 @@ export async function handleAction(
       return await handleStartEndTimeAction(manager, id);
     case ActionType.ATTACK:
       return await handleAttackAction(manager, userId, data, gameEntity);
+    case ActionType.FINISH_END_TIME:
+      return await handleFinishEndTimeAction(manager, id);
     default:
       return;
   }
