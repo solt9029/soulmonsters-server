@@ -1,9 +1,9 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Players1590497052756 implements MigrationInterface {
+export class GameUsers1590497052756 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<any> {
     queryRunner.query(`
-      CREATE TABLE players (
+      CREATE TABLE gameUsers (
         id int(11) NOT NULL AUTO_INCREMENT,
         userId varchar(255) COLLATE utf8_unicode_ci NOT NULL,
         energy int(11) DEFAULT NULL,
@@ -23,6 +23,6 @@ export class Players1590497052756 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<any> {
-    queryRunner.query(`DROP TABLE players`);
+    queryRunner.query(`DROP TABLE gameUsers`);
   }
 }
