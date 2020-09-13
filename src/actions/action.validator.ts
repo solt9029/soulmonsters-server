@@ -3,6 +3,7 @@ import { ActionType } from '../graphql/index';
 import { GameEntity } from '../entities/game.entity';
 import { Injectable } from '@nestjs/common';
 import { validateStartDrawTime } from './validators/start.draw.time.validator';
+import { validateStartEnergyTime } from './validators/start.energy.time.validator';
 
 @Injectable()
 export class ActionValidator {
@@ -13,9 +14,11 @@ export class ActionValidator {
   ) {
     switch (data.type) {
       case ActionType.START_DRAW_TIME:
-        validateStartDrawTime(grantedGameEntity, userId);
+        return validateStartDrawTime(grantedGameEntity, userId);
+      case ActionType.START_ENERGY_TIME:
+        return validateStartEnergyTime(grantedGameEntity, userId);
       default:
-        break;
+        return;
     }
   }
 }
