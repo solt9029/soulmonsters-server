@@ -1,3 +1,4 @@
+import { MIN_DECK_CARD_COUNT } from './../constants/rule';
 import { handleAction } from './../actions/action.handler';
 import { GameStateEntity } from '../entities/game.state.entity';
 import { ActionValidator } from '../actions/action.validator';
@@ -32,8 +33,6 @@ export class GameCardRepository extends Repository<GameCardEntity> {}
 
 @EntityRepository(GameStateEntity)
 export class GameStateRepository extends Repository<GameStateEntity> {}
-
-const MIN_COUNT = 40;
 
 @Injectable()
 export class GameService {
@@ -149,7 +148,7 @@ export class GameService {
         (accumulator, currentValue) => accumulator + currentValue.count,
         0,
       );
-      if (totalCount < MIN_COUNT) {
+      if (totalCount < MIN_DECK_CARD_COUNT) {
         throw new BadRequestException('Min Count');
       }
 

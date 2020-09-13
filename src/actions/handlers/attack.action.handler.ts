@@ -1,3 +1,4 @@
+import { MAX_ENERGY } from './../../constants/rule';
 import { GameUserEntity } from 'src/entities/game.user.entity';
 import { GameEntity } from './../../entities/game.entity';
 import { Zone } from 'src/graphql';
@@ -66,7 +67,7 @@ export async function handleAttackAction(
         await gameCardRepository.query(
           `UPDATE gameCards SET position = position - 1 WHERE gameId = ${gameEntity.id} AND zone = "BATTLE" AND currentUserId = "${opponentGameUser.id}" AND position > ${targetGameCard.position} ORDER BY position`,
         );
-        if (opponentGameUser.energy < 8) {
+        if (opponentGameUser.energy < MAX_ENERGY) {
           await manager.update(
             GameUserEntity,
             { id: opponentGameUser.id },
@@ -82,7 +83,7 @@ export async function handleAttackAction(
         await gameCardRepository.query(
           `UPDATE gameCards SET position = position - 1 WHERE gameId = ${gameEntity.id} AND zone = "BATTLE" AND currentUserId = "${yourGameUser.id}" AND position > ${gameCard.position} ORDER BY position`,
         );
-        if (yourGameUser.energy < 8) {
+        if (yourGameUser.energy < MAX_ENERGY) {
           await manager.update(
             GameUserEntity,
             { id: yourGameUser.id },
