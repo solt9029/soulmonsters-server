@@ -13,7 +13,12 @@ export async function handleStartDrawTimeAction(
 ) {
   const gameRepository = manager.getCustomRepository(GameRepository);
   const gameCardRepository = manager.getCustomRepository(GameCardRepository);
-  await gameRepository.update({ id }, { phase: Phase.DRAW });
+
+  await gameRepository.update(
+    { id },
+    { phase: Phase.DRAW, turnCount: gameEntity.turnCount + 1 },
+  );
+
   const yourDeckGameCards = gameEntity.gameCards
     .filter(value => value.zone === Zone.DECK && value.currentUserId === userId)
     .sort((a, b) => b.position - a.position);
