@@ -1,5 +1,5 @@
 import { GameStateEntity } from '../entities/game.state.entity';
-import { ActionValidator } from '../actions/action.validatior';
+import { ActionValidator } from '../actions/action.validator';
 import { ActionGrantor } from '../actions/action.grantor';
 import { DispatchGameActionInput } from './../graphql/index';
 import { UserService } from './user.service';

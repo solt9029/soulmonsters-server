@@ -1,5 +1,5 @@
 import { GameStateEntity } from '../entities/game.state.entity';
-import { ActionValidator } from '../actions/action.validatior';
+import { ActionValidator } from '../actions/action.validator';
 import { GameUserEntityFactory } from '../factories/game.user.entity.factory';
 import { ActionGrantor } from '../actions/action.grantor';
 import { GameHistoryEntity } from './../entities/game.history.entity';
