@@ -12,7 +12,7 @@ export function grantAttackAction(gameEntity: GameEntity, userId: string) {
       ) {
         const attackCountGameState = gameEntity.gameStates.find(
           gameState =>
-            gameState.gameCard.id === gameEntity.gameCards[i].id &&
+            gameState.gameCard?.id === gameEntity.gameCards[i].id &&
             gameState.state.type === StateType.ATTACK_COUNT,
         );
         if (attackCountGameState?.state.data['value'] || 0 === 0) {
