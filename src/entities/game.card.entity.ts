@@ -1,3 +1,4 @@
+import { GameStateEntity } from './game.states.entity';
 import { GameEntity } from './game.entity';
 import { CardEntity } from './card.entity';
 import { Zone, BattlePosition, GameCard } from './../graphql/index';
@@ -9,6 +10,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Unique,
+  OneToMany,
 } from 'typeorm';
 
 @Entity({ name: 'gameCards' })
@@ -50,6 +52,12 @@ export class GameCardEntity extends GameCard {
     { onDelete: 'CASCADE' },
   )
   game: GameEntity;
+
+  @OneToMany(
+    () => GameStateEntity,
+    gameStateEntity => gameStateEntity.gameCard,
+  )
+  gameStates: GameStateEntity[];
 
   actionTypes = [];
 }

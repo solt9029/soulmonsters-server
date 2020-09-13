@@ -51,6 +51,10 @@ export enum Phase {
     END = "END"
 }
 
+export enum StateType {
+    ATTACK_COUNT = "ATTACK_COUNT"
+}
+
 export enum Type {
     CIRCLE = "CIRCLE",
     TRIANGLE = "TRIANGLE",

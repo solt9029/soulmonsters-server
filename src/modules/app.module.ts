@@ -1,3 +1,4 @@
+import { GameStateEntity } from './../entities/game.states.entity';
 import { ActionValidationLogic } from './../logics/action.validation.logic';
 import { GameUserEntityFactory } from '../factories/game.user.entity.factory';
 import { ActionGrantLogic } from './../logics/action.grant.logic';
@@ -50,6 +51,7 @@ const {
         GameUserEntity,
         GameCardEntity,
         GameHistoryEntity,
+        GameStateEntity,
       ],
       synchronize: DB_SYNCHRONIZE?.toLowerCase() === 'true',
     }),
@@ -61,6 +63,7 @@ const {
       GameUserEntity,
       GameCardEntity,
       GameHistoryEntity,
+      GameStateEntity,
     ]),
     GraphQLModule.forRoot({
       playground: true,

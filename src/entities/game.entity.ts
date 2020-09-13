@@ -1,3 +1,4 @@
+import { GameStateEntity } from './game.states.entity';
 import { GameHistoryEntity } from './game.history.entity';
 import { GameCardEntity } from './game.card.entity';
 import { GameUserEntity } from './game.user.entity';
@@ -48,6 +49,12 @@ export class GameEntity extends Game {
     gameCardEntity => gameCardEntity.game,
   )
   gameCards: GameCardEntity[];
+
+  @OneToMany(
+    () => GameStateEntity,
+    gameStateEntity => gameStateEntity.game,
+  )
+  gameStates: GameStateEntity[];
 
   @OneToMany(
     () => GameHistoryEntity,
