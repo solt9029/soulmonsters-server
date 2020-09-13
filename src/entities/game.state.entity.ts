@@ -32,7 +32,7 @@ export class GameStateEntity {
   @ManyToOne(
     () => GameEntity,
     gameEntity => gameEntity.gameStates,
-    { onDelete: 'CASCADE' },
+    { onDelete: 'CASCADE', nullable: false },
   )
   game: GameEntity;
 

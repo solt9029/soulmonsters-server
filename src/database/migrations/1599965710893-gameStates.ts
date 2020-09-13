@@ -7,7 +7,7 @@ export class GameStates1599965710893 implements MigrationInterface {
         id int(11) NOT NULL AUTO_INCREMENT,
         createdAt datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
         updatedAt datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
-        gameId int(11) DEFAULT NULL,
+        gameId int(11) NOT NULL,
         gameCardId int(11) DEFAULT NULL,
         state json NOT NULL,
         PRIMARY KEY (id),
