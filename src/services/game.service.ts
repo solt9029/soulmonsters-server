@@ -1,12 +1,7 @@
 import { GameStateEntity } from '../entities/game.state.entity';
 import { ActionValidationLogic } from './../logics/action.validation.logic';
-import { ActionGrantLogic } from './../logics/action.grant.logic';
-import {
-  DispatchGameActionInput,
-  Phase,
-  Zone,
-  BattlePosition,
-} from './../graphql/index';
+import { ActionGrantor } from '../actions/action.grantor';
+import { DispatchGameActionInput } from './../graphql/index';
 import { UserService } from './user.service';
 import { ActionType } from '../graphql/index';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -62,7 +57,7 @@ export class GameService {
     private readonly userService: UserService,
     private connection: Connection,
     private gameCardEntityFactory: GameCardEntityFactory,
-    private actionGrantLogic: ActionGrantLogic,
+    private actionGrantor: ActionGrantor,
     private actionValidationLogic: ActionValidationLogic,
   ) {}
 
@@ -104,7 +99,7 @@ export class GameService {
         .where('games.id = :id', { id })
         .getOne();
 
-      const grantedGameEntity = this.actionGrantLogic.grantActions(
+      const grantedGameEntity = this.actionGrantor.grantActions(
         gameEntity,
         userId,
       );

@@ -4,12 +4,12 @@ import {
   Zone,
   Kind,
   BattlePosition,
-} from './../graphql/index';
-import { GameEntity } from './../entities/game.entity';
+} from '../graphql/index';
+import { GameEntity } from '../entities/game.entity';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class ActionGrantLogic {
+export class ActionGrantor {
   grantActions(gameEntity: GameEntity, userId: string) {
     if (gameEntity.phase === null && gameEntity.turnUserId === userId) {
       const yourGameUserIndex = gameEntity.gameUsers.findIndex(

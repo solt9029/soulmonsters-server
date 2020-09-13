@@ -1,4 +1,4 @@
-import { ActionGrantLogic } from './../logics/action.grant.logic';
+import { ActionGrantor } from '../actions/action.grantor';
 import { GameCardEntityFactory } from './../factories/game.card.entity.factory';
 import { GameUserEntityFactory } from './../factories/game.user.entity.factory';
 import { UserService } from './../services/user.service';
@@ -18,7 +18,7 @@ export class GameResolver {
     private readonly userService: UserService,
     private gameUserEntityFactory: GameUserEntityFactory,
     private gameCardEntityFactory: GameCardEntityFactory,
-    private actionGrantLogic: ActionGrantLogic,
+    private actionGrantor: ActionGrantor,
   ) {}
 
   @Query()
@@ -37,7 +37,7 @@ export class GameResolver {
       .map(value => this.gameCardEntityFactory.addInfo(value))
       .map(value => this.gameCardEntityFactory.filterByUserId(value, user.uid));
 
-    gameEntity = this.actionGrantLogic.grantActions(gameEntity, user.uid);
+    gameEntity = this.actionGrantor.grantActions(gameEntity, user.uid);
 
     return gameEntity;
   }
