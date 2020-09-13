@@ -36,7 +36,7 @@ export async function handleAttackAction(
     );
   } else {
     const targetGameCard = gameEntity.gameCards.find(
-      value => value.id === data.gameCardId,
+      value => value.id === data.payload.targetGameCardIds[0],
     );
     const yourGameUser = gameEntity.gameUsers.find(
       value => value.userId === userId,
@@ -55,6 +55,9 @@ export async function handleAttackAction(
       .sort((a, b) => b.position - a.position);
     const opponentSoulGameCardMaxPosition =
       opponentSoulGameCards.length > 0 ? opponentSoulGameCards[0].position : -1;
+    console.log(targetGameCard);
+    console.log(yourSoulGameCardMaxPosition);
+    console.log(opponentSoulGameCardMaxPosition);
 
     if (targetGameCard.battlePosition === BattlePosition.ATTACK) {
       if (gameCard.attack >= targetGameCard.attack) {
@@ -63,7 +66,7 @@ export async function handleAttackAction(
           { position: opponentSoulGameCardMaxPosition + 1, zone: Zone.SOUL },
         );
         await gameCardRepository.query(
-          `UPDATE gameCards SET position = position - 1 WHERE gameId = ${gameEntity.id} AND zone = "HAND" AND currentUserId = "${opponentGameUser.id}" AND position > ${targetGameCard.position} ORDER BY position`,
+          `UPDATE gameCards SET position = position - 1 WHERE gameId = ${gameEntity.id} AND zone = "BATTLE" AND currentUserId = "${opponentGameUser.id}" AND position > ${targetGameCard.position} ORDER BY position`,
         );
       }
       if (gameCard.attack <= targetGameCard.attack) {
@@ -72,18 +75,18 @@ export async function handleAttackAction(
           { position: yourSoulGameCardMaxPosition + 1, zone: Zone.SOUL },
         );
         await gameCardRepository.query(
-          `UPDATE gameCards SET position = position - 1 WHERE gameId = ${gameEntity.id} AND zone = "HAND" AND currentUserId = "${yourGameUser.id}" AND position > ${gameCard.position} ORDER BY position`,
+          `UPDATE gameCards SET position = position - 1 WHERE gameId = ${gameEntity.id} AND zone = "BATTLE" AND currentUserId = "${yourGameUser.id}" AND position > ${gameCard.position} ORDER BY position`,
         );
       }
       if (gameCard.attack != targetGameCard.attack) {
         const damagePoint = Math.abs(gameCard.attack - targetGameCard.attack);
-        const gameUserId =
+        const damagedGameUser =
           gameCard.attack > targetGameCard.attack
-            ? opponentGameUser.id
-            : yourGameUser.id;
+            ? opponentGameUser
+            : yourGameUser;
         await gameUserRepository.update(
-          { id: gameUserId },
-          { lifePoint: opponentGameUser.lifePoint - damagePoint },
+          { id: damagedGameUser.id },
+          { lifePoint: damagedGameUser.lifePoint - damagePoint },
         );
       }
     }
@@ -94,7 +97,7 @@ export async function handleAttackAction(
           { position: opponentSoulGameCardMaxPosition + 1, zone: Zone.SOUL },
         );
         await gameCardRepository.query(
-          `UPDATE gameCards SET position = position - 1 WHERE gameId = ${gameEntity.id} AND zone = "HAND" AND currentUserId = "${opponentGameUser.id}" AND position > ${targetGameCard.position} ORDER BY position`,
+          `UPDATE gameCards SET position = position - 1 WHERE gameId = ${gameEntity.id} AND zone = "BATTLE" AND currentUserId = "${opponentGameUser.id}" AND position > ${targetGameCard.position} ORDER BY position`,
         );
       }
       if (gameCard.attack < targetGameCard.defence) {

@@ -15,7 +15,7 @@ export function grantAttackAction(gameEntity: GameEntity, userId: string) {
             gameState.gameCard.id === gameEntity.gameCards[i].id &&
             gameState.state.type === StateType.ATTACK_COUNT,
         );
-        if (attackCountGameState?.state.data['value'] === 0) {
+        if (attackCountGameState?.state.data['value'] || 0 === 0) {
           gameEntity.gameCards[i].actionTypes.push(ActionType.ATTACK);
         }
       }

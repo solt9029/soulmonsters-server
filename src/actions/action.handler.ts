@@ -40,7 +40,7 @@ export async function handleAction(
     case ActionType.ATTACK:
       return await handleAttackAction(manager, userId, data, gameEntity);
     case ActionType.FINISH_END_TIME:
-      return await handleFinishEndTimeAction(manager, id);
+      return await handleFinishEndTimeAction(manager, userId, id, gameEntity);
     default:
       return;
   }
