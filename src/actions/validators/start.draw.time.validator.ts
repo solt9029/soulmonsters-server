@@ -1,5 +1,5 @@
-import { ActionType } from './../../graphql/index';
-import { GameEntity } from './../../entities/game.entity';
+import { ActionType } from '../../graphql/index';
+import { GameEntity } from '../../entities/game.entity';
 import { BadRequestException } from '@nestjs/common';
 
 export function validateStartDrawTime(gameEntity: GameEntity, userId: string) {

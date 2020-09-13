@@ -2,7 +2,7 @@ import { DispatchGameActionInput } from '../graphql/index';
 import { ActionType } from '../graphql/index';
 import { GameEntity } from '../entities/game.entity';
 import { Injectable } from '@nestjs/common';
-import { validateStartDrawTime } from './validations/start.draw.time.validation';
+import { validateStartDrawTime } from './validators/start.draw.time.validator';
 
 @Injectable()
 export class ActionValidator {
