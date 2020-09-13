@@ -26,6 +26,9 @@ export class GameEntity extends Game {
   @Column({ nullable: true })
   winnerUserId: string;
 
+  @Column({ default: 0 })
+  turnCount: number;
+
   @Column({ nullable: true })
   startedAt: Date;
 
