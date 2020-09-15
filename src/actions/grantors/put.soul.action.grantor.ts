@@ -1,10 +1,22 @@
 import { GameEntity } from './../../entities/game.entity';
-import { Zone } from 'src/graphql';
+import { Zone, StateType } from 'src/graphql';
 import { Phase, ActionType } from './../../graphql/index';
 
 export function grantPutSoulAction(gameEntity: GameEntity, userId: string) {
   if (gameEntity.phase === Phase.PUT && gameEntity.turnUserId === userId) {
-    // TODO: check status before this addition
+    const yourGameUser = gameEntity.gameUsers.find(
+      value => value.userId === userId,
+    );
+    const putSoulGameState = gameEntity.gameStates.find(
+      gameState =>
+        gameState.state.type === StateType.PUT_SOUL_COUNT &&
+        gameState.state.data.gameUserId === yourGameUser.id,
+    );
+
+    if (putSoulGameState?.state.data['value'] || 0 > 0) {
+      return;
+    }
+
     for (let i = 0; i < gameEntity.gameCards.length; i++) {
       if (
         gameEntity.gameCards[i].zone === Zone.HAND &&
