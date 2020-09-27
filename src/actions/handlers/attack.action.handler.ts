@@ -1,3 +1,4 @@
+import { AttackActionType } from './../../graphql/index';
 import { MAX_ENERGY } from './../../constants/rule';
 import { GameUserEntity } from 'src/entities/game.user.entity';
 import { GameEntity } from './../../entities/game.entity';
@@ -7,38 +8,38 @@ import {
   GameCardRepository,
   GameStateRepository,
 } from '../../services/game.service';
-import {
-  DispatchGameActionInput,
-  BattlePosition,
-  StateType,
-} from '../../graphql/index';
+import { Action, BattlePosition, StateType } from '../../graphql/index';
 import { EntityManager } from 'typeorm';
 
 export async function handleAttackAction(
   manager: EntityManager,
   userId: string,
-  data: DispatchGameActionInput,
+  action: Action,
   gameEntity: GameEntity,
 ) {
+  if (action.type !== AttackActionType.ATTACK) {
+    return;
+  }
+
   const gameUserRepository = manager.getCustomRepository(GameUserRepository);
   const gameCardRepository = manager.getCustomRepository(GameCardRepository);
   const gameStateRepository = manager.getCustomRepository(GameStateRepository);
 
   const gameCard = gameEntity.gameCards.find(
-    value => value.id === data.gameCardId,
+    value => value.id === action.payload.gameCardId,
   );
   const opponentGameUser = gameEntity.gameUsers.find(
     value => value.userId !== userId,
   );
 
-  if (data.payload.targetGameUserIds.length === 1) {
+  if (action.payload.targetGameUserId) {
     await gameUserRepository.update(
       { id: opponentGameUser.id },
       { lifePoint: opponentGameUser.lifePoint - gameCard.attack },
     );
   } else {
     const targetGameCard = gameEntity.gameCards.find(
-      value => value.id === data.payload.targetGameCardIds[0],
+      value => value.id === action.payload.targetGameCardId,
     );
     const yourGameUser = gameEntity.gameUsers.find(
       value => value.userId === userId,
@@ -125,7 +126,7 @@ export async function handleAttackAction(
 
   // add attack count state
   const updatedGameCard = await gameCardRepository.findOne({
-    id: data.gameCardId,
+    id: action.payload.gameCardId,
   });
   const gameStates = await gameStateRepository.find({
     game: gameEntity,

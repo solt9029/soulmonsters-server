@@ -1,5 +1,5 @@
 import { GameEntity } from './../../entities/game.entity';
-import { Phase, ActionType } from './../../graphql/index';
+import { Phase, FinishEndTimeActionType } from './../../graphql/index';
 
 export function grantFinishEndTimeAction(
   gameEntity: GameEntity,
@@ -10,7 +10,7 @@ export function grantFinishEndTimeAction(
       value => value.userId === userId,
     );
     gameEntity.gameUsers[yourGameUserIndex].actionTypes = [
-      ActionType.FINISH_END_TIME,
+      { value: FinishEndTimeActionType.FINISH_END_TIME },
     ];
   }
 }

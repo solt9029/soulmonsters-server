@@ -1,16 +1,21 @@
-import { DispatchGameActionInput } from './../../graphql/index';
-import { ActionType } from '../../graphql/index';
+import { Action, PutSoulActionType } from './../../graphql/index';
 import { GameEntity } from '../../entities/game.entity';
 import { BadRequestException } from '@nestjs/common';
 
 export function validatePutSoulAction(
-  data: DispatchGameActionInput,
+  action: Action,
   game: GameEntity,
   userId: string,
 ) {
-  const gameCard = game.gameCards.find(value => value.id === data.gameCardId);
+  if (action.type !== PutSoulActionType.PUT_SOUL) {
+    return;
+  }
+
+  const gameCard = game.gameCards.find(
+    value => value.id === action.payload.gameCardId,
+  );
   if (
-    !gameCard?.actionTypes?.includes(ActionType.PUT_SOUL) ||
+    !gameCard?.actionTypes?.includes({ value: PutSoulActionType.PUT_SOUL }) ||
     game.turnUserId !== userId
   ) {
     throw new BadRequestException();

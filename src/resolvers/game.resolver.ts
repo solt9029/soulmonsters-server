@@ -2,7 +2,10 @@ import { ActionGrantor } from '../actions/action.grantor';
 import { GameCardEntityFactory } from './../factories/game.card.entity.factory';
 import { GameUserEntityFactory } from './../factories/game.user.entity.factory';
 import { UserService } from './../services/user.service';
-import { DispatchGameActionInput } from './../graphql/index';
+import {
+  GameActionDispatchInput,
+  StartDrawTimeActionDispatchInput,
+} from './../graphql/index';
 import { GameService } from './../services/game.service';
 import { AuthGuard } from './../guards/auth.guard';
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
@@ -60,10 +63,10 @@ export class GameResolver {
   }
 
   @Mutation()
-  async dispatchGameAction(
+  async dispatchStartDrawTimeAction(
     @User() user: auth.DecodedIdToken,
     @Args('id') id: number,
-    @Args('data') data: DispatchGameActionInput,
+    @Args('data') data: StartDrawTimeActionDispatchInput,
   ) {
     await this.gameService.dispatchAction(id, user.uid, data);
     return await this.game(user, id);

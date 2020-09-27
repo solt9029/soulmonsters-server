@@ -1,25 +1,32 @@
+import { PutSoulActionType } from './../../graphql/index';
 import { GameStateEntity } from './../../entities/game.state.entity';
 import { Zone, StateType } from 'src/graphql';
 import { GameCardRepository } from '../../services/game.service';
 import { GameEntity } from '../../entities/game.entity';
-import { DispatchGameActionInput } from '../../graphql/index';
+import { Action } from '../../graphql/index';
 import { EntityManager } from 'typeorm';
 
 export async function handlePutSoulAction(
   manager: EntityManager,
   userId: string,
-  data: DispatchGameActionInput,
+  action: Action,
   gameEntity: GameEntity,
 ) {
+  if (action.type !== PutSoulActionType.PUT_SOUL) {
+    return;
+  }
+
   const yourSoulGameCards = gameEntity.gameCards
     .filter(value => value.zone === Zone.SOUL && value.currentUserId === userId)
     .sort((a, b) => b.position - a.position);
   const yourSoulGameCardMaxPosition =
     yourSoulGameCards.length > 0 ? yourSoulGameCards[0].position : -1;
   const gameCardRepository = manager.getCustomRepository(GameCardRepository);
-  const gameCard = await gameCardRepository.findOne({ id: data.gameCardId });
+  const gameCard = await gameCardRepository.findOne({
+    id: action.payload.gameCardId,
+  });
   await gameCardRepository.update(
-    { id: data.gameCardId },
+    { id: action.payload.gameCardId },
     { position: yourSoulGameCardMaxPosition + 1, zone: Zone.SOUL },
   );
   await gameCardRepository.query(

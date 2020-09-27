@@ -1,5 +1,9 @@
-import { DispatchGameActionInput } from '../graphql/index';
-import { ActionType } from '../graphql/index';
+import {
+  Action,
+  StartDrawTimeActionType,
+  StartEnergyTimeActionType,
+  PutSoulActionType,
+} from './../graphql/index';
 import { GameEntity } from '../entities/game.entity';
 import { Injectable } from '@nestjs/common';
 import { validateStartDrawTimeAction } from './validators/start.draw.time.action.validator';
@@ -9,17 +13,17 @@ import { validatePutSoulAction } from './validators/put.soul.action.validator';
 @Injectable()
 export class ActionValidator {
   validateActions(
-    data: DispatchGameActionInput,
+    action: Action,
     grantedGameEntity: GameEntity,
     userId: string,
   ) {
-    switch (data.type) {
-      case ActionType.START_DRAW_TIME:
+    switch (action.type) {
+      case StartDrawTimeActionType.START_DRAW_TIME:
         return validateStartDrawTimeAction(grantedGameEntity, userId);
-      case ActionType.START_ENERGY_TIME:
+      case StartEnergyTimeActionType.START_ENERGY_TIME:
         return validateStartEnergyTimeAction(grantedGameEntity, userId);
-      case ActionType.PUT_SOUL:
-        return validatePutSoulAction(data, grantedGameEntity, userId);
+      case PutSoulActionType.PUT_SOUL:
+        return validatePutSoulAction(action, grantedGameEntity, userId);
       default:
         return;
     }

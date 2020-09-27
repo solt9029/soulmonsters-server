@@ -3,7 +3,7 @@ import { handleAction } from './../actions/action.handler';
 import { GameStateEntity } from '../entities/game.state.entity';
 import { ActionValidator } from '../actions/action.validator';
 import { ActionGrantor } from '../actions/action.grantor';
-import { DispatchGameActionInput } from './../graphql/index';
+import { Action } from './../graphql/index';
 import { UserService } from './user.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GameCardEntityFactory } from './../factories/game.card.entity.factory';
@@ -70,11 +70,7 @@ export class GameService {
     });
   }
 
-  async dispatchAction(
-    id: number,
-    userId: string,
-    data: DispatchGameActionInput,
-  ) {
+  async dispatchAction(id: number, userId: string, action: Action) {
     return this.connection.transaction(async manager => {
       const gameRepository = manager.getCustomRepository(GameRepository);
       const gameEntity = await gameRepository
@@ -93,7 +89,7 @@ export class GameService {
         userId,
       );
 
-      this.actionValidator.validateActions(data, grantedGameEntity, userId);
+      this.actionValidator.validateActions(action, grantedGameEntity, userId);
 
       // TODO: reflect status for gameEntity
       // [WARNING] this implementation is just for handleAttackAction. not correct!
@@ -104,7 +100,7 @@ export class GameService {
 
       // TODO:check events
 
-      return await handleAction(id, data, manager, userId, gameEntity);
+      return await handleAction(id, action, manager, userId, gameEntity);
     });
   }
 

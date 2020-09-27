@@ -6,20 +6,8 @@
 
 /* tslint:disable */
 /* eslint-disable */
-export enum ActionType {
-    START_DRAW_TIME = "START_DRAW_TIME",
-    START_ENERGY_TIME = "START_ENERGY_TIME",
-    START_PUT_TIME = "START_PUT_TIME",
-    START_SOMETHING_TIME = "START_SOMETHING_TIME",
-    START_BATTLE_TIME = "START_BATTLE_TIME",
-    START_END_TIME = "START_END_TIME",
-    FINISH_END_TIME = "FINISH_END_TIME",
-    PUT_SOUL = "PUT_SOUL",
-    CHANGE_BATTLE_POSITION = "CHANGE_BATTLE_POSITION",
-    USE_SOUL_CANON = "USE_SOUL_CANON",
-    SUMMON_MONSTER = "SUMMON_MONSTER",
-    ATTACK = "ATTACK",
-    USE_SOUL_BARRIER = "USE_SOUL_BARRIER"
+export enum AttackActionType {
+    ATTACK = "ATTACK"
 }
 
 export enum Attribute {
@@ -34,6 +22,14 @@ export enum Attribute {
 export enum BattlePosition {
     ATTACK = "ATTACK",
     DEFENCE = "DEFENCE"
+}
+
+export enum ChangeBattlePositionActionType {
+    CHANGE_BATTLE_POSITION = "CHANGE_BATTLE_POSITION"
+}
+
+export enum FinishEndTimeActionType {
+    FINISH_END_TIME = "FINISH_END_TIME"
 }
 
 export enum Kind {
@@ -52,10 +48,42 @@ export enum Phase {
     END = "END"
 }
 
+export enum PutSoulActionType {
+    PUT_SOUL = "PUT_SOUL"
+}
+
+export enum StartBattleTimeActionType {
+    START_BATTLE_TIME = "START_BATTLE_TIME"
+}
+
+export enum StartDrawTimeActionType {
+    START_DRAW_TIME = "START_DRAW_TIME"
+}
+
+export enum StartEndTimeActionType {
+    START_END_TIME = "START_END_TIME"
+}
+
+export enum StartEnergyTimeActionType {
+    START_ENERGY_TIME = "START_ENERGY_TIME"
+}
+
+export enum StartPutTimeActionType {
+    START_PUT_TIME = "START_PUT_TIME"
+}
+
+export enum StartSomethingTimeActionType {
+    START_SOMETHING_TIME = "START_SOMETHING_TIME"
+}
+
 export enum StateType {
     ATTACK_COUNT = "ATTACK_COUNT",
     PUT_SOUL_COUNT = "PUT_SOUL_COUNT",
     SELF_POWER_CHANGE = "SELF_POWER_CHANGE"
+}
+
+export enum SummonMonsterActionType {
+    SUMMON_MONSTER = "SUMMON_MONSTER"
 }
 
 export enum Type {
@@ -66,6 +94,14 @@ export enum Type {
     BLACK_STA = "BLACK_STA"
 }
 
+export enum UseSoulBarrierActionType {
+    USE_SOUL_BARRIER = "USE_SOUL_BARRIER"
+}
+
+export enum UseSoulCanonActionType {
+    USE_SOUL_CANON = "USE_SOUL_CANON"
+}
+
 export enum Zone {
     BATTLE = "BATTLE",
     DECK = "DECK",
@@ -74,10 +110,14 @@ export enum Zone {
     HAND = "HAND"
 }
 
-export class ActionPayload {
-    targetGameCardIds?: number[];
-    costGameCardIds?: number[];
-    targetGameUserIds?: number[];
+export class AttackActionDispatchInput {
+    type: AttackActionType;
+    payload: AttackActionPayload;
+}
+
+export class ChangeBattlePositionActionDispatchInput {
+    type: ChangeBattlePositionActionType;
+    payload: ChangeBattlePositionActionPayload;
 }
 
 export class DeckCardUpdateInput {
@@ -89,14 +129,66 @@ export class DeckCreateInput {
     name: string;
 }
 
-export class DispatchGameActionInput {
-    type: ActionType;
-    gameCardId?: number;
-    payload?: ActionPayload;
+export class FinishEndTimeActionDispatchInput {
+    type: FinishEndTimeActionType;
+}
+
+export class PutSoulActionDispatchInput {
+    type: PutSoulActionType;
+    payload: PutSoulActionPayload;
+}
+
+export class StartBattleTimeActionDispatchInput {
+    type: StartBattleTimeActionType;
+}
+
+export class StartDrawTimeActionDispatchInput {
+    type: StartDrawTimeActionType;
+}
+
+export class StartEndTimeActionDispatchInput {
+    type: StartEndTimeActionType;
+}
+
+export class StartEnergyTimeActionDispatchInput {
+    type: StartEnergyTimeActionType;
+}
+
+export class StartPutTimeActionDispatchInput {
+    type: StartPutTimeActionType;
+}
+
+export class StartSomethingTimeActionDispatchInput {
+    type: StartSomethingTimeActionType;
+}
+
+export class SummonMonsterActionDispatchInput {
+    type: SummonMonsterActionType;
+    payload: SummonMonsterActionPayload;
+}
+
+export class UseSoulBarrierActionDispatchInput {
+    type: UseSoulBarrierActionType;
+    payload: UseSoulBarrierActionPayload;
+}
+
+export class UseSoulCanonActionDispatchInput {
+    type: UseSoulCanonActionType;
+    payload: UseSoulCanonActionPayload;
 }
 
 export interface Node {
     id: number;
+}
+
+export class AttackActionPayload {
+    gameCardId: number;
+    targetGameCardId?: number;
+    targetGameUserId?: number;
+}
+
+export class AttackActionTypeBox {
+    value: AttackActionType;
 }
 
 export class Card implements Node {
@@ -112,6 +204,14 @@ export class Card implements Node {
     picture: string;
 }
 
+export class ChangeBattlePositionActionPayload {
+    gameCardId: number;
+}
+
+export class ChangeBattlePositionActionTypeBox {
+    value: ChangeBattlePositionActionType;
+}
+
 export class Deck implements Node {
     id: number;
     userId: string;
@@ -125,6 +225,10 @@ export class DeckCard implements Node {
     count: number;
     deck: Deck;
     card: Card;
+}
+
+export class FinishEndTimeActionTypeBox {
+    value: FinishEndTimeActionType;
 }
 
 export class Game implements Node {
@@ -185,7 +289,39 @@ export abstract class IMutation {
 
     abstract startGame(deckId: number): Game | Promise<Game>;
 
-    abstract dispatchGameAction(id: number, data: DispatchGameActionInput): Game | Promise<Game>;
+    abstract dispatchStartDrawTimeAction(id: number, data: StartDrawTimeActionDispatchInput): Game | Promise<Game>;
+
+    abstract dispatchStartEnergyTimeAction(id: number, data: StartEnergyTimeActionDispatchInput): Game | Promise<Game>;
+
+    abstract dispatchStartPutTimeAction(id: number, data: StartPutTimeActionDispatchInput): Game | Promise<Game>;
+
+    abstract dispatchStartSomethingTimeAction(id: number, data: StartSomethingTimeActionDispatchInput): Game | Promise<Game>;
+
+    abstract dispatchStartBattleTimeAction(id: number, data: StartBattleTimeActionDispatchInput): Game | Promise<Game>;
+
+    abstract dispatchStartEndTimeAction(id: number, data: StartEndTimeActionDispatchInput): Game | Promise<Game>;
+
+    abstract dispatchFinishEndTimeAction(id: number, data: FinishEndTimeActionDispatchInput): Game | Promise<Game>;
+
+    abstract dispatchPutSoulAction(id: number, data: PutSoulActionDispatchInput): Game | Promise<Game>;
+
+    abstract dispatchChangeBattlePositionAction(id: number, data: ChangeBattlePositionActionDispatchInput): Game | Promise<Game>;
+
+    abstract dispatchUseSoulCanonAction(id: number, data: UseSoulCanonActionDispatchInput): Game | Promise<Game>;
+
+    abstract dispatchSummonMonsterAction(id: number, data: SummonMonsterActionDispatchInput): Game | Promise<Game>;
+
+    abstract dispatchAttackAction(id: number, data: AttackActionDispatchInput): Game | Promise<Game>;
+
+    abstract dispatchUseSoulBarrierAction(id: number, data: UseSoulBarrierActionDispatchInput): Game | Promise<Game>;
+}
+
+export class PutSoulActionPayload {
+    gameCardId: number;
+}
+
+export class PutSoulActionTypeBox {
+    value: PutSoulActionType;
 }
 
 export abstract class IQuery {
@@ -204,6 +340,38 @@ export abstract class IQuery {
     abstract userData(userId: string): UserData | Promise<UserData>;
 }
 
+export class StartBattleTimeActionTypeBox {
+    value: StartBattleTimeActionType;
+}
+
+export class StartDrawTimeActionTypeBox {
+    value: StartDrawTimeActionType;
+}
+
+export class StartEndTimeActionTypeBox {
+    value: StartEndTimeActionType;
+}
+
+export class StartEnergyTimeActionTypeBox {
+    value: StartEnergyTimeActionType;
+}
+
+export class StartPutTimeActionTypeBox {
+    value: StartPutTimeActionType;
+}
+
+export class StartSomethingTimeActionTypeBox {
+    value: StartSomethingTimeActionType;
+}
+
+export class SummonMonsterActionPayload {
+    gameCardId: number;
+}
+
+export class SummonMonsterActionTypeBox {
+    value: SummonMonsterActionType;
+}
+
 export class User {
     id: string;
     displayName?: string;
@@ -217,4 +385,21 @@ export class UserData implements Node {
     losingCount: number;
 }
 
+export class UseSoulBarrierActionPayload {
+    costGameCardIds: number[];
+}
+
+export class UseSoulBarrierActionTypeBox {
+    value: UseSoulBarrierActionType;
+}
+
+export class UseSoulCanonActionPayload {
+    costGameCardIds: number[];
+}
+
+export class UseSoulCanonActionTypeBox {
+    value: UseSoulCanonActionType;
+}
+
 export type DateTime = any;
+export type ActionType = StartDrawTimeActionTypeBox | StartEnergyTimeActionTypeBox | StartPutTimeActionTypeBox | StartSomethingTimeActionTypeBox | StartBattleTimeActionTypeBox | StartEndTimeActionTypeBox | FinishEndTimeActionTypeBox | PutSoulActionTypeBox | ChangeBattlePositionActionTypeBox | UseSoulCanonActionTypeBox | SummonMonsterActionTypeBox | AttackActionTypeBox | UseSoulBarrierActionTypeBox;

@@ -1,4 +1,4 @@
-import { ActionType } from '../../graphql/index';
+import { StartDrawTimeActionType } from '../../graphql/index';
 import { GameEntity } from '../../entities/game.entity';
 
 export function grantStartDrawTimeAction(
@@ -10,7 +10,7 @@ export function grantStartDrawTimeAction(
       value => value.userId === userId,
     );
     gameEntity.gameUsers[yourGameUserIndex].actionTypes = [
-      ActionType.START_DRAW_TIME,
+      { value: StartDrawTimeActionType.START_DRAW_TIME },
     ];
   }
 }

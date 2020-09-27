@@ -1,6 +1,16 @@
+import {
+  StartEnergyTimeActionType,
+  StartPutTimeActionType,
+  PutSoulActionType,
+  StartSomethingTimeActionType,
+  SummonMonsterActionType,
+  StartBattleTimeActionType,
+  StartEndTimeActionType,
+  AttackActionType,
+  FinishEndTimeActionType,
+} from './../graphql/index';
 import { GameEntity } from './../entities/game.entity';
-import { DispatchGameActionInput } from '../graphql/index';
-import { ActionType } from '../graphql/index';
+import { Action, StartDrawTimeActionType } from '../graphql/index';
 import { handleStartDrawTimeAction } from './handlers/start.draw.time.action.handler';
 import { EntityManager } from 'typeorm';
 import { handleStartEnergyTimeAction } from './handlers/start.energy.time.action.handler';
@@ -15,31 +25,36 @@ import { handleFinishEndTimeAction } from './handlers/finish.end.time.action.han
 
 export async function handleAction(
   id: number,
-  data: DispatchGameActionInput,
+  action: Action,
   manager: EntityManager,
   userId: string,
   gameEntity: GameEntity,
 ) {
-  switch (data.type) {
-    case ActionType.START_DRAW_TIME:
+  switch (action.type) {
+    case StartDrawTimeActionType.START_DRAW_TIME:
       return await handleStartDrawTimeAction(manager, id, userId, gameEntity);
-    case ActionType.START_ENERGY_TIME:
+    case StartEnergyTimeActionType.START_ENERGY_TIME:
       return await handleStartEnergyTimeAction(manager, id, userId, gameEntity);
-    case ActionType.START_PUT_TIME:
+    case StartPutTimeActionType.START_PUT_TIME:
       return await handleStartPutTimeAction(manager, id);
-    case ActionType.PUT_SOUL:
-      return await handlePutSoulAction(manager, userId, data, gameEntity);
-    case ActionType.START_SOMETHING_TIME:
+    case PutSoulActionType.PUT_SOUL:
+      return await handlePutSoulAction(manager, userId, action, gameEntity);
+    case StartSomethingTimeActionType.START_SOMETHING_TIME:
       return await handleStartSomethingTimeAction(manager, id);
-    case ActionType.SUMMON_MONSTER:
-      return await handleSummonMonsterAction(manager, userId, data, gameEntity);
-    case ActionType.START_BATTLE_TIME:
+    case SummonMonsterActionType.SUMMON_MONSTER:
+      return await handleSummonMonsterAction(
+        manager,
+        userId,
+        action,
+        gameEntity,
+      );
+    case StartBattleTimeActionType.START_BATTLE_TIME:
       return await handleStartBattleTimeAction(manager, id);
-    case ActionType.START_END_TIME:
+    case StartEndTimeActionType.START_END_TIME:
       return await handleStartEndTimeAction(manager, id);
-    case ActionType.ATTACK:
-      return await handleAttackAction(manager, userId, data, gameEntity);
-    case ActionType.FINISH_END_TIME:
+    case AttackActionType.ATTACK:
+      return await handleAttackAction(manager, userId, action, gameEntity);
+    case FinishEndTimeActionType.FINISH_END_TIME:
       return await handleFinishEndTimeAction(manager, userId, id, gameEntity);
     default:
       return;

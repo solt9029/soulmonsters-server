@@ -1,23 +1,28 @@
+import { SummonMonsterActionType } from './../../graphql/index';
 import { Zone } from 'src/graphql';
 import {
   GameCardRepository,
   GameUserRepository,
 } from '../../services/game.service';
-import { DispatchGameActionInput, BattlePosition } from '../../graphql/index';
+import { Action, BattlePosition } from '../../graphql/index';
 import { GameEntity } from '../../entities/game.entity';
 import { EntityManager } from 'typeorm';
 
 export async function handleSummonMonsterAction(
   manager: EntityManager,
   userId: string,
-  data: DispatchGameActionInput,
+  action: Action,
   gameEntity: GameEntity,
 ) {
+  if (action.type !== SummonMonsterActionType.SUMMON_MONSTER) {
+    return;
+  }
+
   const gameCardRepository = manager.getCustomRepository(GameCardRepository);
   const gameUserRepository = manager.getCustomRepository(GameUserRepository);
 
   const gameCard = gameEntity.gameCards.find(
-    value => value.id === data.gameCardId,
+    value => value.id === action.payload.gameCardId,
   );
 
   // reduce energy
@@ -35,7 +40,7 @@ export async function handleSummonMonsterAction(
 
   // put the target monster card on your battle zone
   await gameCardRepository.update(
-    { id: data.gameCardId },
+    { id: action.payload.gameCardId },
     {
       position: yourBattleGameCardMaxPosition + 1,
       zone: Zone.BATTLE,

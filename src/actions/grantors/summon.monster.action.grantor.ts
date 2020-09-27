@@ -1,5 +1,5 @@
 import { Zone } from 'src/graphql';
-import { Phase, Kind, ActionType } from './../../graphql/index';
+import { Phase, Kind, SummonMonsterActionType } from './../../graphql/index';
 import { GameEntity } from './../../entities/game.entity';
 
 export function grantSummonMonsterAction(
@@ -16,7 +16,9 @@ export function grantSummonMonsterAction(
         gameEntity.gameCards[i].currentUserId === userId &&
         gameEntity.gameCards[i].kind === Kind.MONSTER
       ) {
-        gameEntity.gameCards[i].actionTypes.push(ActionType.SUMMON_MONSTER);
+        gameEntity.gameCards[i].actionTypes.push({
+          value: SummonMonsterActionType.SUMMON_MONSTER,
+        });
       }
     }
   }

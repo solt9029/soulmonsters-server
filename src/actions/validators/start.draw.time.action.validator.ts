@@ -1,4 +1,4 @@
-import { ActionType } from '../../graphql/index';
+import { StartDrawTimeActionType } from '../../graphql/index';
 import { GameEntity } from '../../entities/game.entity';
 import { BadRequestException } from '@nestjs/common';
 
@@ -10,9 +10,9 @@ export function validateStartDrawTimeAction(
     value => value.userId === userId,
   );
   if (
-    !gameEntity.gameUsers[yourGameUserIndex].actionTypes.includes(
-      ActionType.START_DRAW_TIME,
-    )
+    !gameEntity.gameUsers[yourGameUserIndex].actionTypes.includes({
+      value: StartDrawTimeActionType.START_DRAW_TIME,
+    })
   ) {
     throw new BadRequestException();
   }

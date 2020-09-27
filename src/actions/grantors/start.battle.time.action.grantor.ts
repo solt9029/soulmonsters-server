@@ -1,4 +1,4 @@
-import { Phase, ActionType } from './../../graphql/index';
+import { Phase, StartBattleTimeActionType } from './../../graphql/index';
 import { GameEntity } from './../../entities/game.entity';
 
 export function grantStartBattleTimeAction(
@@ -13,7 +13,7 @@ export function grantStartBattleTimeAction(
       value => value.userId === userId,
     );
     gameEntity.gameUsers[yourGameUserIndex].actionTypes = [
-      ActionType.START_BATTLE_TIME,
+      { value: StartBattleTimeActionType.START_BATTLE_TIME },
     ];
   }
 }

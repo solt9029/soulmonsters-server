@@ -1,4 +1,4 @@
-import { ActionType } from '../../graphql/index';
+import { StartEnergyTimeActionType } from './../../graphql/index';
 import { GameEntity } from '../../entities/game.entity';
 import { BadRequestException } from '@nestjs/common';
 
@@ -10,9 +10,9 @@ export function validateStartEnergyTimeAction(
     value => value.userId === userId,
   );
   if (
-    !game.gameUsers[yourGameUserIndex].actionTypes.includes(
-      ActionType.START_ENERGY_TIME,
-    )
+    !game.gameUsers[yourGameUserIndex].actionTypes.includes({
+      value: StartEnergyTimeActionType.START_ENERGY_TIME,
+    })
   ) {
     throw new BadRequestException();
   }

@@ -1,5 +1,5 @@
 import { GameEntity } from './../../entities/game.entity';
-import { Phase, ActionType } from './../../graphql/index';
+import { Phase, StartPutTimeActionType } from './../../graphql/index';
 
 export function grantStartPutTimeAction(
   gameEntity: GameEntity,
@@ -10,7 +10,7 @@ export function grantStartPutTimeAction(
       value => value.userId === userId,
     );
     gameEntity.gameUsers[yourGameUserIndex].actionTypes = [
-      ActionType.START_PUT_TIME,
+      { value: StartPutTimeActionType.START_PUT_TIME },
     ];
   }
 }

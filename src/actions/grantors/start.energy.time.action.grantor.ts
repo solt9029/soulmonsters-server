@@ -1,5 +1,5 @@
 import { GameEntity } from './../../entities/game.entity';
-import { Phase, ActionType } from './../../graphql/index';
+import { Phase, StartEnergyTimeActionType } from './../../graphql/index';
 
 export function grantStartEnergyTimeAction(
   gameEntity: GameEntity,
@@ -10,7 +10,7 @@ export function grantStartEnergyTimeAction(
       value => value.userId === userId,
     );
     gameEntity.gameUsers[yourGameUserIndex].actionTypes = [
-      ActionType.START_ENERGY_TIME,
+      { value: StartEnergyTimeActionType.START_ENERGY_TIME },
     ];
   }
 }

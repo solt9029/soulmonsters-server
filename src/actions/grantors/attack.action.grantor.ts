@@ -1,6 +1,6 @@
 import { GameEntity } from './../../entities/game.entity';
 import { Zone, StateType } from 'src/graphql';
-import { Phase, BattlePosition, ActionType } from './../../graphql/index';
+import { Phase, BattlePosition, AttackActionType } from './../../graphql/index';
 
 export function grantAttackAction(gameEntity: GameEntity, userId: string) {
   if (gameEntity.phase === Phase.BATTLE && gameEntity.turnUserId === userId) {
@@ -16,7 +16,9 @@ export function grantAttackAction(gameEntity: GameEntity, userId: string) {
             gameState.state.type === StateType.ATTACK_COUNT,
         );
         if (attackCountGameState?.state.data['value'] || 0 === 0) {
-          gameEntity.gameCards[i].actionTypes.push(ActionType.ATTACK);
+          gameEntity.gameCards[i].actionTypes.push({
+            value: AttackActionType.ATTACK,
+          });
         }
       }
     }
