@@ -8,7 +8,9 @@ export function validatePutSoulAction(
   game: GameEntity,
   userId: string,
 ) {
-  const gameCard = game.gameCards.find(value => value.id === data.gameCardId);
+  const gameCard = game.gameCards.find(
+    value => value.id === data.payload.gameCardId,
+  );
   if (
     !gameCard?.actionTypes?.includes(ActionType.PUT_SOUL) ||
     game.turnUserId !== userId

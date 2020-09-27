@@ -17,7 +17,7 @@ export async function handleSummonMonsterAction(
   const gameUserRepository = manager.getCustomRepository(GameUserRepository);
 
   const gameCard = gameEntity.gameCards.find(
-    value => value.id === data.gameCardId,
+    value => value.id === data.payload.gameCardId,
   );
 
   // reduce energy
@@ -35,7 +35,7 @@ export async function handleSummonMonsterAction(
 
   // put the target monster card on your battle zone
   await gameCardRepository.update(
-    { id: data.gameCardId },
+    { id: data.payload.gameCardId },
     {
       position: yourBattleGameCardMaxPosition + 1,
       zone: Zone.BATTLE,

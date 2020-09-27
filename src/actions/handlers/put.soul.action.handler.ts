@@ -17,9 +17,11 @@ export async function handlePutSoulAction(
   const yourSoulGameCardMaxPosition =
     yourSoulGameCards.length > 0 ? yourSoulGameCards[0].position : -1;
   const gameCardRepository = manager.getCustomRepository(GameCardRepository);
-  const gameCard = await gameCardRepository.findOne({ id: data.gameCardId });
+  const gameCard = await gameCardRepository.findOne({
+    id: data.payload.gameCardId,
+  });
   await gameCardRepository.update(
-    { id: data.gameCardId },
+    { id: data.payload.gameCardId },
     { position: yourSoulGameCardMaxPosition + 1, zone: Zone.SOUL },
   );
   await gameCardRepository.query(

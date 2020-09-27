@@ -25,7 +25,7 @@ export async function handleAttackAction(
   const gameStateRepository = manager.getCustomRepository(GameStateRepository);
 
   const gameCard = gameEntity.gameCards.find(
-    value => value.id === data.gameCardId,
+    value => value.id === data.payload.gameCardId,
   );
   const opponentGameUser = gameEntity.gameUsers.find(
     value => value.userId !== userId,
@@ -125,7 +125,7 @@ export async function handleAttackAction(
 
   // add attack count state
   const updatedGameCard = await gameCardRepository.findOne({
-    id: data.gameCardId,
+    id: data.payload.gameCardId,
   });
   const gameStates = await gameStateRepository.find({
     game: gameEntity,
