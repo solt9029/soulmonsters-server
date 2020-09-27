@@ -3,7 +3,7 @@ import { handleAction } from './../actions/action.handler';
 import { GameStateEntity } from '../entities/game.state.entity';
 import { ActionValidator } from '../actions/action.validator';
 import { ActionGrantor } from '../actions/action.grantor';
-import { DispatchGameActionInput } from './../graphql/index';
+import { GameActionDispatchInput } from './../graphql/index';
 import { UserService } from './user.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GameCardEntityFactory } from './../factories/game.card.entity.factory';
@@ -73,7 +73,7 @@ export class GameService {
   async dispatchAction(
     id: number,
     userId: string,
-    data: DispatchGameActionInput,
+    data: GameActionDispatchInput,
   ) {
     return this.connection.transaction(async manager => {
       const gameRepository = manager.getCustomRepository(GameRepository);

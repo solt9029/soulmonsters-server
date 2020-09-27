@@ -90,7 +90,7 @@ export class DeckCreateInput {
     name: string;
 }
 
-export class DispatchGameActionInput {
+export class GameActionDispatchInput {
     type: ActionType;
     payload: ActionPayload;
 }
@@ -185,7 +185,7 @@ export abstract class IMutation {
 
     abstract startGame(deckId: number): Game | Promise<Game>;
 
-    abstract dispatchGameAction(id: number, data: DispatchGameActionInput): Game | Promise<Game>;
+    abstract dispatchGameAction(id: number, data: GameActionDispatchInput): Game | Promise<Game>;
 }
 
 export abstract class IQuery {

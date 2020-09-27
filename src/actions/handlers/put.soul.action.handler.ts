@@ -2,13 +2,13 @@ import { GameStateEntity } from './../../entities/game.state.entity';
 import { Zone, StateType } from 'src/graphql';
 import { GameCardRepository } from '../../services/game.service';
 import { GameEntity } from '../../entities/game.entity';
-import { DispatchGameActionInput } from '../../graphql/index';
+import { GameActionDispatchInput } from '../../graphql/index';
 import { EntityManager } from 'typeorm';
 
 export async function handlePutSoulAction(
   manager: EntityManager,
   userId: string,
-  data: DispatchGameActionInput,
+  data: GameActionDispatchInput,
   gameEntity: GameEntity,
 ) {
   const yourSoulGameCards = gameEntity.gameCards

@@ -1,4 +1,4 @@
-import { DispatchGameActionInput } from '../graphql/index';
+import { GameActionDispatchInput } from '../graphql/index';
 import { ActionType } from '../graphql/index';
 import { GameEntity } from '../entities/game.entity';
 import { Injectable } from '@nestjs/common';
@@ -9,7 +9,7 @@ import { validatePutSoulAction } from './validators/put.soul.action.validator';
 @Injectable()
 export class ActionValidator {
   validateActions(
-    data: DispatchGameActionInput,
+    data: GameActionDispatchInput,
     grantedGameEntity: GameEntity,
     userId: string,
   ) {

@@ -1,5 +1,5 @@
 import { GameEntity } from './../entities/game.entity';
-import { DispatchGameActionInput } from '../graphql/index';
+import { GameActionDispatchInput } from '../graphql/index';
 import { ActionType } from '../graphql/index';
 import { handleStartDrawTimeAction } from './handlers/start.draw.time.action.handler';
 import { EntityManager } from 'typeorm';
@@ -15,7 +15,7 @@ import { handleFinishEndTimeAction } from './handlers/finish.end.time.action.han
 
 export async function handleAction(
   id: number,
-  data: DispatchGameActionInput,
+  data: GameActionDispatchInput,
   manager: EntityManager,
   userId: string,
   gameEntity: GameEntity,

@@ -8,7 +8,7 @@ import {
   GameStateRepository,
 } from '../../services/game.service';
 import {
-  DispatchGameActionInput,
+  GameActionDispatchInput,
   BattlePosition,
   StateType,
 } from '../../graphql/index';
@@ -17,7 +17,7 @@ import { EntityManager } from 'typeorm';
 export async function handleAttackAction(
   manager: EntityManager,
   userId: string,
-  data: DispatchGameActionInput,
+  data: GameActionDispatchInput,
   gameEntity: GameEntity,
 ) {
   const gameUserRepository = manager.getCustomRepository(GameUserRepository);

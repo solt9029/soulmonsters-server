@@ -3,14 +3,14 @@ import {
   GameCardRepository,
   GameUserRepository,
 } from '../../services/game.service';
-import { DispatchGameActionInput, BattlePosition } from '../../graphql/index';
+import { GameActionDispatchInput, BattlePosition } from '../../graphql/index';
 import { GameEntity } from '../../entities/game.entity';
 import { EntityManager } from 'typeorm';
 
 export async function handleSummonMonsterAction(
   manager: EntityManager,
   userId: string,
-  data: DispatchGameActionInput,
+  data: GameActionDispatchInput,
   gameEntity: GameEntity,
 ) {
   const gameCardRepository = manager.getCustomRepository(GameCardRepository);

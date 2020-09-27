@@ -1,10 +1,10 @@
-import { DispatchGameActionInput } from './../../graphql/index';
+import { GameActionDispatchInput } from './../../graphql/index';
 import { ActionType } from '../../graphql/index';
 import { GameEntity } from '../../entities/game.entity';
 import { BadRequestException } from '@nestjs/common';
 
 export function validatePutSoulAction(
-  data: DispatchGameActionInput,
+  data: GameActionDispatchInput,
   game: GameEntity,
   userId: string,
 ) {
