@@ -136,7 +136,6 @@ export class Game implements Node {
     endedAt?: DateTime;
     gameUsers: GameUser[];
     gameCards: GameCard[];
-    gameHistories: GameHistory[];
 }
 
 export class GameCard implements Node {
@@ -156,12 +155,6 @@ export class GameCard implements Node {
     detail?: string;
     card?: Card;
     actionTypes: ActionType[];
-}
-
-export class GameHistory implements Node {
-    id: number;
-    detail: string;
-    createdAt: DateTime;
 }
 
 export class GameUser implements Node {
@@ -198,8 +191,6 @@ export abstract class IQuery {
     abstract game(id: number): Game | Promise<Game>;
 
     abstract activeGameId(): number | Promise<number>;
-
-    abstract gameHistories(gameId: number): GameHistory[] | Promise<GameHistory[]>;
 
     abstract userData(userId: string): UserData | Promise<UserData>;
 }

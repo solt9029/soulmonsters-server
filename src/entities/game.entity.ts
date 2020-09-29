@@ -1,5 +1,4 @@
 import { GameStateEntity } from './game.state.entity';
-import { GameHistoryEntity } from './game.history.entity';
 import { GameCardEntity } from './game.card.entity';
 import { GameUserEntity } from './game.user.entity';
 import { Game, Phase } from './../graphql/index';
@@ -58,10 +57,4 @@ export class GameEntity extends Game {
     gameStateEntity => gameStateEntity.game,
   )
   gameStates: GameStateEntity[];
-
-  @OneToMany(
-    () => GameHistoryEntity,
-    gameHistoryEntity => gameHistoryEntity.game,
-  )
-  gameHistories: GameHistoryEntity[];
 }

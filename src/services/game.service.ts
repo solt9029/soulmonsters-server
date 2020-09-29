@@ -63,7 +63,6 @@ export class GameService {
         'gameUsers.deck',
         'gameCards',
         'gameCards.card',
-        'gameHistories',
         'gameStates',
         'gameStates.gameCard',
       ],

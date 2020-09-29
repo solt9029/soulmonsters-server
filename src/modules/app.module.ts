@@ -2,7 +2,6 @@ import { GameStateEntity } from '../entities/game.state.entity';
 import { ActionValidator } from '../actions/action.validator';
 import { GameUserEntityFactory } from '../factories/game.user.entity.factory';
 import { ActionGrantor } from '../actions/action.grantor';
-import { GameHistoryEntity } from './../entities/game.history.entity';
 import { GameCardEntityFactory } from './../factories/game.card.entity.factory';
 import { GameCardEntity } from './../entities/game.card.entity';
 import { GameResolver } from './../resolvers/game.resolver';
@@ -50,7 +49,6 @@ const {
         GameEntity,
         GameUserEntity,
         GameCardEntity,
-        GameHistoryEntity,
         GameStateEntity,
       ],
       synchronize: DB_SYNCHRONIZE?.toLowerCase() === 'true',
@@ -62,7 +60,6 @@ const {
       GameEntity,
       GameUserEntity,
       GameCardEntity,
-      GameHistoryEntity,
       GameStateEntity,
     ]),
     GraphQLModule.forRoot({
