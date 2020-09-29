@@ -1,4 +1,8 @@
-import { GameActionDispatchInput, Zone } from './../../graphql/index';
+import {
+  GameActionDispatchInput,
+  Zone,
+  StateType,
+} from './../../graphql/index';
 import { ActionType } from '../../graphql/index';
 import { GameEntity } from '../../entities/game.entity';
 import { BadRequestException } from '@nestjs/common';
@@ -61,5 +65,13 @@ export function validateAttackAction(
     }
   }
 
-  // check state
+  const gameState = game.gameStates.find(
+    value =>
+      value.state.type === StateType.ATTACK_COUNT &&
+      value.gameCard.id === gameCard.id &&
+      value.state.data.value > 0,
+  );
+  if (gameState) {
+    throw new BadRequestException('既にこのターン中に攻撃済みです');
+  }
 }
