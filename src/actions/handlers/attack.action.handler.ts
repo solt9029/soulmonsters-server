@@ -31,7 +31,7 @@ export async function handleAttackAction(
     value => value.userId !== userId,
   );
 
-  if (data.payload.targetGameUserIds.length === 1) {
+  if (data.payload.targetGameUserIds?.length === 1) {
     await gameUserRepository.update(
       { id: opponentGameUser.id },
       { lifePoint: opponentGameUser.lifePoint - gameCard.attack },
