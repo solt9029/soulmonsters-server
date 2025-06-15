@@ -3,7 +3,6 @@
 ## environment
 
 - prisma: 1.34.6
-- node: 10.16.3
 - nvm: 0.40.2
 
 ## setup
