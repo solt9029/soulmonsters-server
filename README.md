@@ -8,6 +8,11 @@
 ## setup
 
 ```sh
+git clone git@github.com:solt9029/soulmonsters-client.git
+cd soulmonsters-client
+
+git submodules init
+
 npm install
 
 docker-compose up -d
