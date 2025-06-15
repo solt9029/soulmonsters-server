@@ -4,6 +4,7 @@
 
 - prisma: 1.34.6
 - node: 10.16.3
+- nvm: 0.40.2
 
 ## setup
 
@@ -13,6 +14,7 @@ cd soulmonsters-client
 
 git submodules init
 
+nvm use # automatically switch to the node version specified in .nvmrc
 npm install
 
 docker-compose up -d
